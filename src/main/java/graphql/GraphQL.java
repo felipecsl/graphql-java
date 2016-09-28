@@ -68,8 +68,8 @@ public class GraphQL {
       return new ExecutionResultImpl(Collections.singletonList(invalidSyntaxError));
     }
 
-    Validator validator = new Validator();
-    List<ValidationError> validationErrors = validator.validateDocument(graphQLSchema, document);
+    Validator validator = new Validator(graphQLSchema);
+    List<ValidationError> validationErrors = validator.validate(document);
     if (validationErrors.size() > 0) {
       return new ExecutionResultImpl(validationErrors);
     }

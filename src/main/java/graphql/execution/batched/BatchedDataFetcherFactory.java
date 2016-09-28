@@ -14,8 +14,8 @@ import java.lang.reflect.Method;
  * so regular DataFetchers should normally only be used if they are in-memory.
  */
 
-public class BatchedDataFetcherFactory {
-  public BatchedDataFetcher create(final DataFetcher supplied) {
+class BatchedDataFetcherFactory {
+  BatchedDataFetcher create(final DataFetcher supplied) {
     if (supplied instanceof BatchedDataFetcher) {
       return (BatchedDataFetcher) supplied;
     }

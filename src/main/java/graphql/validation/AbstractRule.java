@@ -36,7 +36,6 @@ public class AbstractRule {
     return validationErrorCollector.getErrors();
   }
 
-
   public ValidationContext getValidationContext() {
     return validationContext;
   }

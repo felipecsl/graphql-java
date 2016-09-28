@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 public class NoUnusedVariables extends AbstractRule {
-
   private final List<VariableDefinition> variableDefinitions = new ArrayList<>();
   private final Set<String> usedVariables = new LinkedHashSet<>();
 

@@ -7,8 +7,6 @@ import graphql.schema.SchemaUtil;
 import graphql.validation.*;
 
 public class VariablesAreInputTypes extends AbstractRule {
-  private final SchemaUtil schemaUtil = new SchemaUtil();
-
   public VariablesAreInputTypes(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);
@@ -21,7 +19,7 @@ public class VariablesAreInputTypes extends AbstractRule {
 
     GraphQLType type = getValidationContext().getSchema().getType(unmodifiedAstType.getName());
     if (type == null) return;
-    if (!schemaUtil.isInputType(type)) {
+    if (!SchemaUtil.isInputType(type)) {
       String message = "Wrong type for a variable";
       addError(new ValidationError(ValidationErrorType.NonInputTypeOnVariable,
           variableDefinition.getSourceLocation(), message));

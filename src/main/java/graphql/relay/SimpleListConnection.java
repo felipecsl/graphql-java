@@ -99,8 +99,7 @@ public class SimpleListConnection implements DataFetcher {
   }
 
   private String createCursor(int offset) {
-    String string = Base64.toBase64(DUMMY_CURSOR_PREFIX + Integer.toString(offset));
-    return string;
+    return Base64.toBase64(DUMMY_CURSOR_PREFIX + Integer.toString(offset));
   }
 
 

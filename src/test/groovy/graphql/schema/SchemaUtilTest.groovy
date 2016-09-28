@@ -11,7 +11,7 @@ class SchemaUtilTest extends Specification {
 
   def "collectAllTypes"() {
     when:
-    Map<String, GraphQLType> types = new SchemaUtil().allTypes(starWarsSchema, Collections.emptySet())
+    Map<String, GraphQLType> types = SchemaUtil.allTypes(starWarsSchema, Collections.emptySet())
     then:
     types.size() == 15
     types == [(droidType.name)                        : droidType,
@@ -33,7 +33,7 @@ class SchemaUtilTest extends Specification {
 
   def "collectAllTypesNestedInput"() {
     when:
-    Map<String, GraphQLType> types = new SchemaUtil().allTypes(NestedInputSchema.createSchema(), Collections.emptySet());
+    Map<String, GraphQLType> types = SchemaUtil.allTypes(NestedInputSchema.createSchema(), Collections.emptySet());
     Map<String, GraphQLType> expected =
 
         [(NestedInputSchema.rootType().name)     : NestedInputSchema.rootType(),

@@ -57,7 +57,7 @@ public class PossibleFragmentSpreads extends AbstractRule {
     if (parent instanceof GraphQLObjectType) {
       possibleParentTypes = Collections.<GraphQLType>singletonList(parent);
     } else if (parent instanceof GraphQLInterfaceType) {
-      possibleParentTypes = new SchemaUtil()
+      possibleParentTypes = SchemaUtil
           .findImplementations(getValidationContext().getSchema(), (GraphQLInterfaceType) parent);
     } else if (parent instanceof GraphQLUnionType) {
       possibleParentTypes = ((GraphQLUnionType) parent).getTypes();
@@ -68,7 +68,7 @@ public class PossibleFragmentSpreads extends AbstractRule {
     if (type instanceof GraphQLObjectType) {
       possibleConditionTypes = Collections.singletonList(type);
     } else if (type instanceof GraphQLInterfaceType) {
-      possibleConditionTypes = new SchemaUtil()
+      possibleConditionTypes = SchemaUtil
           .findImplementations(getValidationContext().getSchema(), (GraphQLInterfaceType) type);
     } else if (type instanceof GraphQLUnionType) {
       possibleConditionTypes = ((GraphQLUnionType) type).getTypes();

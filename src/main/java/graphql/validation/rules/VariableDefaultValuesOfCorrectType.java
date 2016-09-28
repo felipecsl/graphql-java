@@ -5,15 +5,11 @@ import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLNonNull;
 import graphql.validation.*;
 
-
 public class VariableDefaultValuesOfCorrectType extends AbstractRule {
-
-
   public VariableDefaultValuesOfCorrectType(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);
   }
-
 
   @Override
   public void checkVariableDefinition(VariableDefinition variableDefinition) {

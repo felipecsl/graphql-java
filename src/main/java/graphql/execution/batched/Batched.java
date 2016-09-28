@@ -7,7 +7,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
  * <p>
  * When placed on {@link graphql.schema.DataFetcher#get(DataFetchingEnvironment)}, indicates that this DataFetcher is batched.
@@ -54,5 +53,5 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Batched {
+@interface Batched {
 }

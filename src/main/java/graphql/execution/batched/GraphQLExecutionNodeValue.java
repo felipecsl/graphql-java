@@ -1,17 +1,16 @@
 package graphql.execution.batched;
 
-public class GraphQLExecutionNodeValue {
-
+class GraphQLExecutionNodeValue {
   private final GraphQLExecutionResultContainer resultContainer;
   private final Object value;
 
-  public GraphQLExecutionNodeValue(GraphQLExecutionResultContainer resultContainer, /*Nullable*/
+  GraphQLExecutionNodeValue(GraphQLExecutionResultContainer resultContainer, /*Nullable*/
       Object value) {
     this.resultContainer = resultContainer;
     this.value = value;
   }
 
-  public GraphQLExecutionResultContainer getResultContainer() {
+  GraphQLExecutionResultContainer getResultContainer() {
     return resultContainer;
   }
 

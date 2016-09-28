@@ -16,7 +16,9 @@ public class ValidationErrorCollector {
 
   public boolean containsValidationError(ValidationErrorType validationErrorType) {
     for (ValidationError validationError : errors) {
-      if (validationError.getValidationErrorType() == validationErrorType) return true;
+      if (validationError.getValidationErrorType() == validationErrorType) {
+        return true;
+      }
     }
     return false;
   }

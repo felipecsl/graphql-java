@@ -7,12 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 class GraphQLExecutionNode {
-
   private final GraphQLObjectType parentType;
   private final Map<String, List<Field>> fields;
   private final List<GraphQLExecutionNodeDatum> data;
 
-  public GraphQLExecutionNode(GraphQLObjectType parentType, Map<String, List<Field>> fields,
+  GraphQLExecutionNode(GraphQLObjectType parentType, Map<String, List<Field>> fields,
       List<GraphQLExecutionNodeDatum> data) {
     this.parentType = parentType;
     this.fields = fields;

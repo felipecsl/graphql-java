@@ -15,6 +15,6 @@ class SpecValidationBase extends Specification {
 
   List<ValidationError> validate(String query) {
     def document = new Parser().parseDocument(query)
-    return new Validator().validateDocument(SpecValidationSchema.specValidationSchema, document)
+    return new Validator(SpecValidationSchema.specValidationSchema).validate(document)
   }
 }

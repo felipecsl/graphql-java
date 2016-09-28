@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class GraphQLExecutionResultContainer {
+abstract class GraphQLExecutionResultContainer {
 
   /**
    * Creates a child datum which is linked through the results container to this parent.
@@ -14,13 +14,13 @@ public abstract class GraphQLExecutionResultContainer {
    * @param value     value
    * @return datum
    */
-  public GraphQLExecutionNodeDatum createAndPutChildDatum(String fieldName, Object value) {
+  GraphQLExecutionNodeDatum createAndPutChildDatum(String fieldName, Object value) {
     Map<String, Object> map = new LinkedHashMap<>();
     putResult(fieldName, map);
     return new GraphQLExecutionNodeDatum(map, value);
   }
 
-  public GraphQLExecutionResultList createAndPutEmptyChildList(String fieldName) {
+  GraphQLExecutionResultList createAndPutEmptyChildList(String fieldName) {
     List<Object> resultList = new ArrayList<>();
     putResult(fieldName, resultList);
     return new GraphQLExecutionResultList(resultList);

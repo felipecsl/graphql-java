@@ -5,14 +5,11 @@ import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.validation.*;
 
-
 public class KnownArgumentNames extends AbstractRule {
-
   public KnownArgumentNames(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);
   }
-
 
   @Override
   public void checkArgument(Argument argument) {

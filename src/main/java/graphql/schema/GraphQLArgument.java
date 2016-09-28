@@ -1,10 +1,8 @@
 package graphql.schema;
 
-
 import static graphql.Assert.assertNotNull;
 
 public class GraphQLArgument {
-
   private final String name;
   private final String description;
   private final GraphQLInputType type;
@@ -24,7 +22,6 @@ public class GraphQLArgument {
     this(name, null, type, null);
   }
 
-
   public String getName() {
     return name;
   }
@@ -37,7 +34,6 @@ public class GraphQLArgument {
     return defaultValue;
   }
 
-
   public String getDescription() {
     return description;
   }
@@ -47,7 +43,6 @@ public class GraphQLArgument {
   }
 
   public static class Builder {
-
     private String name;
     private GraphQLInputType type;
     private Object defaultValue;
@@ -63,7 +58,6 @@ public class GraphQLArgument {
       return this;
     }
 
-
     public Builder type(GraphQLInputType type) {
       this.type = type;
       return this;
@@ -78,6 +72,4 @@ public class GraphQLArgument {
       return new GraphQLArgument(name, description, type, defaultValue);
     }
   }
-
-
 }

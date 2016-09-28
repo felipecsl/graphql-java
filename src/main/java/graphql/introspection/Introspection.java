@@ -186,7 +186,7 @@ public class Introspection {
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();
       if (type instanceof GraphQLInterfaceType) {
-        return new SchemaUtil()
+        return SchemaUtil
             .findImplementations(environment.getGraphQLSchema(), (GraphQLInterfaceType) type);
       }
       if (type instanceof GraphQLUnionType) {

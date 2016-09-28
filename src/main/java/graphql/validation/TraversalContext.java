@@ -18,7 +18,6 @@ public class TraversalContext implements QueryLanguageVisitor {
   private final List<GraphQLFieldDefinition> fieldDefStack = new ArrayList<>();
   private GraphQLDirective directive;
   private GraphQLArgument argument;
-  private final SchemaUtil schemaUtil = new SchemaUtil();
 
   public TraversalContext(GraphQLSchema graphQLSchema) {
     this.schema = graphQLSchema;
@@ -50,7 +49,7 @@ public class TraversalContext implements QueryLanguageVisitor {
   }
 
   private void enterImpl(SelectionSet selectionSet) {
-    GraphQLUnmodifiedType rawType = new SchemaUtil().getUnmodifiedType(getOutputType());
+    GraphQLUnmodifiedType rawType = SchemaUtil.getUnmodifiedType(getOutputType());
     GraphQLCompositeType parentType = null;
     if (rawType instanceof GraphQLCompositeType) {
       parentType = (GraphQLCompositeType) rawType;
@@ -119,7 +118,7 @@ public class TraversalContext implements QueryLanguageVisitor {
   }
 
   private void enterImpl(ObjectField objectField) {
-    GraphQLUnmodifiedType objectType = schemaUtil.getUnmodifiedType(getInputType());
+    GraphQLUnmodifiedType objectType = SchemaUtil.getUnmodifiedType(getInputType());
     GraphQLInputType inputType = null;
     if (objectType instanceof GraphQLInputObjectType) {
       GraphQLInputObjectField inputField =

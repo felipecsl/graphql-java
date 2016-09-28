@@ -14,8 +14,7 @@ import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLInterfaceType.newInterface;
 
 public class Relay {
-
-  public static final String NODE = "Node";
+  private static final String NODE = "Node";
   private final GraphQLObjectType pageInfoType = GraphQLObjectType.newBuilder().name("PageInfo")
       .description("Information about pagination in a connection.")
       .field(GraphQLFieldDefinition.newBuilder()
@@ -37,7 +36,7 @@ public class Relay {
       .build();
 
   public GraphQLInterfaceType nodeInterface(TypeResolver typeResolver) {
-    GraphQLInterfaceType node = newInterface()
+    return newInterface()
         .name(NODE)
         .description("An object with an ID")
         .typeResolver(typeResolver)
@@ -46,12 +45,11 @@ public class Relay {
             .description("The ID of an object")
             .type(new GraphQLNonNull(GraphQLID)))
         .build();
-    return node;
   }
 
   public GraphQLFieldDefinition nodeField(GraphQLInterfaceType nodeInterface,
       DataFetcher nodeDataFetcher) {
-    GraphQLFieldDefinition fieldDefinition = GraphQLFieldDefinition.newBuilder()
+    return GraphQLFieldDefinition.newBuilder()
         .name("node")
         .description("Fetches an object given its ID")
         .type(nodeInterface)
@@ -61,7 +59,6 @@ public class Relay {
             .description("The ID of an object")
             .type(new GraphQLNonNull(GraphQLID)))
         .build();
-    return fieldDefinition;
   }
 
   public List<GraphQLArgument> getConnectionFieldArguments() {
@@ -93,7 +90,7 @@ public class Relay {
   public GraphQLObjectType edgeType(String name, GraphQLOutputType nodeType,
       GraphQLInterfaceType nodeInterface, List<GraphQLFieldDefinition> edgeFields) {
 
-    GraphQLObjectType edgeType = GraphQLObjectType.newBuilder()
+    return GraphQLObjectType.newBuilder()
         .name(name + "Edge")
         .description("An edge in a connection.")
         .field(GraphQLFieldDefinition.newBuilder()
@@ -105,13 +102,12 @@ public class Relay {
             .type(new GraphQLNonNull(GraphQLString))
             .description(""))
         .fields(edgeFields).build();
-    return edgeType;
   }
 
   public GraphQLObjectType connectionType(String name, GraphQLObjectType edgeType,
       List<GraphQLFieldDefinition> connectionFields) {
 
-    GraphQLObjectType connectionType = GraphQLObjectType.newBuilder()
+    return GraphQLObjectType.newBuilder()
         .name(name + "Connection")
         .description("A connection to a list of items.")
         .field(GraphQLFieldDefinition.newBuilder()
@@ -122,7 +118,6 @@ public class Relay {
             .type(new GraphQLNonNull(pageInfoType)))
         .fields(connectionFields)
         .build();
-    return connectionType;
   }
 
   public GraphQLFieldDefinition mutationWithClientMutationId(String name, String fieldName,

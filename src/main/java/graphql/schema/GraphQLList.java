@@ -20,7 +20,7 @@ public class GraphQLList
   }
 
   void replaceTypeReferences(Map<String, GraphQLType> typeMap) {
-    wrappedType = new SchemaUtil().resolveTypeReference(wrappedType, typeMap);
+    wrappedType = SchemaUtil.resolveTypeReference(wrappedType, typeMap);
   }
 
   @Override

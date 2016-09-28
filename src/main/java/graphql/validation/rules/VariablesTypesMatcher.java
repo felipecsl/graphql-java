@@ -1,6 +1,5 @@
 package graphql.validation.rules;
 
-
 import graphql.language.Value;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLNonNull;
@@ -20,19 +19,15 @@ public class VariablesTypesMatcher {
   }
 
   private boolean checkType(GraphQLType actualType, GraphQLType expectedType) {
-
     if (expectedType instanceof GraphQLNonNull) {
-      if (actualType instanceof GraphQLNonNull) {
-        return checkType(((GraphQLNonNull) actualType).getWrappedType(),
-            ((GraphQLNonNull) expectedType).getWrappedType());
-      }
-      return false;
+      return actualType instanceof GraphQLNonNull &&
+          checkType(((GraphQLNonNull) actualType).getWrappedType(),
+              ((GraphQLNonNull) expectedType).getWrappedType());
     }
 
     if (actualType instanceof GraphQLNonNull) {
       return checkType(((GraphQLNonNull) actualType).getWrappedType(), expectedType);
     }
-
 
     if ((actualType instanceof GraphQLList) && (expectedType instanceof GraphQLList)) {
       return checkType(((GraphQLList) actualType).getWrappedType(),

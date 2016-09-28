@@ -6,8 +6,6 @@ import graphql.schema.SchemaUtil;
 import graphql.validation.*;
 
 public class ScalarLeafs extends AbstractRule {
-  private final SchemaUtil schemaUtil = new SchemaUtil();
-
   public ScalarLeafs(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);
@@ -17,7 +15,7 @@ public class ScalarLeafs extends AbstractRule {
   public void checkField(Field field) {
     GraphQLOutputType type = getValidationContext().getOutputType();
     if (type == null) return;
-    if (schemaUtil.isLeafType(type)) {
+    if (SchemaUtil.isLeafType(type)) {
       if (field.getSelectionSet() != null) {
         String message = String.format("Sub selection not allowed on leaf type %s", type.getName());
         addError(new ValidationError(ValidationErrorType.SubSelectionNotAllowed,

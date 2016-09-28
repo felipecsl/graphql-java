@@ -6,7 +6,6 @@ import static graphql.Assert.assertNotNull;
 
 public class GraphQLNonNull
     implements GraphQLType, GraphQLInputType, GraphQLOutputType, GraphQLModifiedType {
-
   private GraphQLType wrappedType;
 
   public GraphQLNonNull(GraphQLType wrappedType) {
@@ -19,7 +18,7 @@ public class GraphQLNonNull
   }
 
   void replaceTypeReferences(Map<String, GraphQLType> typeMap) {
-    wrappedType = new SchemaUtil().resolveTypeReference(wrappedType, typeMap);
+    wrappedType = SchemaUtil.resolveTypeReference(wrappedType, typeMap);
   }
 
   @Override

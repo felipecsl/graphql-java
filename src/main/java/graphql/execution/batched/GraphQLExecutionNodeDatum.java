@@ -6,15 +6,14 @@ class GraphQLExecutionNodeDatum extends GraphQLExecutionResultContainer {
   private final Map<String, Object> parentResult;
   private final Object source;
 
-  public GraphQLExecutionNodeDatum(Map<String, Object> parentResult, Object source) {
+  GraphQLExecutionNodeDatum(Map<String, Object> parentResult, Object source) {
     this.parentResult = parentResult;
     this.source = source;
   }
 
-  public Map<String, Object> getParentResult() {
+  Map<String, Object> getParentResult() {
     return parentResult;
   }
-
 
   @Override
   public void putResult(String fieldName, Object value) {

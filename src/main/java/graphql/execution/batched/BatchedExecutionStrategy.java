@@ -140,9 +140,7 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
 
     ChildDataCollector collector = createAndPopulateChildData(values, fieldName, fieldType);
 
-    List<GraphQLExecutionNode> childNodes = createChildNodes(executionContext, fields, collector);
-
-    return childNodes;
+    return createChildNodes(executionContext, fields, collector);
   }
 
   private List<GraphQLExecutionNode> createChildNodes(ExecutionContext executionContext,

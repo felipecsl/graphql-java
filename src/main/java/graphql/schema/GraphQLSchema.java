@@ -1,6 +1,5 @@
 package graphql.schema;
 
-
 import graphql.Assert;
 import graphql.Directives;
 
@@ -25,7 +24,7 @@ public class GraphQLSchema {
     this.queryType = queryType;
     this.mutationType = mutationType;
     this.dictionary = dictionary;
-    typeMap = new SchemaUtil().allTypes(this, dictionary);
+    typeMap = SchemaUtil.allTypes(this, dictionary);
   }
 
   Set<GraphQLType> getDictionary() {
@@ -60,7 +59,7 @@ public class GraphQLSchema {
     return null;
   }
 
-  public boolean isSupportingMutations() {
+  boolean isSupportingMutations() {
     return mutationType != null;
   }
 
@@ -97,7 +96,7 @@ public class GraphQLSchema {
     public GraphQLSchema build(Set<GraphQLType> dictionary) {
       Assert.assertNotNull(dictionary, "dictionary can't be null");
       GraphQLSchema graphQLSchema = new GraphQLSchema(queryType, mutationType, dictionary);
-      new SchemaUtil().replaceTypeReferences(graphQLSchema);
+      SchemaUtil.replaceTypeReferences(graphQLSchema);
       return graphQLSchema;
     }
   }

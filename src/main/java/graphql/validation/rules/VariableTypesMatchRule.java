@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class VariableTypesMatchRule extends AbstractRule {
-  private final VariablesTypesMatcher variablesTypesMatcher = new VariablesTypesMatcher();
+  private VariablesTypesMatcher variablesTypesMatcher = new VariablesTypesMatcher();
   private Map<String, VariableDefinition> variableDefinitionMap;
 
   public VariableTypesMatchRule(ValidationContext validationContext,

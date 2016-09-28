@@ -8,7 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Validator {
-  public List<ValidationError> validateDocument(GraphQLSchema schema, Document document) {
+  private final GraphQLSchema schema;
+
+  public Validator(GraphQLSchema schema) {
+    this.schema = schema;
+  }
+
+  public List<ValidationError> validate(Document document) {
     ValidationContext validationContext = new ValidationContext(schema, document);
     ValidationErrorCollector validationErrorCollector = new ValidationErrorCollector();
     LanguageTraversal languageTraversal = new LanguageTraversal();
