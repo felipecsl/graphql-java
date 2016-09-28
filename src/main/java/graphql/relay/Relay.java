@@ -65,7 +65,7 @@ public class Relay {
   }
 
   public List<GraphQLArgument> getConnectionFieldArguments() {
-    List<GraphQLArgument> args = new ArrayList<GraphQLArgument>();
+    List<GraphQLArgument> args = new ArrayList<>();
 
     args.add(newArgument().name("before").type(GraphQLString).build());
     args.add(newArgument().name("after").type(GraphQLString).build());
@@ -75,7 +75,7 @@ public class Relay {
   }
 
   public List<GraphQLArgument> getBackwardPaginationConnectionFieldArguments() {
-    List<GraphQLArgument> args = new ArrayList<GraphQLArgument>();
+    List<GraphQLArgument> args = new ArrayList<>();
 
     args.add(newArgument().name("before").type(GraphQLString).build());
     args.add(newArgument().name("last").type(GraphQLInt).build());
@@ -83,7 +83,7 @@ public class Relay {
   }
 
   public List<GraphQLArgument> getForwardPaginationConnectionFieldArguments() {
-    List<GraphQLArgument> args = new ArrayList<GraphQLArgument>();
+    List<GraphQLArgument> args = new ArrayList<>();
 
     args.add(newArgument().name("after").type(GraphQLString).build());
     args.add(newArgument().name("first").type(GraphQLInt).build());

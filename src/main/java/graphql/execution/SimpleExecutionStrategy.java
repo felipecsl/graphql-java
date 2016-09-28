@@ -13,7 +13,7 @@ public class SimpleExecutionStrategy extends ExecutionStrategy {
   @Override
   public ExecutionResult execute(ExecutionContext executionContext, GraphQLObjectType parentType,
       Object source, Map<String, List<Field>> fields) {
-    Map<String, Object> results = new LinkedHashMap<String, Object>();
+    Map<String, Object> results = new LinkedHashMap<>();
     for (String fieldName : fields.keySet()) {
       List<Field> fieldList = fields.get(fieldName);
       ExecutionResult resolvedResult =

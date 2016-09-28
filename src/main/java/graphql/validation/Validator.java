@@ -24,7 +24,7 @@ public class Validator {
 
   private List<AbstractRule> createRules(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
-    List<AbstractRule> rules = new ArrayList<AbstractRule>();
+    List<AbstractRule> rules = new ArrayList<>();
 
     ArgumentsOfCorrectType argumentsOfCorrectType =
         new ArgumentsOfCorrectType(validationContext, validationErrorCollector);

@@ -2,7 +2,6 @@ package graphql.language;
 
 
 public class SourceLocation {
-
   private final int line;
   private final int column;
 
@@ -28,7 +27,6 @@ public class SourceLocation {
 
     if (line != that.line) return false;
     return column == that.column;
-
   }
 
   @Override

@@ -1,16 +1,15 @@
 package graphql;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExecutionResultImpl implements ExecutionResult {
-
-  private final List<GraphQLError> errors = new ArrayList<GraphQLError>();
-  private Object data;
+  private final List<GraphQLError> errors = new ArrayList<>();
+  private final Object data;
 
   public ExecutionResultImpl(List<? extends GraphQLError> errors) {
     this.errors.addAll(errors);
+    this.data = null;
   }
 
   public ExecutionResultImpl(Object data, List<? extends GraphQLError> errors) {
@@ -30,14 +29,8 @@ public class ExecutionResultImpl implements ExecutionResult {
     return data;
   }
 
-  public void setData(Object result) {
-    this.data = result;
-  }
-
   @Override
   public List<GraphQLError> getErrors() {
-    return new ArrayList<GraphQLError>(errors);
+    return new ArrayList<>(errors);
   }
-
-
 }

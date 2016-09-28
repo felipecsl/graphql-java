@@ -1,12 +1,10 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class BooleanValue extends AbstractNode implements Value {
-
-  private boolean value;
+  private final boolean value;
 
   public BooleanValue(boolean value) {
     this.value = value;
@@ -16,14 +14,9 @@ public class BooleanValue extends AbstractNode implements Value {
     return value;
   }
 
-  public void setValue(boolean value) {
-    this.value = value;
-  }
-
-
   @Override
   public List<Node> getChildren() {
-    return new ArrayList<Node>();
+    return new ArrayList<>();
   }
 
   @Override

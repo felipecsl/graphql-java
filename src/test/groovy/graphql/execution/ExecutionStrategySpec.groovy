@@ -8,13 +8,13 @@ import graphql.schema.GraphQLObjectType
 import spock.lang.Specification
 
 class ExecutionStrategySpec extends Specification {
-
   ExecutionStrategy executionStrategy
 
   def setup() {
     executionStrategy = new ExecutionStrategy() {
       @Override
-      ExecutionResult execute(ExecutionContext executionContext, GraphQLObjectType parentType, Object source, Map<String, List<Field>> fields) {
+      ExecutionResult execute(ExecutionContext executionContext, GraphQLObjectType parentType,
+                              Object source, Map<String, List<Field>> fields) {
         return null
       }
     }
@@ -22,7 +22,7 @@ class ExecutionStrategySpec extends Specification {
 
   def "completes value for a java.util.List"() {
     given:
-    ExecutionContext executionContext = new ExecutionContext();
+    ExecutionContext executionContext = new ExecutionContext(null, null, null, null, null, null);
     Field field = new Field()
     def fieldType = new GraphQLList(Scalars.GraphQLString)
     def result = Arrays.asList("test")
@@ -33,10 +33,9 @@ class ExecutionStrategySpec extends Specification {
     executionResult.data == ["test"]
   }
 
-
   def "completes value for an array"() {
     given:
-    ExecutionContext executionContext = new ExecutionContext();
+    ExecutionContext executionContext = new ExecutionContext(null, null, null, null, null, null);
     Field field = new Field()
     def fieldType = new GraphQLList(Scalars.GraphQLString)
     String[] result = ["test"]
@@ -46,5 +45,4 @@ class ExecutionStrategySpec extends Specification {
     then:
     executionResult.data == ["test"]
   }
-
 }

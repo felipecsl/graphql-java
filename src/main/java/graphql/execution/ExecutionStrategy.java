@@ -16,8 +16,8 @@ import static graphql.introspection.Introspection.*;
 public abstract class ExecutionStrategy {
   private static final Logger log = LoggerFactory.getLogger(ExecutionStrategy.class);
 
-  protected ValuesResolver valuesResolver = new ValuesResolver();
-  protected FieldCollector fieldCollector = new FieldCollector();
+  protected final ValuesResolver valuesResolver = new ValuesResolver();
+  protected final FieldCollector fieldCollector = new FieldCollector();
 
   public abstract ExecutionResult execute(ExecutionContext executionContext,
       GraphQLObjectType parentType, Object source, Map<String, List<Field>> fields);
@@ -76,8 +76,8 @@ public abstract class ExecutionStrategy {
       resolvedType = (GraphQLObjectType) fieldType;
     }
 
-    Map<String, List<Field>> subFields = new LinkedHashMap<String, List<Field>>();
-    List<String> visitedFragments = new ArrayList<String>();
+    Map<String, List<Field>> subFields = new LinkedHashMap<>();
+    List<String> visitedFragments = new ArrayList<>();
     for (Field field : fields) {
       if (field.getSelectionSet() == null) continue;
       fieldCollector
@@ -117,7 +117,6 @@ public abstract class ExecutionStrategy {
     return result;
   }
 
-
   protected ExecutionResult completeValueForEnum(GraphQLEnumType enumType, Object result) {
     return new ExecutionResultImpl(enumType.getCoercing().serialize(result), null);
   }
@@ -133,7 +132,7 @@ public abstract class ExecutionStrategy {
 
   protected ExecutionResult completeValueForList(ExecutionContext executionContext,
       GraphQLList fieldType, List<Field> fields, List<Object> result) {
-    List<Object> completedResults = new ArrayList<Object>();
+    List<Object> completedResults = new ArrayList<>();
     for (Object item : result) {
       ExecutionResult completedValue =
           completeValue(executionContext, fieldType.getWrappedType(), fields, item);

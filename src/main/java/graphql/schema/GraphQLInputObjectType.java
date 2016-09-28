@@ -17,7 +17,7 @@ public class GraphQLInputObjectType
 
 
   private final Map<String, GraphQLInputObjectField> fieldMap =
-      new LinkedHashMap<String, GraphQLInputObjectField>();
+      new LinkedHashMap<>();
 
   public GraphQLInputObjectType(String name, String description,
       List<GraphQLInputObjectField> fields) {
@@ -45,7 +45,7 @@ public class GraphQLInputObjectType
   }
 
   public List<GraphQLInputObjectField> getFields() {
-    return new ArrayList<GraphQLInputObjectField>(fieldMap.values());
+    return new ArrayList<>(fieldMap.values());
   }
 
   public GraphQLInputObjectField getField(String name) {
@@ -59,7 +59,7 @@ public class GraphQLInputObjectType
   public static class Builder {
     private String name;
     private String description;
-    private List<GraphQLInputObjectField> fields = new ArrayList<GraphQLInputObjectField>();
+    private List<GraphQLInputObjectField> fields = new ArrayList<>();
 
     public Builder name(String name) {
       this.name = name;

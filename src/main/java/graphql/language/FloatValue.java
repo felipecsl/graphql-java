@@ -1,13 +1,11 @@
 package graphql.language;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FloatValue extends AbstractNode implements Value {
-
-  private BigDecimal value;
+  private final BigDecimal value;
 
   public FloatValue(BigDecimal value) {
     this.value = value;
@@ -17,14 +15,9 @@ public class FloatValue extends AbstractNode implements Value {
     return value;
   }
 
-  public void setValue(BigDecimal value) {
-    this.value = value;
-  }
-
-
   @Override
   public List<Node> getChildren() {
-    return new ArrayList<Node>();
+    return new ArrayList<>();
   }
 
   @Override
@@ -40,7 +33,5 @@ public class FloatValue extends AbstractNode implements Value {
     FloatValue that = (FloatValue) o;
 
     return !(value != null ? !value.equals(that.value) : that.value != null);
-
   }
-
 }

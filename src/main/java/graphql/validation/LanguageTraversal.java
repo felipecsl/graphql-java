@@ -10,7 +10,7 @@ public class LanguageTraversal {
 
 
   public void traverse(Node root, QueryLanguageVisitor queryLanguageVisitor) {
-    List<Node> path = new ArrayList<Node>();
+    List<Node> path = new ArrayList<>();
     traverseImpl(root, queryLanguageVisitor, path);
   }
 

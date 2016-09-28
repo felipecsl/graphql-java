@@ -17,7 +17,7 @@ public class GraphQLEnumType
   private final String name;
   private final String description;
   private final Map<String, GraphQLEnumValueDefinition> valueDefinitionMap =
-      new LinkedHashMap<String, GraphQLEnumValueDefinition>();
+      new LinkedHashMap<>();
 
   private final Coercing coercing = new Coercing() {
     @Override
@@ -60,7 +60,7 @@ public class GraphQLEnumType
   }
 
   public List<GraphQLEnumValueDefinition> getValues() {
-    return new ArrayList<GraphQLEnumValueDefinition>(valueDefinitionMap.values());
+    return new ArrayList<>(valueDefinitionMap.values());
   }
 
 
@@ -102,7 +102,7 @@ public class GraphQLEnumType
     private String name;
     private String description;
     private final List<GraphQLEnumValueDefinition> values =
-        new ArrayList<GraphQLEnumValueDefinition>();
+        new ArrayList<>();
 
     public Builder name(String name) {
       this.name = name;

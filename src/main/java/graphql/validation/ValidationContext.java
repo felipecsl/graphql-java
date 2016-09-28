@@ -16,7 +16,7 @@ public class ValidationContext {
 
   private TraversalContext traversalContext;
   private final Map<String, FragmentDefinition> fragmentDefinitionMap =
-      new LinkedHashMap<String, FragmentDefinition>();
+      new LinkedHashMap<>();
 
 
   public ValidationContext(GraphQLSchema schema, Document document) {

@@ -1,6 +1,5 @@
 package graphql.execution;
 
-
 import graphql.ExecutionResult;
 import graphql.GraphQLException;
 import graphql.language.Document;
@@ -9,30 +8,24 @@ import graphql.language.OperationDefinition;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Execution {
+  private final FieldCollector fieldCollector = new FieldCollector();
+  private final ExecutionStrategy strategy;
 
-  private FieldCollector fieldCollector = new FieldCollector();
-  private ExecutionStrategy strategy;
-
-  public Execution(ExecutionStrategy strategy) {
-    this.strategy = strategy;
-
-    if (this.strategy == null) {
-      this.strategy = new SimpleExecutionStrategy();
-    }
+  public Execution(@Nullable ExecutionStrategy strategy) {
+    this.strategy = strategy != null ? strategy : new SimpleExecutionStrategy();
   }
 
   public ExecutionResult execute(GraphQLSchema graphQLSchema, Object root, Document document,
       String operationName, Map<String, Object> args) {
-    ExecutionContextBuilder executionContextBuilder =
-        new ExecutionContextBuilder(new ValuesResolver());
-    ExecutionContext executionContext =
-        executionContextBuilder.build(graphQLSchema, strategy, root, document, operationName, args);
+    ExecutionContext executionContext = new ExecutionContextBuilder(new ValuesResolver())
+        .build(graphQLSchema, strategy, root, document, operationName, args);
     return executeOperation(executionContext, root, executionContext.getOperationDefinition());
   }
 
@@ -54,10 +47,9 @@ public class Execution {
     GraphQLObjectType operationRootType =
         getOperationRootType(executionContext.getGraphQLSchema(), operationDefinition);
 
-    Map<String, List<Field>> fields = new LinkedHashMap<String, List<Field>>();
-    fieldCollector
-        .collectFields(executionContext, operationRootType, operationDefinition.getSelectionSet(),
-            new ArrayList<String>(), fields);
+    Map<String, List<Field>> fields = new LinkedHashMap<>();
+    fieldCollector.collectFields(executionContext, operationRootType,
+        operationDefinition.getSelectionSet(), new ArrayList<String>(), fields);
 
     if (operationDefinition.getOperation() == OperationDefinition.Operation.MUTATION) {
       return new SimpleExecutionStrategy()

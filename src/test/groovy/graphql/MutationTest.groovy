@@ -4,8 +4,6 @@ import spock.lang.Specification
 
 
 class MutationTest extends Specification {
-
-
   def "evaluates mutations"() {
     given:
     def query = """
@@ -49,12 +47,9 @@ class MutationTest extends Specification {
     when:
     def executionResult = new GraphQL(MutationSchema.schema).execute(query, new MutationSchema.Root(6))
 
-
     then:
     executionResult.data == expectedResult
-
   }
-
 
   def "evaluates mutations with errors"() {
     given:
@@ -95,11 +90,9 @@ class MutationTest extends Specification {
     when:
     def executionResult = new GraphQL(MutationSchema.schema).execute(query, new MutationSchema.Root(6))
 
-
     then:
     executionResult.data == expectedResult
     executionResult.errors.size() == 2
     executionResult.errors.every({ it instanceof ExceptionWhileDataFetching })
-
   }
 }

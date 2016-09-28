@@ -160,7 +160,7 @@ public class Introspection {
         List<GraphQLFieldDefinition> fieldDefinitions = fieldsContainer.getFieldDefinitions();
         if (includeDeprecated) return fieldDefinitions;
         List<GraphQLFieldDefinition> filtered =
-            new ArrayList<GraphQLFieldDefinition>(fieldDefinitions);
+            new ArrayList<>(fieldDefinitions);
         for (GraphQLFieldDefinition fieldDefinition : fieldDefinitions) {
           if (fieldDefinition.isDeprecated()) filtered.remove(fieldDefinition);
         }
@@ -205,7 +205,7 @@ public class Introspection {
         List<GraphQLEnumValueDefinition> values = ((GraphQLEnumType) type).getValues();
         if (includeDeprecated) return values;
         List<GraphQLEnumValueDefinition> filtered =
-            new ArrayList<GraphQLEnumValueDefinition>(values);
+            new ArrayList<>(values);
         for (GraphQLEnumValueDefinition valueDefinition : values) {
           if (valueDefinition.isDeprecated()) filtered.remove(valueDefinition);
         }

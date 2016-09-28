@@ -1,11 +1,9 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListType extends AbstractNode implements Type {
-
   private Type type;
 
   public ListType() {
@@ -25,7 +23,7 @@ public class ListType extends AbstractNode implements Type {
 
   @Override
   public List<Node> getChildren() {
-    List<Node> result = new ArrayList<Node>();
+    List<Node> result = new ArrayList<>();
     result.add(type);
     return result;
   }
@@ -37,7 +35,6 @@ public class ListType extends AbstractNode implements Type {
 
     return true;
   }
-
 
   @Override
   public String toString() {

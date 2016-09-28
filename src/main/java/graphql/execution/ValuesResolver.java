@@ -1,6 +1,5 @@
 package graphql.execution;
 
-
 import graphql.GraphQLException;
 import graphql.language.*;
 import graphql.schema.*;
@@ -8,11 +7,9 @@ import graphql.schema.*;
 import java.util.*;
 
 public class ValuesResolver {
-
-
   public Map<String, Object> getVariableValues(GraphQLSchema schema,
       List<VariableDefinition> variableDefinitions, Map<String, Object> inputs) {
-    Map<String, Object> result = new LinkedHashMap<String, Object>();
+    Map<String, Object> result = new LinkedHashMap<>();
     for (VariableDefinition variableDefinition : variableDefinitions) {
       result.put(variableDefinition.getName(),
           getVariableValue(schema, variableDefinition, inputs.get(variableDefinition.getName())));
@@ -20,10 +17,9 @@ public class ValuesResolver {
     return result;
   }
 
-
   public Map<String, Object> getArgumentValues(List<GraphQLArgument> argumentTypes,
       List<Argument> arguments, Map<String, Object> variables) {
-    Map<String, Object> result = new LinkedHashMap<String, Object>();
+    Map<String, Object> result = new LinkedHashMap<>();
     Map<String, Argument> argumentMap = argumentMap(arguments);
     for (GraphQLArgument fieldArgument : argumentTypes) {
       Argument argument = argumentMap.get(fieldArgument.getName());
@@ -38,20 +34,17 @@ public class ValuesResolver {
     return result;
   }
 
-
   private Map<String, Argument> argumentMap(List<Argument> arguments) {
-    Map<String, Argument> result = new LinkedHashMap<String, Argument>();
+    Map<String, Argument> result = new LinkedHashMap<>();
     for (Argument argument : arguments) {
       result.put(argument.getName(), argument);
     }
     return result;
   }
 
-
   private Object getVariableValue(GraphQLSchema schema, VariableDefinition variableDefinition,
       Object inputValue) {
     GraphQLType type = TypeFromAST.getTypeFromAST(schema, variableDefinition.getType());
-
     if (!isValid(type, inputValue)) {
       throw new GraphQLException("Invalid value for type");
     }
@@ -94,7 +87,7 @@ public class ValuesResolver {
 
   private Object coerceValueForInputObjectType(GraphQLInputObjectType inputObjectType,
       Map<String, Object> input) {
-    Map<String, Object> result = new LinkedHashMap<String, Object>();
+    Map<String, Object> result = new LinkedHashMap<>();
     for (GraphQLInputObjectField inputField : inputObjectType.getFields()) {
       Object value = coerceValue(inputField.getType(), input.get(inputField.getName()));
       result.put(inputField.getName(), value == null ? inputField.getDefaultValue() : value);
@@ -113,7 +106,7 @@ public class ValuesResolver {
 
   private List coerceValueForList(GraphQLList graphQLList, Object value) {
     if (value instanceof Iterable) {
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = new ArrayList<>();
       for (Object val : (Iterable) value) {
         result.add(coerceValue(graphQLList.getWrappedType(), val));
       }
@@ -150,7 +143,7 @@ public class ValuesResolver {
       Map<String, Object> variables) {
     if (value instanceof ArrayValue) {
       ArrayValue arrayValue = (ArrayValue) value;
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = new ArrayList<>();
       for (Value singleValue : arrayValue.getValues()) {
         result.add(coerceValueAst(graphQLList.getWrappedType(), singleValue, variables));
       }
@@ -163,7 +156,7 @@ public class ValuesResolver {
 
   private Object coerceValueAstForInputObject(GraphQLInputObjectType type, ObjectValue inputValue,
       Map<String, Object> variables) {
-    Map<String, Object> result = new LinkedHashMap<String, Object>();
+    Map<String, Object> result = new LinkedHashMap<>();
 
     for (ObjectField objectField : inputValue.getObjectFields()) {
       GraphQLInputObjectField inputObjectField = type.getField(objectField.getName());
@@ -178,6 +171,4 @@ public class ValuesResolver {
     }
     return result;
   }
-
-
 }

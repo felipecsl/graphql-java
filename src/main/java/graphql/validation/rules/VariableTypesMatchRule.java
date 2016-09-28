@@ -26,7 +26,7 @@ public class VariableTypesMatchRule extends AbstractRule {
 
   @Override
   public void checkOperationDefinition(OperationDefinition operationDefinition) {
-    variableDefinitionMap = new LinkedHashMap<String, VariableDefinition>();
+    variableDefinitionMap = new LinkedHashMap<>();
   }
 
   @Override

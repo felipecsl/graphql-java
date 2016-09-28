@@ -1,25 +1,23 @@
 package graphql.validation;
 
-
 import graphql.language.*;
 
 import java.util.*;
 
 public class RulesVisitor implements QueryLanguageVisitor {
-
-  private final List<AbstractRule> rules = new ArrayList<AbstractRule>();
+  private final List<AbstractRule> rules = new ArrayList<>();
   private ValidationContext validationContext;
   private boolean subVisitor;
-  private List<AbstractRule> rulesVisitingFragmentSpreads = new ArrayList<AbstractRule>();
+  private List<AbstractRule> rulesVisitingFragmentSpreads = new ArrayList<>();
   private Map<Node, List<AbstractRule>> rulesToSkipByUntilNode =
-      new IdentityHashMap<Node, List<AbstractRule>>();
-  private Set<AbstractRule> rulesToSkip = new LinkedHashSet<AbstractRule>();
+      new IdentityHashMap<>();
+  private Set<AbstractRule> rulesToSkip = new LinkedHashSet<>();
 
   public RulesVisitor(ValidationContext validationContext, List<AbstractRule> rules) {
     this(validationContext, rules, false);
   }
 
-  public RulesVisitor(ValidationContext validationContext, List<AbstractRule> rules,
+  private RulesVisitor(ValidationContext validationContext, List<AbstractRule> rules,
       boolean subVisitor) {
     this.validationContext = validationContext;
     this.subVisitor = subVisitor;
@@ -38,11 +36,10 @@ public class RulesVisitor implements QueryLanguageVisitor {
 
   @Override
   public void enter(Node node, List<Node> ancestors) {
-//        System.out.println("enter: " + node);
     validationContext.getTraversalContext().enter(node, ancestors);
-    Set<AbstractRule> tmpRulesSet = new LinkedHashSet<AbstractRule>(this.rules);
+    Set<AbstractRule> tmpRulesSet = new LinkedHashSet<>(this.rules);
     tmpRulesSet.removeAll(rulesToSkip);
-    List<AbstractRule> rulesToConsider = new ArrayList<AbstractRule>(tmpRulesSet);
+    List<AbstractRule> rulesToConsider = new ArrayList<>(tmpRulesSet);
     if (node instanceof Argument) {
       checkArgument((Argument) node, rulesToConsider);
     } else if (node instanceof TypeName) {
@@ -66,9 +63,7 @@ public class RulesVisitor implements QueryLanguageVisitor {
     } else if (node instanceof SelectionSet) {
       checkSelectionSet((SelectionSet) node, rulesToConsider);
     }
-
   }
-
 
   private void checkArgument(Argument node, List<AbstractRule> rules) {
     for (AbstractRule rule : rules) {
@@ -81,7 +76,6 @@ public class RulesVisitor implements QueryLanguageVisitor {
       rule.checkTypeName(node);
     }
   }
-
 
   private void checkVariableDefinition(VariableDefinition variableDefinition,
       List<AbstractRule> rules) {
@@ -121,7 +115,7 @@ public class RulesVisitor implements QueryLanguageVisitor {
   }
 
   private List<AbstractRule> getRulesVisitingFragmentSpreads(List<AbstractRule> rules) {
-    List<AbstractRule> result = new ArrayList<AbstractRule>();
+    List<AbstractRule> result = new ArrayList<>();
     for (AbstractRule rule : rules) {
       if (rule.isVisitFragmentSpreads()) result.add(rule);
     }
@@ -133,7 +127,7 @@ public class RulesVisitor implements QueryLanguageVisitor {
       List<AbstractRule> rules) {
     if (!subVisitor) {
       rulesToSkipByUntilNode
-          .put(fragmentDefinition, new ArrayList<AbstractRule>(rulesVisitingFragmentSpreads));
+          .put(fragmentDefinition, new ArrayList<>(rulesVisitingFragmentSpreads));
       rulesToSkip.addAll(rulesVisitingFragmentSpreads);
     }
 
@@ -164,7 +158,6 @@ public class RulesVisitor implements QueryLanguageVisitor {
     }
   }
 
-
   @Override
   public void leave(Node node, List<Node> ancestors) {
     validationContext.getTraversalContext().leave(node, ancestors);
@@ -181,8 +174,6 @@ public class RulesVisitor implements QueryLanguageVisitor {
       rulesToSkip.removeAll(rulesToSkipByUntilNode.get(node));
       rulesToSkipByUntilNode.remove(node);
     }
-
-
   }
 
   private void leaveSelectionSet(SelectionSet selectionSet) {

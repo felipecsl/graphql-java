@@ -1,12 +1,10 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnumValue extends AbstractNode implements Value {
-
-  private String name;
+  private final String name;
 
   public EnumValue(String name) {
     this.name = name;
@@ -16,14 +14,9 @@ public class EnumValue extends AbstractNode implements Value {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-
   @Override
   public List<Node> getChildren() {
-    return new ArrayList<Node>();
+    return new ArrayList<>();
   }
 
   @Override
@@ -36,7 +29,6 @@ public class EnumValue extends AbstractNode implements Value {
     return !(name != null ? !name.equals(enumValue.name) : enumValue.name != null);
 
   }
-
 
   @Override
   public String toString() {

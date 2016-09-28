@@ -15,7 +15,7 @@ import java.util.Map;
 public class NoFragmentCycles extends AbstractRule {
 
   private Map<String, List<FragmentSpread>> fragmentSpreads =
-      new LinkedHashMap<String, List<FragmentSpread>>();
+      new LinkedHashMap<>();
 
 
   public NoFragmentCycles(ValidationContext validationContext,
@@ -36,7 +36,7 @@ public class NoFragmentCycles extends AbstractRule {
 
 
   private List<FragmentSpread> gatherSpreads(FragmentDefinition fragmentDefinition) {
-    final List<FragmentSpread> fragmentSpreads = new ArrayList<FragmentSpread>();
+    final List<FragmentSpread> fragmentSpreads = new ArrayList<>();
     QueryLanguageVisitor visitor = new QueryLanguageVisitor() {
       @Override
       public void enter(Node node, List<Node> path) {
@@ -58,7 +58,7 @@ public class NoFragmentCycles extends AbstractRule {
 
   @Override
   public void checkFragmentDefinition(FragmentDefinition fragmentDefinition) {
-    List<FragmentSpread> spreadPath = new ArrayList<FragmentSpread>();
+    List<FragmentSpread> spreadPath = new ArrayList<>();
     detectCycleRecursive(fragmentDefinition.getName(), fragmentDefinition.getName(), spreadPath);
   }
 

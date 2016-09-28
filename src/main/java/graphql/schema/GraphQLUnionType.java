@@ -13,7 +13,7 @@ public class GraphQLUnionType
 
   private final String name;
   private final String description;
-  private List<GraphQLObjectType> types = new ArrayList<GraphQLObjectType>();
+  private List<GraphQLObjectType> types = new ArrayList<>();
   private final TypeResolver typeResolver;
 
 
@@ -31,7 +31,7 @@ public class GraphQLUnionType
 
 
   public List<GraphQLObjectType> getTypes() {
-    return new ArrayList<GraphQLObjectType>(types);
+    return new ArrayList<>(types);
   }
 
   public TypeResolver getTypeResolver() {
@@ -54,7 +54,7 @@ public class GraphQLUnionType
   public static class Builder {
     private String name;
     private String description;
-    private List<GraphQLObjectType> types = new ArrayList<GraphQLObjectType>();
+    private List<GraphQLObjectType> types = new ArrayList<>();
     private TypeResolver typeResolver;
 
     public Builder name(String name) {

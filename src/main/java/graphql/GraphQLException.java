@@ -1,8 +1,6 @@
 package graphql;
 
-
 public class GraphQLException extends RuntimeException {
-
   public GraphQLException() {
   }
 
@@ -17,6 +15,4 @@ public class GraphQLException extends RuntimeException {
   public GraphQLException(Throwable cause) {
     super(cause);
   }
-
-
 }

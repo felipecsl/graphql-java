@@ -35,7 +35,6 @@ class StarWarsIntrospectionTests extends Specification {
                         [name: '__Directive'],
                         [name: '__DirectiveLocation']]
         ]
-
     ];
 
     when:
@@ -44,7 +43,6 @@ class StarWarsIntrospectionTests extends Specification {
     then:
     result == expected
   }
-
 
   def "Allows querying the schema for query type"() {
     given:

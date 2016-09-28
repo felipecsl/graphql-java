@@ -29,8 +29,7 @@ import java.util.concurrent.Future;
  * See {@code graphql.execution.ExecutorServiceExecutionStrategyTest} for example usage.
  */
 public class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
-
-  ExecutorService executorService;
+  private final ExecutorService executorService;
 
   public ExecutorServiceExecutionStrategy(ExecutorService executorService) {
     this.executorService = executorService;
@@ -44,7 +43,7 @@ public class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
       return new SimpleExecutionStrategy().execute(executionContext, parentType, source, fields);
 
     Map<String, Future<ExecutionResult>> futures =
-        new LinkedHashMap<String, Future<ExecutionResult>>();
+        new LinkedHashMap<>();
     for (String fieldName : fields.keySet()) {
       final List<Field> fieldList = fields.get(fieldName);
       Callable<ExecutionResult> resolveField = new Callable<ExecutionResult>() {
@@ -57,7 +56,7 @@ public class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
       futures.put(fieldName, executorService.submit(resolveField));
     }
     try {
-      Map<String, Object> results = new LinkedHashMap<String, Object>();
+      Map<String, Object> results = new LinkedHashMap<>();
       for (String fieldName : futures.keySet()) {
         ExecutionResult executionResult = futures.get(fieldName).get();
 

@@ -1,12 +1,10 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class StringValue extends AbstractNode implements Value {
-
-  private String value;
+  private final String value;
 
   public StringValue(String value) {
     this.value = value;
@@ -16,14 +14,9 @@ public class StringValue extends AbstractNode implements Value {
     return value;
   }
 
-  public void setValue(String value) {
-    this.value = value;
-  }
-
   @Override
   public List<Node> getChildren() {
-    List<Node> result = new ArrayList<Node>();
-    return result;
+    return new ArrayList<>();
   }
 
   @Override
@@ -39,7 +32,5 @@ public class StringValue extends AbstractNode implements Value {
     StringValue that = (StringValue) o;
 
     return !(value != null ? !value.equals(that.value) : that.value != null);
-
   }
-
 }

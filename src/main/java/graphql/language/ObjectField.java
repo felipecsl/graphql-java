@@ -1,13 +1,11 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectField extends AbstractNode {
-
-  private String name;
-  private Value value;
+  private final String name;
+  private final Value value;
 
   public ObjectField(String name, Value value) {
     this.name = name;
@@ -24,7 +22,7 @@ public class ObjectField extends AbstractNode {
 
   @Override
   public List<Node> getChildren() {
-    List<Node> result = new ArrayList<Node>();
+    List<Node> result = new ArrayList<>();
     result.add(value);
     return result;
   }
@@ -37,7 +35,6 @@ public class ObjectField extends AbstractNode {
     ObjectField that = (ObjectField) o;
 
     return !(name != null ? !name.equals(that.name) : that.name != null);
-
   }
 
   @Override

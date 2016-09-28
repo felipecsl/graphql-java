@@ -10,20 +10,19 @@ import graphql.schema.GraphQLSchema;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ExecutionContextBuilder {
+class ExecutionContextBuilder {
+  private final ValuesResolver valuesResolver;
 
-  private ValuesResolver valuesResolver;
-
-  public ExecutionContextBuilder(ValuesResolver valuesResolver) {
+  ExecutionContextBuilder(ValuesResolver valuesResolver) {
     this.valuesResolver = valuesResolver;
   }
 
   public ExecutionContext build(GraphQLSchema graphQLSchema, ExecutionStrategy executionStrategy,
       Object root, Document document, String operationName, Map<String, Object> args) {
     Map<String, FragmentDefinition> fragmentsByName =
-        new LinkedHashMap<String, FragmentDefinition>();
+        new LinkedHashMap<>();
     Map<String, OperationDefinition> operationsByName =
-        new LinkedHashMap<String, OperationDefinition>();
+        new LinkedHashMap<>();
 
     for (Definition definition : document.getDefinitions()) {
       if (definition instanceof OperationDefinition) {
@@ -49,15 +48,9 @@ public class ExecutionContextBuilder {
       throw new GraphQLException();
     }
 
-    ExecutionContext executionContext = new ExecutionContext();
-    executionContext.setGraphQLSchema(graphQLSchema);
-    executionContext.setExecutionStrategy(executionStrategy);
-    executionContext.setOperationDefinition(operation);
-    executionContext.setRoot(root);
-    executionContext.setFragmentsByName(fragmentsByName);
     Map<String, Object> variableValues =
         valuesResolver.getVariableValues(graphQLSchema, operation.getVariableDefinitions(), args);
-    executionContext.setVariables(variableValues);
-    return executionContext;
+    return new ExecutionContext(graphQLSchema, executionStrategy, fragmentsByName, operation,
+        variableValues, root);
   }
 }

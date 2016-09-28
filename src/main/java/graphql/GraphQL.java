@@ -1,6 +1,5 @@
 package graphql;
 
-
 import graphql.execution.Execution;
 import graphql.execution.ExecutionStrategy;
 import graphql.language.Document;
@@ -14,6 +13,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,15 +21,15 @@ import java.util.Map;
 import static graphql.Assert.assertNotNull;
 
 public class GraphQL {
-  private final GraphQLSchema graphQLSchema;
-  private final ExecutionStrategy executionStrategy;
   private static final Logger log = LoggerFactory.getLogger(GraphQL.class);
+  private final GraphQLSchema graphQLSchema;
+  @Nullable private final ExecutionStrategy executionStrategy;
 
   public GraphQL(GraphQLSchema graphQLSchema) {
     this(graphQLSchema, null);
   }
 
-  public GraphQL(GraphQLSchema graphQLSchema, ExecutionStrategy executionStrategy) {
+  public GraphQL(GraphQLSchema graphQLSchema, @Nullable ExecutionStrategy executionStrategy) {
     this.graphQLSchema = graphQLSchema;
     this.executionStrategy = executionStrategy;
   }
