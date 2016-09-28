@@ -1,11 +1,9 @@
 package graphql.validation;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ValidationErrorCollector {
-
   private final List<ValidationError> errors = new ArrayList<>();
 
   public void addError(ValidationError validationError) {

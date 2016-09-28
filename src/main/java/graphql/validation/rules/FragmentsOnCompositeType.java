@@ -1,6 +1,5 @@
 package graphql.validation.rules;
 
-
 import graphql.language.FragmentDefinition;
 import graphql.language.InlineFragment;
 import graphql.schema.GraphQLCompositeType;
@@ -8,8 +7,6 @@ import graphql.schema.GraphQLType;
 import graphql.validation.*;
 
 public class FragmentsOnCompositeType extends AbstractRule {
-
-
   public FragmentsOnCompositeType(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);

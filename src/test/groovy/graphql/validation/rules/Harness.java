@@ -13,7 +13,7 @@ import static graphql.schema.GraphQLUnionType.newUnionType;
 
 public class Harness {
 
-  private static TypeResolver dummyTypeResolve = new TypeResolver() {
+  private static final TypeResolver dummyTypeResolve = new TypeResolver() {
     @Override
     public GraphQLObjectType getType(Object object) {
       return null;

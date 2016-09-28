@@ -1,6 +1,5 @@
 package graphql.validation.rules;
 
-
 import graphql.ShouldNotHappenException;
 import graphql.execution.TypeFromAST;
 import graphql.language.FragmentDefinition;
@@ -13,12 +12,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class PossibleFragmentSpreads extends AbstractRule {
-
   public PossibleFragmentSpreads(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);
   }
-
 
   @Override
   public void checkInlineFragment(InlineFragment inlineFragment) {
@@ -31,7 +28,6 @@ public class PossibleFragmentSpreads extends AbstractRule {
           parentType, fragType);
       addError(new ValidationError(ValidationErrorType.InvalidFragmentType,
           inlineFragment.getSourceLocation(), message));
-
     }
   }
 
@@ -57,7 +53,6 @@ public class PossibleFragmentSpreads extends AbstractRule {
     if (type == parent) {
       return true;
     }
-
     List<? extends GraphQLType> possibleParentTypes;
     if (parent instanceof GraphQLObjectType) {
       possibleParentTypes = Collections.<GraphQLType>singletonList(parent);

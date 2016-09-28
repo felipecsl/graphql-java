@@ -75,7 +75,7 @@ public class GraphQLInterfaceType
   public static class Builder {
     private String name;
     private String description;
-    private List<GraphQLFieldDefinition> fields = new ArrayList<>();
+    private final List<GraphQLFieldDefinition> fields = new ArrayList<>();
     private TypeResolver typeResolver;
 
 

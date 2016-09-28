@@ -1,12 +1,9 @@
 package graphql.validation.rules;
 
-
 import graphql.language.TypeName;
 import graphql.validation.*;
 
 public class KnownTypeNames extends AbstractRule {
-
-
   public KnownTypeNames(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);

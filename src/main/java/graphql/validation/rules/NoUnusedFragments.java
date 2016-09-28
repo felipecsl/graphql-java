@@ -1,6 +1,5 @@
 package graphql.validation.rules;
 
-
 import graphql.language.Document;
 import graphql.language.FragmentDefinition;
 import graphql.language.FragmentSpread;
@@ -13,12 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public class NoUnusedFragments extends AbstractRule {
-
-
   private final List<FragmentDefinition> allDeclaredFragments = new ArrayList<>();
-
   private List<String> usedFragments = new ArrayList<>();
-  private Map<String, List<String>> spreadsInDefinition = new LinkedHashMap<>();
+  private final Map<String, List<String>> spreadsInDefinition = new LinkedHashMap<>();
   private final List<List<String>> fragmentsUsedDirectlyInOperation = new ArrayList<>();
 
   public NoUnusedFragments(ValidationContext validationContext,
@@ -31,7 +27,6 @@ public class NoUnusedFragments extends AbstractRule {
     usedFragments = new ArrayList<>();
     fragmentsUsedDirectlyInOperation.add(usedFragments);
   }
-
 
   @Override
   public void checkFragmentSpread(FragmentSpread fragmentSpread) {
@@ -47,7 +42,6 @@ public class NoUnusedFragments extends AbstractRule {
 
   @Override
   public void documentFinished(Document document) {
-
     List<String> allUsedFragments = new ArrayList<>();
     for (List<String> fragmentsInOneOperation : fragmentsUsedDirectlyInOperation) {
       for (String fragment : fragmentsInOneOperation) {
@@ -62,7 +56,6 @@ public class NoUnusedFragments extends AbstractRule {
             fragmentDefinition.getSourceLocation(), message));
       }
     }
-
   }
 
   private void collectUsedFragmentsInDefinition(List<String> result, String fragmentName) {
@@ -72,7 +65,5 @@ public class NoUnusedFragments extends AbstractRule {
     for (String fragment : spreadList) {
       collectUsedFragmentsInDefinition(result, fragment);
     }
-
   }
-
 }

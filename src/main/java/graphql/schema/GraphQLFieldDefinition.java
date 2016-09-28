@@ -76,7 +76,7 @@ public class GraphQLFieldDefinition {
     private String description;
     private GraphQLOutputType type;
     private DataFetcher dataFetcher;
-    private List<GraphQLArgument> arguments = new ArrayList<>();
+    private final List<GraphQLArgument> arguments = new ArrayList<>();
     private String deprecationReason;
     private boolean isField;
 

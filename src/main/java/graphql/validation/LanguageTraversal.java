@@ -1,19 +1,14 @@
 package graphql.validation;
 
-
 import graphql.language.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LanguageTraversal {
-
-
   public void traverse(Node root, QueryLanguageVisitor queryLanguageVisitor) {
-    List<Node> path = new ArrayList<>();
-    traverseImpl(root, queryLanguageVisitor, path);
+    traverseImpl(root, queryLanguageVisitor, new ArrayList<Node>());
   }
-
 
   private void traverseImpl(Node root, QueryLanguageVisitor queryLanguageVisitor, List<Node> path) {
     queryLanguageVisitor.enter(root, path);
@@ -23,7 +18,5 @@ public class LanguageTraversal {
     }
     path.remove(path.size() - 1);
     queryLanguageVisitor.leave(root, path);
-
-
   }
 }

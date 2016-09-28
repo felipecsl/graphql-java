@@ -51,7 +51,7 @@ public class GraphQLUnionType
   public static class Builder {
     private String name;
     private String description;
-    private List<GraphQLObjectType> types = new ArrayList<>();
+    private final List<GraphQLObjectType> types = new ArrayList<>();
     private TypeResolver typeResolver;
 
     public Builder name(String name) {

@@ -1,6 +1,5 @@
 package graphql.validation.rules;
 
-
 import graphql.language.Definition;
 import graphql.language.FragmentDefinition;
 import graphql.language.FragmentSpread;
@@ -13,10 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class NoFragmentCycles extends AbstractRule {
-
-  private Map<String, List<FragmentSpread>> fragmentSpreads =
-      new LinkedHashMap<>();
-
+  private final Map<String, List<FragmentSpread>> fragmentSpreads = new LinkedHashMap<>();
 
   public NoFragmentCycles(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
@@ -34,7 +30,6 @@ public class NoFragmentCycles extends AbstractRule {
     }
   }
 
-
   private List<FragmentSpread> gatherSpreads(FragmentDefinition fragmentDefinition) {
     final List<FragmentSpread> fragmentSpreads = new ArrayList<>();
     QueryLanguageVisitor visitor = new QueryLanguageVisitor() {
@@ -47,7 +42,6 @@ public class NoFragmentCycles extends AbstractRule {
 
       @Override
       public void leave(Node node, List<Node> path) {
-
       }
     };
 
@@ -68,7 +62,6 @@ public class NoFragmentCycles extends AbstractRule {
 
     outer:
     for (FragmentSpread fragmentSpread : fragmentSpreads) {
-
       if (fragmentSpread.getName().equals(initialName)) {
         String message = "Fragment cycles not allowed";
         addError(

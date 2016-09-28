@@ -1,6 +1,5 @@
 package graphql.validation;
 
-
 import graphql.ShouldNotHappenException;
 import graphql.execution.TypeFromAST;
 import graphql.language.*;
@@ -12,16 +11,14 @@ import java.util.List;
 import static graphql.introspection.Introspection.*;
 
 public class TraversalContext implements QueryLanguageVisitor {
-  GraphQLSchema schema;
-  List<GraphQLOutputType> outputTypeStack = new ArrayList<>();
-  List<GraphQLCompositeType> parentTypeStack = new ArrayList<>();
-  List<GraphQLInputType> inputTypeStack = new ArrayList<>();
-  List<GraphQLFieldDefinition> fieldDefStack = new ArrayList<>();
-  GraphQLDirective directive;
-  GraphQLArgument argument;
-
-  SchemaUtil schemaUtil = new SchemaUtil();
-
+  private final GraphQLSchema schema;
+  private final List<GraphQLOutputType> outputTypeStack = new ArrayList<>();
+  private final List<GraphQLCompositeType> parentTypeStack = new ArrayList<>();
+  private final List<GraphQLInputType> inputTypeStack = new ArrayList<>();
+  private final List<GraphQLFieldDefinition> fieldDefStack = new ArrayList<>();
+  private GraphQLDirective directive;
+  private GraphQLArgument argument;
+  private final SchemaUtil schemaUtil = new SchemaUtil();
 
   public TraversalContext(GraphQLSchema graphQLSchema) {
     this.schema = graphQLSchema;
@@ -51,7 +48,6 @@ public class TraversalContext implements QueryLanguageVisitor {
       enterImpl((ObjectField) node);
     }
   }
-
 
   private void enterImpl(SelectionSet selectionSet) {
     GraphQLUnmodifiedType rawType = new SchemaUtil().getUnmodifiedType(getOutputType());
@@ -140,7 +136,6 @@ public class TraversalContext implements QueryLanguageVisitor {
     return null;
   }
 
-
   @Override
   public void leave(Node node, List<Node> ancestors) {
     if (node instanceof OperationDefinition) {
@@ -168,7 +163,6 @@ public class TraversalContext implements QueryLanguageVisitor {
     }
   }
 
-
   private GraphQLNullableType getNullableType(GraphQLType type) {
     return (GraphQLNullableType) (type instanceof GraphQLNonNull ?
         ((GraphQLNonNull) type).getWrappedType() : type);
@@ -181,7 +175,6 @@ public class TraversalContext implements QueryLanguageVisitor {
   private void addType(GraphQLOutputType type) {
     outputTypeStack.add(type);
   }
-
 
   private <T> T lastElement(List<T> list) {
     if (list.size() == 0) return null;
@@ -219,7 +212,6 @@ public class TraversalContext implements QueryLanguageVisitor {
   public GraphQLArgument getArgument() {
     return argument;
   }
-
 
   private GraphQLFieldDefinition getFieldDef(GraphQLSchema schema, GraphQLType parentType,
       Field field) {

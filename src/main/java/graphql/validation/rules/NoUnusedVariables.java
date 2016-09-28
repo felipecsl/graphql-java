@@ -1,6 +1,5 @@
 package graphql.validation.rules;
 
-
 import graphql.language.OperationDefinition;
 import graphql.language.VariableDefinition;
 import graphql.language.VariableReference;
@@ -13,8 +12,8 @@ import java.util.Set;
 
 public class NoUnusedVariables extends AbstractRule {
 
-  private List<VariableDefinition> variableDefinitions = new ArrayList<>();
-  private Set<String> usedVariables = new LinkedHashSet<>();
+  private final List<VariableDefinition> variableDefinitions = new ArrayList<>();
+  private final Set<String> usedVariables = new LinkedHashSet<>();
 
   public NoUnusedVariables(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {

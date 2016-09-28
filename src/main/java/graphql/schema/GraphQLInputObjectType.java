@@ -56,7 +56,7 @@ public class GraphQLInputObjectType
   public static class Builder {
     private String name;
     private String description;
-    private List<GraphQLInputObjectField> fields = new ArrayList<>();
+    private final List<GraphQLInputObjectField> fields = new ArrayList<>();
 
     public Builder name(String name) {
       this.name = name;

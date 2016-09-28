@@ -8,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ValidationUtil {
-
   public TypeName getUnmodifiedType(Type type) {
     if (type instanceof ListType) {
       return getUnmodifiedType(((ListType) type).getType());
@@ -30,22 +29,17 @@ public class ValidationUtil {
     if (type instanceof GraphQLNonNull) {
       return isValidLiteralValue(value, ((GraphQLNonNull) type).getWrappedType());
     }
-
     if (type instanceof GraphQLScalarType) {
       return ((GraphQLScalarType) type).getCoercing().parseLiteral(value) != null;
     }
     if (type instanceof GraphQLEnumType) {
       return ((GraphQLEnumType) type).getCoercing().parseLiteral(value) != null;
     }
-
     if (type instanceof GraphQLList) {
       return isValidLiteralValue(value, (GraphQLList) type);
     }
-    if (type instanceof GraphQLInputObjectType) {
-      return isValidLiteralValue(value, (GraphQLInputObjectType) type);
-    }
-
-    return false;
+    return type instanceof GraphQLInputObjectType &&
+        isValidLiteralValue(value, (GraphQLInputObjectType) type);
   }
 
   private boolean isValidLiteralValue(Value value, GraphQLInputObjectType type) {
@@ -92,5 +86,4 @@ public class ValidationUtil {
       return isValidLiteralValue(value, wrappedType);
     }
   }
-
 }

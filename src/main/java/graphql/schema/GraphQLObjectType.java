@@ -72,8 +72,8 @@ public class GraphQLObjectType
   public static class Builder {
     private String name;
     private String description;
-    private List<GraphQLFieldDefinition> fieldDefinitions = new ArrayList<>();
-    private List<GraphQLInterfaceType> interfaces = new ArrayList<>();
+    private final List<GraphQLFieldDefinition> fieldDefinitions = new ArrayList<>();
+    private final List<GraphQLInterfaceType> interfaces = new ArrayList<>();
 
     public Builder name(String name) {
       this.name = name;

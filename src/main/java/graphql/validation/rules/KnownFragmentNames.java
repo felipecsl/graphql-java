@@ -1,12 +1,10 @@
 package graphql.validation.rules;
 
-
 import graphql.language.FragmentDefinition;
 import graphql.language.FragmentSpread;
 import graphql.validation.*;
 
 public class KnownFragmentNames extends AbstractRule {
-
   public KnownFragmentNames(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);

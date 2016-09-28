@@ -7,7 +7,7 @@ public class GraphQLArgument {
 
   private final String name;
   private final String description;
-  private GraphQLInputType type;
+  private final GraphQLInputType type;
   private final Object defaultValue;
 
   public GraphQLArgument(String name, String description, GraphQLInputType type,

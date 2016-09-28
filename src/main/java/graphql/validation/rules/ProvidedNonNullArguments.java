@@ -1,6 +1,5 @@
 package graphql.validation.rules;
 
-
 import graphql.language.Argument;
 import graphql.language.Directive;
 import graphql.language.Field;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ProvidedNonNullArguments extends AbstractRule {
-
   public ProvidedNonNullArguments(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);
@@ -46,7 +44,6 @@ public class ProvidedNonNullArguments extends AbstractRule {
     }
     return result;
   }
-
 
   @Override
   public void checkDirective(Directive directive, List<Node> ancestors) {

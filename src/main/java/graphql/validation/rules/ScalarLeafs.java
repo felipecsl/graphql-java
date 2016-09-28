@@ -1,14 +1,12 @@
 package graphql.validation.rules;
 
-
 import graphql.language.Field;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.SchemaUtil;
 import graphql.validation.*;
 
 public class ScalarLeafs extends AbstractRule {
-
-  private SchemaUtil schemaUtil = new SchemaUtil();
+  private final SchemaUtil schemaUtil = new SchemaUtil();
 
   public ScalarLeafs(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {

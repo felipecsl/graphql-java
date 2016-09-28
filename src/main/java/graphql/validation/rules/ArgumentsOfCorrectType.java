@@ -1,12 +1,10 @@
 package graphql.validation.rules;
 
-
 import graphql.language.Argument;
 import graphql.schema.GraphQLArgument;
 import graphql.validation.*;
 
 public class ArgumentsOfCorrectType extends AbstractRule {
-
   public ArgumentsOfCorrectType(ValidationContext validationContext,
       ValidationErrorCollector validationErrorCollector) {
     super(validationContext, validationErrorCollector);
@@ -22,6 +20,4 @@ public class ArgumentsOfCorrectType extends AbstractRule {
           message));
     }
   }
-
-
 }

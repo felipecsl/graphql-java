@@ -63,9 +63,9 @@ public class GarfieldSchema {
 
   public static class Person implements Named {
     private final String name;
-    private List<Dog> dogs;
-    private List<Cat> cats;
-    private List<Named> friends;
+    private final List<Dog> dogs;
+    private final List<Cat> cats;
+    private final List<Named> friends;
 
     public Person(String name) {
       this(name, Collections.<Cat>emptyList(), Collections.<Dog>emptyList(),

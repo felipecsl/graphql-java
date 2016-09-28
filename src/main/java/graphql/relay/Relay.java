@@ -16,7 +16,7 @@ import static graphql.schema.GraphQLInterfaceType.newInterface;
 public class Relay {
 
   public static final String NODE = "Node";
-  private GraphQLObjectType pageInfoType = GraphQLObjectType.newBuilder().name("PageInfo")
+  private final GraphQLObjectType pageInfoType = GraphQLObjectType.newBuilder().name("PageInfo")
       .description("Information about pagination in a connection.")
       .field(GraphQLFieldDefinition.newBuilder()
           .name("hasNextPage")

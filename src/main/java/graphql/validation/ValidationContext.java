@@ -1,6 +1,5 @@
 package graphql.validation;
 
-
 import graphql.language.Definition;
 import graphql.language.Document;
 import graphql.language.FragmentDefinition;
@@ -10,14 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ValidationContext {
-
   private final GraphQLSchema schema;
   private final Document document;
-
-  private TraversalContext traversalContext;
+  private final TraversalContext traversalContext;
   private final Map<String, FragmentDefinition> fragmentDefinitionMap =
       new LinkedHashMap<>();
-
 
   public ValidationContext(GraphQLSchema schema, Document document) {
     this.schema = schema;
