@@ -6,7 +6,6 @@ import graphql.schema.GraphQLNonNull;
 import graphql.schema.GraphQLType;
 
 public class VariablesTypesMatcher {
-
   public boolean doesVariableTypesMatch(GraphQLType variableType, Value variableDefaultValue,
       GraphQLType expectedType) {
     return checkType(effectiveType(variableType, variableDefaultValue), expectedType);

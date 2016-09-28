@@ -11,7 +11,7 @@ import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newBuilder;
 
 public class Introspection {
-  public enum TypeKind {
+  private enum TypeKind {
     SCALAR, OBJECT, INTERFACE, UNION, ENUM, INPUT_OBJECT, LIST, NON_NULL
   }
 
@@ -33,7 +33,7 @@ public class Introspection {
       .value("NON_NULL", TypeKind.NON_NULL,
           "Indicates this type is a non-null. `ofType` is a valid field.").build();
 
-  public static DataFetcher kindDataFetcher = new DataFetcher() {
+  private static final DataFetcher kindDataFetcher = new DataFetcher() {
     @Override
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();
@@ -150,7 +150,7 @@ public class Introspection {
           .type(GraphQLString))
       .build();
 
-  public static DataFetcher fieldsFetcher = new DataFetcher() {
+  private static final DataFetcher fieldsFetcher = new DataFetcher() {
     @Override
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();
@@ -170,7 +170,7 @@ public class Introspection {
     }
   };
 
-  public static DataFetcher interfacesFetcher = new DataFetcher() {
+  private static final DataFetcher interfacesFetcher = new DataFetcher() {
     @Override
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();
@@ -181,7 +181,7 @@ public class Introspection {
     }
   };
 
-  public static DataFetcher possibleTypesFetcher = new DataFetcher() {
+  private static final DataFetcher possibleTypesFetcher = new DataFetcher() {
     @Override
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();
@@ -196,7 +196,7 @@ public class Introspection {
     }
   };
 
-  public static DataFetcher enumValuesTypesFetcher = new DataFetcher() {
+  private static final DataFetcher enumValuesTypesFetcher = new DataFetcher() {
     @Override
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();
@@ -215,7 +215,7 @@ public class Introspection {
     }
   };
 
-  public static DataFetcher inputFieldsFetcher = new DataFetcher() {
+  private static final DataFetcher inputFieldsFetcher = new DataFetcher() {
     @Override
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();
@@ -226,7 +226,7 @@ public class Introspection {
     }
   };
 
-  public static DataFetcher OfTypeFetcher = new DataFetcher() {
+  private static final DataFetcher OfTypeFetcher = new DataFetcher() {
     @Override
     public Object get(DataFetchingEnvironment environment) {
       Object type = environment.getSource();

@@ -24,8 +24,9 @@ public class SchemaUtil {
   public static GraphQLUnmodifiedType getUnmodifiedType(GraphQLType graphQLType) {
     if (graphQLType instanceof GraphQLModifiedType) {
       return getUnmodifiedType(((GraphQLModifiedType) graphQLType).getWrappedType());
+    } else {
+      return (GraphQLUnmodifiedType) graphQLType;
     }
-    return (GraphQLUnmodifiedType) graphQLType;
   }
 
   private static void collectTypes(GraphQLType root, Map<String, GraphQLType> result) {
@@ -99,7 +100,8 @@ public class SchemaUtil {
     }
   }
 
-  public static Map<String, GraphQLType> allTypes(GraphQLSchema schema, Set<GraphQLType> dictionary) {
+  public static Map<String, GraphQLType> allTypes(GraphQLSchema schema,
+      Set<GraphQLType> dictionary) {
     Map<String, GraphQLType> typesByName = new LinkedHashMap<>();
     collectTypes(schema.getQueryType(), typesByName);
     if (schema.isSupportingMutations()) {

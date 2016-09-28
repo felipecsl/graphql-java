@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OperationDefinition extends AbstractNode implements Definition {
-
   public enum Operation {
     QUERY, MUTATION
   }
@@ -82,7 +81,6 @@ public class OperationDefinition extends AbstractNode implements Definition {
   public void setSelectionSet(SelectionSet selectionSet) {
     this.selectionSet = selectionSet;
   }
-
 
   @Override
   public boolean isEqualTo(Node o) {
