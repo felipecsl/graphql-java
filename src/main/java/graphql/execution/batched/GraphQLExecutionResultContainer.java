@@ -7,29 +7,31 @@ import java.util.Map;
 
 public abstract class GraphQLExecutionResultContainer {
 
-    /**
-     * Creates a child datum which is linked through the results container to this parent.
-     * @param fieldName fieldName
-     * @param value value
-     * @return datum
-     */
-    public GraphQLExecutionNodeDatum createAndPutChildDatum(String fieldName, Object value) {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
-        putResult(fieldName, map);
-        return new GraphQLExecutionNodeDatum(map, value);
-    }
+  /**
+   * Creates a child datum which is linked through the results container to this parent.
+   *
+   * @param fieldName fieldName
+   * @param value     value
+   * @return datum
+   */
+  public GraphQLExecutionNodeDatum createAndPutChildDatum(String fieldName, Object value) {
+    Map<String, Object> map = new LinkedHashMap<String, Object>();
+    putResult(fieldName, map);
+    return new GraphQLExecutionNodeDatum(map, value);
+  }
 
-    public GraphQLExecutionResultList createAndPutEmptyChildList(String fieldName) {
-        List<Object> resultList = new ArrayList<Object>();
-        putResult(fieldName, resultList);
-        return new GraphQLExecutionResultList(resultList);
-    }
+  public GraphQLExecutionResultList createAndPutEmptyChildList(String fieldName) {
+    List<Object> resultList = new ArrayList<Object>();
+    putResult(fieldName, resultList);
+    return new GraphQLExecutionResultList(resultList);
+  }
 
-    /**
-     * Inserts this result into the parent for the specified field.
-     * @param fieldName fieldName
-     * @param value value
-     */
-    abstract void putResult(String fieldName, Object value);
+  /**
+   * Inserts this result into the parent for the specified field.
+   *
+   * @param fieldName fieldName
+   * @param value     value
+   */
+  abstract void putResult(String fieldName, Object value);
 
 }

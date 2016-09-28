@@ -12,24 +12,24 @@ import org.slf4j.LoggerFactory;
 
 public class Parser {
 
-    private static final Logger log = LoggerFactory.getLogger(Parser.class);
+  private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
 
-    public Document parseDocument(String input) {
+  public Document parseDocument(String input) {
 
-        GraphqlLexer lexer = new GraphqlLexer(new ANTLRInputStream(input));
+    GraphqlLexer lexer = new GraphqlLexer(new ANTLRInputStream(input));
 
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
+    CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        GraphqlParser parser = new GraphqlParser(tokens);
-        parser.removeErrorListeners();
-        parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-        parser.setErrorHandler(new BailErrorStrategy());
-        GraphqlParser.DocumentContext document = parser.document();
+    GraphqlParser parser = new GraphqlParser(tokens);
+    parser.removeErrorListeners();
+    parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+    parser.setErrorHandler(new BailErrorStrategy());
+    GraphqlParser.DocumentContext document = parser.document();
 
 
-        GraphqlAntlrToLanguage antlrToLanguage = new GraphqlAntlrToLanguage();
-        antlrToLanguage.visitDocument(document);
-        return antlrToLanguage.result;
-    }
+    GraphqlAntlrToLanguage antlrToLanguage = new GraphqlAntlrToLanguage();
+    antlrToLanguage.visitDocument(document);
+    return antlrToLanguage.result;
+  }
 }

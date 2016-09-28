@@ -17,84 +17,84 @@ import static graphql.Scalars.GraphQLString
 
 class ProvidedNonNullArgumentsTest extends Specification {
 
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    ProvidedNonNullArguments providedNonNullArguments = new ProvidedNonNullArguments(validationContext, errorCollector)
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  ProvidedNonNullArguments providedNonNullArguments = new ProvidedNonNullArguments(validationContext, errorCollector)
 
-    def "not provided field argument"() {
-        given:
-        def fieldArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
-        def fieldDef = GraphQLFieldDefinition.newFieldDefinition()
-                .name("field")
-                .type(GraphQLString)
-                .argument(fieldArg)
-                .build()
-        validationContext.getFieldDef() >> fieldDef
+  def "not provided field argument"() {
+    given:
+    def fieldArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
+    def fieldDef = GraphQLFieldDefinition.newBuilder()
+        .name("field")
+        .type(GraphQLString)
+        .argument(fieldArg)
+        .build()
+    validationContext.getFieldDef() >> fieldDef
 
-        def field = new Field("field")
+    def field = new Field("field")
 
-        when:
-        providedNonNullArguments.checkField(field)
+    when:
+    providedNonNullArguments.checkField(field)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.MissingFieldArgument)
-    }
-
-
-    def "all field arguments are provided"() {
-        given:
-        def fieldArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
-        def fieldDef = GraphQLFieldDefinition.newFieldDefinition()
-                .name("field")
-                .type(GraphQLString)
-                .argument(fieldArg)
-                .build()
-        validationContext.getFieldDef() >> fieldDef
-
-        def field = new Field("field", [new Argument("arg", new StringValue("hallo"))])
-
-        when:
-        providedNonNullArguments.checkField(field)
-
-        then:
-        errorCollector.getErrors().isEmpty()
-    }
-
-    def "not provided directive argument"() {
-        given:
-        def directiveArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
-        def graphQLDirective = GraphQLDirective.newDirective()
-                .name("directive")
-                .argument(directiveArg)
-                .build()
-        validationContext.getDirective() >> graphQLDirective
-
-        def directive = new Directive("directive")
-
-        when:
-        providedNonNullArguments.checkDirective(directive,[])
-
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.MissingDirectiveArgument)
-    }
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.MissingFieldArgument)
+  }
 
 
-    def "all directive arguments are provided"() {
-        given:
-        def directiveArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
-        def graphQLDirective = GraphQLDirective.newDirective()
-                .name("directive")
-                .argument(directiveArg)
-                .build()
-        validationContext.getDirective() >> graphQLDirective
+  def "all field arguments are provided"() {
+    given:
+    def fieldArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
+    def fieldDef = GraphQLFieldDefinition.newBuilder()
+        .name("field")
+        .type(GraphQLString)
+        .argument(fieldArg)
+        .build()
+    validationContext.getFieldDef() >> fieldDef
 
-        def directive = new Directive("directive", [new Argument("arg", new StringValue("hallo"))])
+    def field = new Field("field", [new Argument("arg", new StringValue("hallo"))])
+
+    when:
+    providedNonNullArguments.checkField(field)
+
+    then:
+    errorCollector.getErrors().isEmpty()
+  }
+
+  def "not provided directive argument"() {
+    given:
+    def directiveArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
+    def graphQLDirective = GraphQLDirective.newDirective()
+        .name("directive")
+        .argument(directiveArg)
+        .build()
+    validationContext.getDirective() >> graphQLDirective
+
+    def directive = new Directive("directive")
+
+    when:
+    providedNonNullArguments.checkDirective(directive, [])
+
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.MissingDirectiveArgument)
+  }
 
 
-        when:
-        providedNonNullArguments.checkDirective(directive,[])
+  def "all directive arguments are provided"() {
+    given:
+    def directiveArg = GraphQLArgument.newArgument().name("arg").type(new GraphQLNonNull(GraphQLString))
+    def graphQLDirective = GraphQLDirective.newDirective()
+        .name("directive")
+        .argument(directiveArg)
+        .build()
+    validationContext.getDirective() >> graphQLDirective
 
-        then:
-        errorCollector.getErrors().isEmpty()
-    }
+    def directive = new Directive("directive", [new Argument("arg", new StringValue("hallo"))])
+
+
+    when:
+    providedNonNullArguments.checkDirective(directive, [])
+
+    then:
+    errorCollector.getErrors().isEmpty()
+  }
 }

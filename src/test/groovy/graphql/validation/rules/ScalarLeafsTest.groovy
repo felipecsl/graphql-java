@@ -11,29 +11,29 @@ import spock.lang.Specification
 
 class ScalarLeafsTest extends Specification {
 
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    ValidationContext validationContext = Mock(ValidationContext)
-    ScalarLeafs scalarLeafs = new ScalarLeafs(validationContext, errorCollector)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  ValidationContext validationContext = Mock(ValidationContext)
+  ScalarLeafs scalarLeafs = new ScalarLeafs(validationContext, errorCollector)
 
-    def "sub selection not allowed"() {
-        given:
-        Field field = new Field("hello", new SelectionSet([new Field("world")]))
-        validationContext.getOutputType() >> Scalars.GraphQLString
-        when:
-        scalarLeafs.checkField(field)
+  def "sub selection not allowed"() {
+    given:
+    Field field = new Field("hello", new SelectionSet([new Field("world")]))
+    validationContext.getOutputType() >> Scalars.GraphQLString
+    when:
+    scalarLeafs.checkField(field)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.SubSelectionNotAllowed)
-    }
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.SubSelectionNotAllowed)
+  }
 
-    def "sub selection required"() {
-        given:
-        Field field = new Field("hello")
-        validationContext.getOutputType() >> GraphQLObjectType.newObject().name("objectType").build()
-        when:
-        scalarLeafs.checkField(field)
+  def "sub selection required"() {
+    given:
+    Field field = new Field("hello")
+    validationContext.getOutputType() >> GraphQLObjectType.newBuilder().name("objectType").build()
+    when:
+    scalarLeafs.checkField(field)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.SubSelectionRequired)
-    }
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.SubSelectionRequired)
+  }
 }

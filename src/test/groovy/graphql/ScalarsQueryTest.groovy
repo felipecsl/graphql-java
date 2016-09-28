@@ -6,9 +6,9 @@ import spock.lang.Unroll;
 
 class ScalarsQueryTest extends Specification {
 
-    def 'Large BigIntegers'() {
-        given:
-        def query = """
+  def 'Large BigIntegers'() {
+    given:
+    def query = """
         query BigInteger {
           bigInteger
           i1: bigIntegerInput(input: 1234567890123456789012345678901234567890)
@@ -16,24 +16,24 @@ class ScalarsQueryTest extends Specification {
           i3: bigIntegerString(input: "1234567890123456789012345678901234567890")
         }
         """
-        def expected = [
-                bigInteger: 9999,
-                i1: 1234567890123456789012345678901234567890,
-                i2: 1234567890123456789012345678901234567890,
-                i3: 1234567890123456789012345678901234567890
-        ]
+    def expected = [
+        bigInteger: 9999,
+        i1        : 1234567890123456789012345678901234567890,
+        i2        : 1234567890123456789012345678901234567890,
+        i3        : 1234567890123456789012345678901234567890
+    ]
 
-        when:
-        def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
+    when:
+    def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
 
-        then:
-        result.data == expected
-        result.errors.empty == true
-    }
-    
-    def 'Large BigDecimals'() {
-        given:
-        def query = """
+    then:
+    result.data == expected
+    result.errors.empty == true
+  }
+
+  def 'Large BigDecimals'() {
+    given:
+    def query = """
         query BigDecimal {
           bigDecimal
           d1: bigDecimalInput(input: "1234567890123456789012345678901234567890.0")
@@ -41,84 +41,84 @@ class ScalarsQueryTest extends Specification {
           d3: bigDecimalString(input: "1234567890123456789012345678901234567890.0")
         }
         """
-        def expected = [
-                bigDecimal: 1234.0,
-                d1: 1234567890123456789012345678901234567890.0,
-                d2: 1234567890123456789012345678901234567890.0,
-                d3: 1234567890123456789012345678901234567890.0,
-        ]
+    def expected = [
+        bigDecimal: 1234.0,
+        d1        : 1234567890123456789012345678901234567890.0,
+        d2        : 1234567890123456789012345678901234567890.0,
+        d3        : 1234567890123456789012345678901234567890.0,
+    ]
 
-        when:
-        def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
+    when:
+    def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
 
-        then:
-        result.data == expected
-        result.errors.empty == true
-    }
+    then:
+    result.data == expected
+    result.errors.empty == true
+  }
 
-    def 'Float NaN Not a Number '() {
-        given:
-        def query = """
+  def 'Float NaN Not a Number '() {
+    given:
+    def query = """
         query FloatNaN {
           floatNaN
         }
         """
-        def expected = [
-                floatNaN: null
-        ]
+    def expected = [
+        floatNaN: null
+    ]
 
-        when:
-        def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
-        def resultBatched = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema, new BatchedExecutionStrategy()).execute(query)
+    when:
+    def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
+    def resultBatched = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema, new BatchedExecutionStrategy()).execute(query)
 
-        then:
-        result.data == expected
-        result.errors.empty
-        resultBatched.data == expected
-        resultBatched.errors.empty
-    }
+    then:
+    result.data == expected
+    result.errors.empty
+    resultBatched.data == expected
+    resultBatched.errors.empty
+  }
 
-    def 'Escaped characters are handled'() {
-        given:
-        def query = """
+  def 'Escaped characters are handled'() {
+    given:
+    def query = """
         query {
           stringInput(input: "test \\" \\/ \\b \\f \\n \\r \\t \\u12Aa")
         }
         """
-        def expected = [
-                stringInput: "test \" / \b \f \n \r \t \u12Aa",
-        ]
+    def expected = [
+        stringInput: "test \" / \b \f \n \r \t \u12Aa",
+    ]
 
-        when:
-        def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
+    when:
+    def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
 
-        then:
-        result.data == expected
-        result.errors.empty == true
-    }
-    
-    @Unroll
-    def "FooBar String cannot be cast to #number"() {
-        given:
-        def query = "{ " + number + "String(input: \"foobar\") }"
-        
-        when:
-        def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
-        
-        then:
-        //FIXME do not propagate exception, but instead raise an error.
-        thrown(NumberFormatException)
-        //TODO result.errors.empty == false
-        //TODO result.errors == xyz
-        
-        where:
-        number       | _
-        "bigInteger" | _
-        "bigDecimal" | _
-        "float"      | _
-        "long"       | _
-        "int"        | _
-        "short"      | _
-        "byte"       | _
-    }
+    then:
+    result.data == expected
+    result.errors.empty == true
+  }
+
+  @Unroll
+  def "FooBar String cannot be cast to #number"() {
+    given:
+    def query = "{ " + number + "String(input: \"foobar\") }"
+
+    when:
+    def result = new GraphQL(ScalarsQuerySchema.scalarsQuerySchema).execute(query)
+
+    then:
+    //FIXME do not propagate exception, but instead raise an error.
+    thrown(NumberFormatException)
+    //TODO result.errors.empty == false
+    //TODO result.errors == xyz
+
+    where:
+    number       | _
+    "bigInteger" | _
+    "bigDecimal" | _
+    "float"      | _
+    "long"       | _
+    "int"        | _
+    "short"      | _
+    "byte"       | _
+  }
 }

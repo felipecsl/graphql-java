@@ -6,7 +6,7 @@ package graphql.schema;
  * build graphql types. e.g:
  * <pre>
  * {@code
- *  GraphQLObjectType.Builder obj = GraphQLObjectType.newObject();
+ *  GraphQLObjectType.Builder obj = GraphQLObjectType.newArgument();
  *     obj.field(field -> field
  *             .name("fieldName")
  *             .argument(arg -> arg
@@ -17,5 +17,5 @@ package graphql.schema;
  * @param <T> type of result supplied
  */
 public interface BuilderFunction<T> {
-    T apply(T t);
+  T apply(T t);
 }

@@ -12,18 +12,18 @@ import static graphql.Scalars.GraphQLString
 
 class KnownArgumentNamesTest extends Specification {
 
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    KnownArgumentNames knownArgumentNames = new KnownArgumentNames(validationContext, errorCollector)
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  KnownArgumentNames knownArgumentNames = new KnownArgumentNames(validationContext, errorCollector)
 
-    def "unknown argument"(){
-        given:
-        Argument argument = new Argument("unknownArg",new StringValue("value"))
-        def fieldDefinition = GraphQLFieldDefinition.newFieldDefinition().name("field").type(GraphQLString).build();
-        validationContext.getFieldDef() >> fieldDefinition
-        when:
-        knownArgumentNames.checkArgument(argument)
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.UnknownArgument)
-    }
+  def "unknown argument"() {
+    given:
+    Argument argument = new Argument("unknownArg", new StringValue("value"))
+    def fieldDefinition = GraphQLFieldDefinition.newBuilder().name("field").type(GraphQLString).build();
+    validationContext.getFieldDef() >> fieldDefinition
+    when:
+    knownArgumentNames.checkArgument(argument)
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.UnknownArgument)
+  }
 }

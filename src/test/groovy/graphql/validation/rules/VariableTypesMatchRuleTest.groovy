@@ -10,34 +10,34 @@ import spock.lang.Specification
 
 class VariableTypesMatchRuleTest extends Specification {
 
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    VariableTypesMatchRule variableTypesMatchRule = new VariableTypesMatchRule(validationContext,errorCollector)
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  VariableTypesMatchRule variableTypesMatchRule = new VariableTypesMatchRule(validationContext, errorCollector)
 
-    def setup(){
-        variableTypesMatchRule.variablesTypesMatcher = Mock(VariablesTypesMatcher)
+  def setup() {
+    variableTypesMatchRule.variablesTypesMatcher = Mock(VariablesTypesMatcher)
 
-    }
+  }
 
-    def "invalid type"(){
-        given:
-        def defaultValue = new StringValue("default")
-        def astType = new TypeName("String")
-        def expectedType = Scalars.GraphQLBoolean
+  def "invalid type"() {
+    given:
+    def defaultValue = new StringValue("default")
+    def astType = new TypeName("String")
+    def expectedType = Scalars.GraphQLBoolean
 
-        validationContext.getSchema() >> StarWarsSchema.starWarsSchema
-        validationContext.getInputType() >> expectedType
-        variableTypesMatchRule.variablesTypesMatcher
-                .doesVariableTypesMatch(Scalars.GraphQLString,defaultValue,expectedType) >> false
+    validationContext.getSchema() >> StarWarsSchema.starWarsSchema
+    validationContext.getInputType() >> expectedType
+    variableTypesMatchRule.variablesTypesMatcher
+        .doesVariableTypesMatch(Scalars.GraphQLString, defaultValue, expectedType) >> false
 
-        when:
-        variableTypesMatchRule.checkOperationDefinition(new OperationDefinition())
-        variableTypesMatchRule.checkVariableDefinition(new VariableDefinition("var",astType,defaultValue))
-        variableTypesMatchRule.checkVariable(new VariableReference("var"))
+    when:
+    variableTypesMatchRule.checkOperationDefinition(new OperationDefinition())
+    variableTypesMatchRule.checkVariableDefinition(new VariableDefinition("var", astType, defaultValue))
+    variableTypesMatchRule.checkVariable(new VariableReference("var"))
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.VariableTypeMismatch)
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.VariableTypeMismatch)
 
 
-    }
+  }
 }

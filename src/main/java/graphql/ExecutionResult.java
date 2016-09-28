@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ExecutionResult {
 
-    Object getData();
+  Object getData();
 
-    List<GraphQLError> getErrors();
+  List<GraphQLError> getErrors();
 }

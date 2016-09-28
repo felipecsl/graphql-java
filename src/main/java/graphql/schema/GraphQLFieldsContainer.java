@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface GraphQLFieldsContainer extends GraphQLType {
 
-    GraphQLFieldDefinition getFieldDefinition(String name);
+  GraphQLFieldDefinition getFieldDefinition(String name);
 
-    List<GraphQLFieldDefinition> getFieldDefinitions();
+  List<GraphQLFieldDefinition> getFieldDefinitions();
 }

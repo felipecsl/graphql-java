@@ -12,21 +12,21 @@ import spock.lang.Specification
 
 class VariablesAreInputTypesTest extends Specification {
 
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    VariablesAreInputTypes variablesAreInputTypes = new VariablesAreInputTypes(validationContext, errorCollector)
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  VariablesAreInputTypes variablesAreInputTypes = new VariablesAreInputTypes(validationContext, errorCollector)
 
 
-    def "the unmodified ast type is not a schema input type"() {
-        given:
-        def astType = new NonNullType(new ListType(new TypeName(StarWarsSchema.droidType.getName())))
-        VariableDefinition variableDefinition = new VariableDefinition("var", astType)
-        validationContext.getSchema() >> StarWarsSchema.starWarsSchema
+  def "the unmodified ast type is not a schema input type"() {
+    given:
+    def astType = new NonNullType(new ListType(new TypeName(StarWarsSchema.droidType.getName())))
+    VariableDefinition variableDefinition = new VariableDefinition("var", astType)
+    validationContext.getSchema() >> StarWarsSchema.starWarsSchema
 
-        when:
-        variablesAreInputTypes.checkVariableDefinition(variableDefinition)
+    when:
+    variablesAreInputTypes.checkVariableDefinition(variableDefinition)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.NonInputTypeOnVariable)
-    }
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.NonInputTypeOnVariable)
+  }
 }

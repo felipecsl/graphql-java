@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface GraphQLError {
 
-    String getMessage();
+  String getMessage();
 
-    List<SourceLocation> getLocations();
+  List<SourceLocation> getLocations();
 
-    ErrorType getErrorType();
+  ErrorType getErrorType();
 
 }

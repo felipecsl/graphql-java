@@ -8,21 +8,21 @@ import spock.lang.Specification
 
 class KnownFragmentNamesTest extends Specification {
 
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    KnownFragmentNames knownFragmentNames = new KnownFragmentNames(validationContext, errorCollector)
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  KnownFragmentNames knownFragmentNames = new KnownFragmentNames(validationContext, errorCollector)
 
-    def "unknown fragment reference in fragment spread"() {
-        given:
-        FragmentSpread fragmentSpread = new FragmentSpread("fragment")
-        knownFragmentNames.validationContext.getFragment("fragment") >> null
-        when:
-        knownFragmentNames.checkFragmentSpread(fragmentSpread);
+  def "unknown fragment reference in fragment spread"() {
+    given:
+    FragmentSpread fragmentSpread = new FragmentSpread("fragment")
+    knownFragmentNames.validationContext.getFragment("fragment") >> null
+    when:
+    knownFragmentNames.checkFragmentSpread(fragmentSpread);
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.UndefinedFragment)
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.UndefinedFragment)
 
-    }
+  }
 
 
 }

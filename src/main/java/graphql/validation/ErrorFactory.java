@@ -10,15 +10,16 @@ import java.util.List;
 public class ErrorFactory {
 
 
-    public ValidationError newError(ValidationErrorType validationErrorType, List<? extends Node> locations, String description) {
-        List<SourceLocation> locationList = new ArrayList<SourceLocation>();
-        for (Node node : locations) {
-            locationList.add(node.getSourceLocation());
-        }
-        return new ValidationError(validationErrorType, locationList, description);
+  public ValidationError newError(ValidationErrorType validationErrorType,
+      List<? extends Node> locations, String description) {
+    List<SourceLocation> locationList = new ArrayList<SourceLocation>();
+    for (Node node : locations) {
+      locationList.add(node.getSourceLocation());
     }
+    return new ValidationError(validationErrorType, locationList, description);
+  }
 
-    public ValidationError newError(ValidationErrorType validationErrorType, String description) {
-        return new ValidationError(validationErrorType, (List) null, description);
-    }
+  public ValidationError newError(ValidationErrorType validationErrorType, String description) {
+    return new ValidationError(validationErrorType, (List) null, description);
+  }
 }

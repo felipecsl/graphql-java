@@ -6,42 +6,40 @@ import java.util.List;
 
 public class ObjectValue extends AbstractNode implements Value {
 
-    private List<ObjectField> objectFields = new ArrayList<ObjectField>();
+  private List<ObjectField> objectFields = new ArrayList<ObjectField>();
 
-    public ObjectValue() {
-    }
+  public ObjectValue() {
+  }
 
-    public ObjectValue(List<ObjectField> objectFields) {
-        this.objectFields.addAll(objectFields);
-    }
+  public ObjectValue(List<ObjectField> objectFields) {
+    this.objectFields.addAll(objectFields);
+  }
 
-    public List<ObjectField> getObjectFields() {
-        return objectFields;
-    }
+  public List<ObjectField> getObjectFields() {
+    return objectFields;
+  }
 
-    @Override
-    public List<Node> getChildren() {
-        List<Node> result = new ArrayList<Node>();
-        result.addAll(objectFields);
-        return result;
-    }
+  @Override
+  public List<Node> getChildren() {
+    List<Node> result = new ArrayList<Node>();
+    result.addAll(objectFields);
+    return result;
+  }
 
-    @Override
-    public boolean isEqualTo(Node o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public boolean isEqualTo(Node o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        ObjectValue that = (ObjectValue) o;
+    ObjectValue that = (ObjectValue) o;
 
-        return true;
+    return true;
 
-    }
+  }
 
 
-    @Override
-    public String toString() {
-        return "ObjectValue{" +
-                "objectFields=" + objectFields +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "ObjectValue{" + "objectFields=" + objectFields + '}';
+  }
 }

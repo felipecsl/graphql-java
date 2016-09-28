@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface QueryLanguageVisitor {
 
-    void enter(Node node, List<Node> path);
+  void enter(Node node, List<Node> path);
 
-    void leave(Node node, List<Node> path);
+  void leave(Node node, List<Node> path);
 }

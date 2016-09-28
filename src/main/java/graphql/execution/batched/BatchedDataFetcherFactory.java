@@ -15,24 +15,24 @@ import java.lang.reflect.Method;
  */
 
 public class BatchedDataFetcherFactory {
-    public BatchedDataFetcher create(final DataFetcher supplied) {
-        if (supplied instanceof BatchedDataFetcher) {
-            return (BatchedDataFetcher) supplied;
-        }
-        try {
-            Method getMethod = supplied.getClass().getMethod("get", DataFetchingEnvironment.class);
-            Batched batched = getMethod.getAnnotation(Batched.class);
-            if (batched != null) {
-                return new BatchedDataFetcher() {
-                    @Override
-                    public Object get(DataFetchingEnvironment environment) {
-                        return supplied.get(environment);
-                    }
-                };
-            }
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException(e);
-        }
-        return new UnbatchedDataFetcher(supplied);
+  public BatchedDataFetcher create(final DataFetcher supplied) {
+    if (supplied instanceof BatchedDataFetcher) {
+      return (BatchedDataFetcher) supplied;
     }
+    try {
+      Method getMethod = supplied.getClass().getMethod("get", DataFetchingEnvironment.class);
+      Batched batched = getMethod.getAnnotation(Batched.class);
+      if (batched != null) {
+        return new BatchedDataFetcher() {
+          @Override
+          public Object get(DataFetchingEnvironment environment) {
+            return supplied.get(environment);
+          }
+        };
+      }
+    } catch (NoSuchMethodException e) {
+      throw new IllegalArgumentException(e);
+    }
+    return new UnbatchedDataFetcher(supplied);
+  }
 }

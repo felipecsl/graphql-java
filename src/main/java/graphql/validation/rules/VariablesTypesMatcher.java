@@ -8,34 +8,37 @@ import graphql.schema.GraphQLType;
 
 public class VariablesTypesMatcher {
 
-    public boolean doesVariableTypesMatch(GraphQLType variableType, Value variableDefaultValue, GraphQLType expectedType) {
-        return checkType(effectiveType(variableType, variableDefaultValue), expectedType);
+  public boolean doesVariableTypesMatch(GraphQLType variableType, Value variableDefaultValue,
+      GraphQLType expectedType) {
+    return checkType(effectiveType(variableType, variableDefaultValue), expectedType);
+  }
+
+  private GraphQLType effectiveType(GraphQLType variableType, Value defaultValue) {
+    if (defaultValue == null) return variableType;
+    if (variableType instanceof GraphQLNonNull) return variableType;
+    return new GraphQLNonNull(variableType);
+  }
+
+  private boolean checkType(GraphQLType actualType, GraphQLType expectedType) {
+
+    if (expectedType instanceof GraphQLNonNull) {
+      if (actualType instanceof GraphQLNonNull) {
+        return checkType(((GraphQLNonNull) actualType).getWrappedType(),
+            ((GraphQLNonNull) expectedType).getWrappedType());
+      }
+      return false;
     }
 
-    private GraphQLType effectiveType(GraphQLType variableType, Value defaultValue) {
-        if (defaultValue == null) return variableType;
-        if (variableType instanceof GraphQLNonNull) return variableType;
-        return new GraphQLNonNull(variableType);
+    if (actualType instanceof GraphQLNonNull) {
+      return checkType(((GraphQLNonNull) actualType).getWrappedType(), expectedType);
     }
 
-    private boolean checkType(GraphQLType actualType, GraphQLType expectedType) {
 
-        if (expectedType instanceof GraphQLNonNull) {
-            if (actualType instanceof GraphQLNonNull) {
-                return checkType(((GraphQLNonNull) actualType).getWrappedType(), ((GraphQLNonNull) expectedType).getWrappedType());
-            }
-            return false;
-        }
-
-        if (actualType instanceof GraphQLNonNull) {
-            return checkType(((GraphQLNonNull) actualType).getWrappedType(), expectedType);
-        }
-
-
-        if ((actualType instanceof GraphQLList) && (expectedType instanceof GraphQLList)) {
-            return checkType(((GraphQLList) actualType).getWrappedType(), ((GraphQLList) expectedType).getWrappedType());
-        }
-        return actualType == expectedType;
+    if ((actualType instanceof GraphQLList) && (expectedType instanceof GraphQLList)) {
+      return checkType(((GraphQLList) actualType).getWrappedType(),
+          ((GraphQLList) expectedType).getWrappedType());
     }
+    return actualType == expectedType;
+  }
 
 }

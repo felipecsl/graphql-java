@@ -9,22 +9,22 @@ import spock.lang.Specification
 class NoUnusedVariablesTest extends Specification {
 
 
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
 
 
-    def traverse(String query) {
-        Document document = new Parser().parseDocument(query)
-        ValidationContext validationContext = new ValidationContext(TestUtil.dummySchema, document)
-        NoUnusedVariables noUnusedVariables = new NoUnusedVariables(validationContext, errorCollector)
-        LanguageTraversal languageTraversal = new LanguageTraversal();
+  def traverse(String query) {
+    Document document = new Parser().parseDocument(query)
+    ValidationContext validationContext = new ValidationContext(TestUtil.dummySchema, document)
+    NoUnusedVariables noUnusedVariables = new NoUnusedVariables(validationContext, errorCollector)
+    LanguageTraversal languageTraversal = new LanguageTraversal();
 
-        languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedVariables]));
-    }
+    languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedVariables]));
+  }
 
 
-    def 'uses all variables in fragments'() {
-        given:
-        def query = """
+  def 'uses all variables in fragments'() {
+    given:
+    def query = """
         fragment FragA on Type {
             field(a: \$a) {
                 ...FragB
@@ -42,16 +42,16 @@ class NoUnusedVariablesTest extends Specification {
             ...FragA
         }
         """
-        when:
-        traverse(query)
+    when:
+    traverse(query)
 
-        then:
-        errorCollector.errors.isEmpty()
-    }
+    then:
+    errorCollector.errors.isEmpty()
+  }
 
-    def "variable used by fragment in multiple operations"() {
-        given:
-        def query = """
+  def "variable used by fragment in multiple operations"() {
+    given:
+    def query = """
         query Foo(\$a: String) {
             ...FragA
           }
@@ -66,27 +66,27 @@ class NoUnusedVariablesTest extends Specification {
           }
             """
 
-        when:
-        traverse(query)
+    when:
+    traverse(query)
 
-        then:
-        errorCollector.errors.isEmpty()
-    }
+    then:
+    errorCollector.errors.isEmpty()
+  }
 
-    def "variables not used"(){
-        given:
-        def query = """
+  def "variables not used"() {
+    given:
+    def query = """
         query Foo(\$a: String, \$b: String, \$c: String) {
             field(a: \$a, b: \$b)
         }
         """
-        when:
-        traverse(query)
+    when:
+    traverse(query)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.UnusedVariable)
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.UnusedVariable)
 
-    }
+  }
 
 
 }

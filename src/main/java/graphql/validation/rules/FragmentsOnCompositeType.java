@@ -10,27 +10,33 @@ import graphql.validation.*;
 public class FragmentsOnCompositeType extends AbstractRule {
 
 
-    public FragmentsOnCompositeType(ValidationContext validationContext, ValidationErrorCollector validationErrorCollector) {
-        super(validationContext, validationErrorCollector);
-    }
+  public FragmentsOnCompositeType(ValidationContext validationContext,
+      ValidationErrorCollector validationErrorCollector) {
+    super(validationContext, validationErrorCollector);
+  }
 
-    @Override
-    public void checkInlineFragment(InlineFragment inlineFragment) {
-        GraphQLType type = getValidationContext().getSchema().getType(inlineFragment.getTypeCondition().getName());
-        if (type == null) return;
-        if (!(type instanceof GraphQLCompositeType)) {
-            String message = "Inline fragment type condition is invalid, must be on Object/Interface/Union";
-            addError(new ValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid, inlineFragment.getSourceLocation(), message));
-        }
+  @Override
+  public void checkInlineFragment(InlineFragment inlineFragment) {
+    GraphQLType type =
+        getValidationContext().getSchema().getType(inlineFragment.getTypeCondition().getName());
+    if (type == null) return;
+    if (!(type instanceof GraphQLCompositeType)) {
+      String message =
+          "Inline fragment type condition is invalid, must be on Object/Interface/Union";
+      addError(new ValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid,
+          inlineFragment.getSourceLocation(), message));
     }
+  }
 
-    @Override
-    public void checkFragmentDefinition(FragmentDefinition fragmentDefinition) {
-        GraphQLType type = getValidationContext().getSchema().getType(fragmentDefinition.getTypeCondition().getName());
-        if (type == null) return;
-        if (!(type instanceof GraphQLCompositeType)) {
-            String message = "Fragment type condition is invalid, must be on Object/Interface/Union";
-            addError(new ValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid, fragmentDefinition.getSourceLocation(), message));
-        }
+  @Override
+  public void checkFragmentDefinition(FragmentDefinition fragmentDefinition) {
+    GraphQLType type =
+        getValidationContext().getSchema().getType(fragmentDefinition.getTypeCondition().getName());
+    if (type == null) return;
+    if (!(type instanceof GraphQLCompositeType)) {
+      String message = "Fragment type condition is invalid, must be on Object/Interface/Union";
+      addError(new ValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid,
+          fragmentDefinition.getSourceLocation(), message));
     }
+  }
 }

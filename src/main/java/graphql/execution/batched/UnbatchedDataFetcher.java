@@ -14,30 +14,25 @@ import java.util.List;
  */
 public class UnbatchedDataFetcher implements BatchedDataFetcher {
 
-    private final DataFetcher delegate;
+  private final DataFetcher delegate;
 
-    public UnbatchedDataFetcher(DataFetcher delegate) {
-        assert !(delegate instanceof BatchedDataFetcher);
-        this.delegate = delegate;
+  public UnbatchedDataFetcher(DataFetcher delegate) {
+    assert !(delegate instanceof BatchedDataFetcher);
+    this.delegate = delegate;
+  }
+
+
+  @Override
+  public Object get(DataFetchingEnvironment environment) {
+    @SuppressWarnings("unchecked") List<Object> sources = (List<Object>) environment.getSource();
+    List<Object> results = new ArrayList<Object>();
+    for (Object source : sources) {
+      DataFetchingEnvironment singleEnv =
+          new DataFetchingEnvironment(source, environment.getArguments(), environment.getContext(),
+              environment.getFields(), environment.getFieldType(), environment.getParentType(),
+              environment.getGraphQLSchema());
+      results.add(delegate.get(singleEnv));
     }
-
-
-    @Override
-    public Object get(DataFetchingEnvironment environment) {
-        @SuppressWarnings("unchecked")
-        List<Object> sources = (List<Object>) environment.getSource();
-        List<Object> results = new ArrayList<Object>();
-        for (Object source : sources) {
-            DataFetchingEnvironment singleEnv = new DataFetchingEnvironment(
-                    source,
-                    environment.getArguments(),
-                    environment.getContext(),
-                    environment.getFields(),
-                    environment.getFieldType(),
-                    environment.getParentType(),
-                    environment.getGraphQLSchema());
-            results.add(delegate.get(singleEnv));
-        }
-        return results;
-    }
+    return results;
+  }
 }

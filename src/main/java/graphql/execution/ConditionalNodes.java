@@ -11,35 +11,39 @@ import static graphql.Directives.SkipDirective;
 
 public class ConditionalNodes {
 
-    ValuesResolver valuesResolver;
+  ValuesResolver valuesResolver;
 
-    public ConditionalNodes() {
-        valuesResolver = new ValuesResolver();
+  public ConditionalNodes() {
+    valuesResolver = new ValuesResolver();
+  }
+
+  public boolean shouldInclude(ExecutionContext executionContext, List<Directive> directives) {
+
+    Directive skipDirective = findDirective(directives, SkipDirective.getName());
+    if (skipDirective != null) {
+      Map<String, Object> argumentValues = valuesResolver
+          .getArgumentValues(SkipDirective.getArguments(), skipDirective.getArguments(),
+              executionContext.getVariables());
+      return !(Boolean) argumentValues.get("if");
     }
 
-    public boolean shouldInclude(ExecutionContext executionContext, List<Directive> directives) {
 
-        Directive skipDirective = findDirective(directives, SkipDirective.getName());
-        if (skipDirective != null) {
-            Map<String, Object> argumentValues = valuesResolver.getArgumentValues(SkipDirective.getArguments(), skipDirective.getArguments(), executionContext.getVariables());
-            return !(Boolean) argumentValues.get("if");
-        }
-
-
-        Directive includeDirective = findDirective(directives, IncludeDirective.getName());
-        if (includeDirective != null) {
-            Map<String, Object> argumentValues = valuesResolver.getArgumentValues(IncludeDirective.getArguments(), includeDirective.getArguments(), executionContext.getVariables());
-            return (Boolean) argumentValues.get("if");
-        }
-
-        return true;
+    Directive includeDirective = findDirective(directives, IncludeDirective.getName());
+    if (includeDirective != null) {
+      Map<String, Object> argumentValues = valuesResolver
+          .getArgumentValues(IncludeDirective.getArguments(), includeDirective.getArguments(),
+              executionContext.getVariables());
+      return (Boolean) argumentValues.get("if");
     }
 
-    private Directive findDirective(List<Directive> directives, String name) {
-        for (Directive directive : directives) {
-            if (directive.getName().equals(name)) return directive;
-        }
-        return null;
+    return true;
+  }
+
+  private Directive findDirective(List<Directive> directives, String name) {
+    for (Directive directive : directives) {
+      if (directive.getName().equals(name)) return directive;
     }
+    return null;
+  }
 
 }

@@ -7,18 +7,18 @@ import spock.lang.Specification
 
 class NoUnusedFragmentsTest extends Specification {
 
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    NoUnusedFragments noUnusedFragments = new NoUnusedFragments(validationContext, errorCollector)
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  NoUnusedFragments noUnusedFragments = new NoUnusedFragments(validationContext, errorCollector)
 
-    def setup() {
-        def traversalContext = Mock(TraversalContext)
-        validationContext.getTraversalContext() >> traversalContext
-    }
+  def setup() {
+    def traversalContext = Mock(TraversalContext)
+    validationContext.getTraversalContext() >> traversalContext
+  }
 
-    def "all fragment names are used"() {
-        given:
-        def query = """
+  def "all fragment names are used"() {
+    given:
+    def query = """
                 {
                     human(id: 4) {
                         ...HumanFields1
@@ -39,18 +39,18 @@ class NoUnusedFragmentsTest extends Specification {
                 }
                 """
 
-        Document document = new Parser().parseDocument(query)
-        LanguageTraversal languageTraversal = new LanguageTraversal();
+    Document document = new Parser().parseDocument(query)
+    LanguageTraversal languageTraversal = new LanguageTraversal();
 
-        when:
-        languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
+    when:
+    languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
 
-        then:
-        errorCollector.getErrors().isEmpty()
-    }
+    then:
+    errorCollector.getErrors().isEmpty()
+  }
 
-    def "all fragment names are used by multiple operations"() {
-        def query = """
+  def "all fragment names are used by multiple operations"() {
+    def query = """
             query Foo {
                 human(id: 4) {
                     ...HumanFields1
@@ -73,19 +73,19 @@ class NoUnusedFragmentsTest extends Specification {
             }
         """
 
-        Document document = new Parser().parseDocument(query)
-        LanguageTraversal languageTraversal = new LanguageTraversal();
+    Document document = new Parser().parseDocument(query)
+    LanguageTraversal languageTraversal = new LanguageTraversal();
 
-        when:
-        languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
+    when:
+    languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
 
-        then:
-        errorCollector.getErrors().isEmpty()
-    }
+    then:
+    errorCollector.getErrors().isEmpty()
+  }
 
 
-    def "contains unknown fragments"() {
-        def query = """
+  def "contains unknown fragments"() {
+    def query = """
                 query Foo {
                     human(id: 4) {
                         ...HumanFields1
@@ -114,21 +114,21 @@ class NoUnusedFragmentsTest extends Specification {
                 }
                 """
 
-        Document document = new Parser().parseDocument(query)
-        LanguageTraversal languageTraversal = new LanguageTraversal();
+    Document document = new Parser().parseDocument(query)
+    LanguageTraversal languageTraversal = new LanguageTraversal();
 
-        when:
-        languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
+    when:
+    languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.UnusedFragment)
-        errorCollector.getErrors().size() == 2
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.UnusedFragment)
+    errorCollector.getErrors().size() == 2
 
-    }
+  }
 
-    def "contains unknown fragments with ref cycle"() {
-        given:
-        def query = """
+  def "contains unknown fragments with ref cycle"() {
+    given:
+    def query = """
         query Foo {
             human(id: 4) {
                 ...HumanFields1
@@ -159,14 +159,14 @@ class NoUnusedFragmentsTest extends Specification {
         }
         """
 
-        Document document = new Parser().parseDocument(query)
-        LanguageTraversal languageTraversal = new LanguageTraversal();
+    Document document = new Parser().parseDocument(query)
+    LanguageTraversal languageTraversal = new LanguageTraversal();
 
-        when:
-        languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
+    when:
+    languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUnusedFragments]));
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.UnusedFragment)
-        errorCollector.getErrors().size() == 2
-    }
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.UnusedFragment)
+    errorCollector.getErrors().size() == 2
+  }
 }
