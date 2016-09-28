@@ -22,7 +22,7 @@ public abstract class ExecutionStrategy {
   public abstract ExecutionResult execute(ExecutionContext executionContext,
       GraphQLObjectType parentType, Object source, Map<String, List<Field>> fields);
 
-  protected ExecutionResult resolveField(ExecutionContext executionContext,
+  ExecutionResult resolveField(ExecutionContext executionContext,
       GraphQLObjectType parentType, Object source, List<Field> fields) {
     GraphQLFieldDefinition fieldDef =
         getFieldDef(executionContext.getGraphQLSchema(), parentType, fields.get(0));
@@ -65,7 +65,6 @@ public abstract class ExecutionStrategy {
     } else if (fieldType instanceof GraphQLEnumType) {
       return completeValueForEnum((GraphQLEnumType) fieldType, result);
     }
-
 
     GraphQLObjectType resolvedType;
     if (fieldType instanceof GraphQLInterfaceType) {
@@ -117,11 +116,11 @@ public abstract class ExecutionStrategy {
     return result;
   }
 
-  protected ExecutionResult completeValueForEnum(GraphQLEnumType enumType, Object result) {
+  private ExecutionResult completeValueForEnum(GraphQLEnumType enumType, Object result) {
     return new ExecutionResultImpl(enumType.getCoercing().serialize(result), null);
   }
 
-  protected ExecutionResult completeValueForScalar(GraphQLScalarType scalarType, Object result) {
+  private ExecutionResult completeValueForScalar(GraphQLScalarType scalarType, Object result) {
     Object serialized = scalarType.getCoercing().serialize(result);
     //6.6.1 http://facebook.github.io/graphql/#sec-Field-entries
     if (serialized instanceof Double && ((Double) serialized).isNaN()) {
@@ -130,7 +129,7 @@ public abstract class ExecutionStrategy {
     return new ExecutionResultImpl(serialized, null);
   }
 
-  protected ExecutionResult completeValueForList(ExecutionContext executionContext,
+  private ExecutionResult completeValueForList(ExecutionContext executionContext,
       GraphQLList fieldType, List<Field> fields, List<Object> result) {
     List<Object> completedResults = new ArrayList<>();
     for (Object item : result) {

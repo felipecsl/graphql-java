@@ -1,6 +1,5 @@
 package graphql.schema;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +12,8 @@ public class GraphQLUnionType
 
   private final String name;
   private final String description;
-  private List<GraphQLObjectType> types = new ArrayList<>();
+  private final List<GraphQLObjectType> types = new ArrayList<>();
   private final TypeResolver typeResolver;
-
 
   public GraphQLUnionType(String name, String description, List<GraphQLObjectType> types,
       TypeResolver typeResolver) {
@@ -28,7 +26,6 @@ public class GraphQLUnionType
     this.types.addAll(types);
     this.typeResolver = typeResolver;
   }
-
 
   public List<GraphQLObjectType> getTypes() {
     return new ArrayList<>(types);
@@ -67,12 +64,10 @@ public class GraphQLUnionType
       return this;
     }
 
-
     public Builder typeResolver(TypeResolver typeResolver) {
       this.typeResolver = typeResolver;
       return this;
     }
-
 
     public Builder possibleType(GraphQLObjectType type) {
       assertNotNull(type, "possible type can't be null");
@@ -90,7 +85,5 @@ public class GraphQLUnionType
     public GraphQLUnionType build() {
       return new GraphQLUnionType(name, description, types, typeResolver);
     }
-
-
   }
 }

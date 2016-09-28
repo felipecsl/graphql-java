@@ -1,13 +1,11 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Argument extends AbstractNode {
-
-  private String name;
-  private Value value;
+  private final String name;
+  private final Value value;
 
   public Argument(String name, Value value) {
     this.name = name;
@@ -18,18 +16,9 @@ public class Argument extends AbstractNode {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public Value getValue() {
     return value;
   }
-
-  public void setValue(Value value) {
-    this.value = value;
-  }
-
 
   @Override
   public List<Node> getChildren() {
@@ -37,7 +26,6 @@ public class Argument extends AbstractNode {
     result.add(value);
     return result;
   }
-
 
   @Override
   public boolean isEqualTo(Node o) {
@@ -50,10 +38,8 @@ public class Argument extends AbstractNode {
 
   }
 
-
   @Override
   public String toString() {
     return "Argument{" + "name='" + name + '\'' + ", value=" + value + '}';
   }
-
 }

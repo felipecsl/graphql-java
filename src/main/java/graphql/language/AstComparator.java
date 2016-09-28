@@ -1,11 +1,8 @@
 package graphql.language;
 
-
 import java.util.List;
 
 public class AstComparator {
-
-
   public boolean isEqual(Node node1, Node node2) {
     if (!node1.isEqualTo(node2)) return false;
     List<Node> childs1 = node1.getChildren();

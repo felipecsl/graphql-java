@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Field extends AbstractNode implements Selection {
-  private String name;
+  private final String name;
   private String alias;
-
   private List<Argument> arguments = new ArrayList<>();
   private List<Directive> directives = new ArrayList<>();
   private SelectionSet selectionSet;
 
   public Field() {
-
+    this(null);
   }
 
   public Field(String name) {
@@ -42,7 +41,6 @@ public class Field extends AbstractNode implements Selection {
     this.selectionSet = selectionSet;
   }
 
-
   @Override
   public List<Node> getChildren() {
     List<Node> result = new ArrayList<>();
@@ -52,13 +50,8 @@ public class Field extends AbstractNode implements Selection {
     return result;
   }
 
-
   public String getName() {
     return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public String getAlias() {
@@ -79,10 +72,6 @@ public class Field extends AbstractNode implements Selection {
 
   public List<Directive> getDirectives() {
     return directives;
-  }
-
-  public void setDirectives(List<Directive> directives) {
-    this.directives = directives;
   }
 
   public SelectionSet getSelectionSet() {

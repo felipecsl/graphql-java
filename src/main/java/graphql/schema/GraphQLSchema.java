@@ -9,18 +9,13 @@ import java.util.*;
 import static graphql.Assert.assertNotNull;
 
 public class GraphQLSchema {
-
   private final GraphQLObjectType queryType;
   private final GraphQLObjectType mutationType;
   private final Map<String, GraphQLType> typeMap;
-  private Set<GraphQLType> dictionary;
+  private final Set<GraphQLType> dictionary;
 
   public GraphQLSchema(GraphQLObjectType queryType) {
     this(queryType, null, Collections.<GraphQLType>emptySet());
-  }
-
-  public Set<GraphQLType> getDictionary() {
-    return dictionary;
   }
 
   public GraphQLSchema(GraphQLObjectType queryType, GraphQLObjectType mutationType,
@@ -31,6 +26,10 @@ public class GraphQLSchema {
     this.mutationType = mutationType;
     this.dictionary = dictionary;
     typeMap = new SchemaUtil().allTypes(this, dictionary);
+  }
+
+  Set<GraphQLType> getDictionary() {
+    return dictionary;
   }
 
   public GraphQLType getType(String typeName) {
@@ -60,7 +59,6 @@ public class GraphQLSchema {
     }
     return null;
   }
-
 
   public boolean isSupportingMutations() {
     return mutationType != null;
@@ -102,8 +100,6 @@ public class GraphQLSchema {
       new SchemaUtil().replaceTypeReferences(graphQLSchema);
       return graphQLSchema;
     }
-
-
   }
 
 }

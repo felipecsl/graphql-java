@@ -16,6 +16,6 @@ package graphql.schema;
  *
  * @param <T> type of result supplied
  */
-public interface BuilderFunction<T> {
+interface BuilderFunction<T> {
   T apply(T t);
 }

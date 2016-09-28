@@ -1,12 +1,10 @@
 package graphql;
 
-
 import graphql.language.SourceLocation;
 
 import java.util.List;
 
 public class ExceptionWhileDataFetching implements GraphQLError {
-
   private final Throwable exception;
 
   public ExceptionWhileDataFetching(Throwable exception) {
@@ -16,7 +14,6 @@ public class ExceptionWhileDataFetching implements GraphQLError {
   public Throwable getException() {
     return exception;
   }
-
 
   @Override
   public String getMessage() {

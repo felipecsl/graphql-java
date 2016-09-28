@@ -1,6 +1,5 @@
 package graphql.execution;
 
-
 import graphql.language.*;
 import graphql.schema.*;
 
@@ -11,15 +10,8 @@ import java.util.Map;
 import static graphql.execution.TypeFromAST.getTypeFromAST;
 
 public class FieldCollector {
-
-  private ConditionalNodes conditionalNodes;
-
-  private SchemaUtil schemaUtil = new SchemaUtil();
-
-  public FieldCollector() {
-    conditionalNodes = new ConditionalNodes();
-  }
-
+  private final ConditionalNodes conditionalNodes = new ConditionalNodes();
+  private final SchemaUtil schemaUtil = new SchemaUtil();
 
   public void collectFields(ExecutionContext executionContext, GraphQLObjectType type,
       SelectionSet selectionSet, List<String> visitedFragments, Map<String, List<Field>> fields) {
@@ -87,7 +79,6 @@ public class FieldCollector {
     else return field.getName();
   }
 
-
   private boolean doesFragmentConditionMatch(ExecutionContext executionContext,
       InlineFragment inlineFragment, GraphQLObjectType type) {
     GraphQLType conditionType;
@@ -120,6 +111,4 @@ public class FieldCollector {
     }
     return false;
   }
-
-
 }

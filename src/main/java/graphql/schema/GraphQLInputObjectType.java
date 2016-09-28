@@ -11,11 +11,8 @@ import static graphql.Assert.assertNotNull;
 
 public class GraphQLInputObjectType
     implements GraphQLType, GraphQLInputType, GraphQLUnmodifiedType, GraphQLNullableType {
-
   private final String name;
   private final String description;
-
-
   private final Map<String, GraphQLInputObjectField> fieldMap =
       new LinkedHashMap<>();
 
@@ -118,6 +115,5 @@ public class GraphQLInputObjectType
     public GraphQLInputObjectType build() {
       return new GraphQLInputObjectType(name, description, fields);
     }
-
   }
 }

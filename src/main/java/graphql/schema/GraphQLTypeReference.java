@@ -1,6 +1,5 @@
 package graphql.schema;
 
-
 import static graphql.Assert.assertNotNull;
 
 /**
@@ -8,7 +7,6 @@ import static graphql.Assert.assertNotNull;
  * object when the schema is build.
  */
 public class GraphQLTypeReference implements GraphQLType, GraphQLOutputType {
-
   private final String name;
 
   public GraphQLTypeReference(String name) {

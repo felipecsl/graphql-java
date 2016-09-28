@@ -6,13 +6,6 @@ import java.util.List;
 public class ObjectValue extends AbstractNode implements Value {
   private final List<ObjectField> objectFields = new ArrayList<>();
 
-  public ObjectValue() {
-  }
-
-  public ObjectValue(List<ObjectField> objectFields) {
-    this.objectFields.addAll(objectFields);
-  }
-
   public List<ObjectField> getObjectFields() {
     return objectFields;
   }
@@ -32,7 +25,6 @@ public class ObjectValue extends AbstractNode implements Value {
     ObjectValue that = (ObjectValue) o;
 
     return true;
-
   }
 
   @Override

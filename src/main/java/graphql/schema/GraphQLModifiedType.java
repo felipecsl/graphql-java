@@ -1,7 +1,5 @@
 package graphql.schema;
 
-
-public interface GraphQLModifiedType extends GraphQLType {
-
+interface GraphQLModifiedType extends GraphQLType {
   GraphQLType getWrappedType();
 }

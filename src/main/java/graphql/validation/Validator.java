@@ -1,6 +1,5 @@
 package graphql.validation;
 
-
 import graphql.language.Document;
 import graphql.schema.GraphQLSchema;
 import graphql.validation.rules.*;
@@ -9,16 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Validator {
-
   public List<ValidationError> validateDocument(GraphQLSchema schema, Document document) {
     ValidationContext validationContext = new ValidationContext(schema, document);
-
-
     ValidationErrorCollector validationErrorCollector = new ValidationErrorCollector();
     List<AbstractRule> rules = createRules(validationContext, validationErrorCollector);
     LanguageTraversal languageTraversal = new LanguageTraversal();
     languageTraversal.traverse(document, new RulesVisitor(validationContext, rules));
-
     return validationErrorCollector.getErrors();
   }
 

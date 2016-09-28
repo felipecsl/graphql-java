@@ -1,7 +1,7 @@
 package graphql.schema;
 
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class GraphQLDirective {
   private final boolean onFragment;
   private final boolean onField;
 
-  public GraphQLDirective(String name, String description, EnumSet<DirectiveLocation> locations,
+  private GraphQLDirective(String name, String description, EnumSet<DirectiveLocation> locations,
       List<GraphQLArgument> arguments, boolean onOperation, boolean onFragment, boolean onField) {
     assertNotNull(name, "name can't be null");
     assertNotNull(arguments, "arguments can't be null");
@@ -106,9 +106,7 @@ public class GraphQLDirective {
     }
 
     public Builder validLocations(DirectiveLocation... validLocations) {
-      for (DirectiveLocation location : validLocations) {
-        locations.add(location);
-      }
+      Collections.addAll(locations, validLocations);
       return this;
     }
 
@@ -184,7 +182,5 @@ public class GraphQLDirective {
       return new GraphQLDirective(name, description, locations, arguments, onOperation, onFragment,
           onField);
     }
-
-
   }
 }

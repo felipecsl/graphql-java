@@ -71,16 +71,8 @@ public class OperationDefinition extends AbstractNode implements Definition {
     return variableDefinitions;
   }
 
-  public void setVariableDefinitions(List<VariableDefinition> variableDefinitions) {
-    this.variableDefinitions = variableDefinitions;
-  }
-
   public List<Directive> getDirectives() {
     return directives;
-  }
-
-  public void setDirectives(List<Directive> directives) {
-    this.directives = directives;
   }
 
   public SelectionSet getSelectionSet() {

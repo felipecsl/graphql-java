@@ -1,6 +1,5 @@
 package graphql.schema;
 
-
 import java.util.Map;
 
 import static graphql.Assert.assertNotNull;

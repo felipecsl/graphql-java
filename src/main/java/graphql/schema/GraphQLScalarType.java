@@ -1,6 +1,5 @@
 package graphql.schema;
 
-
 import static graphql.Assert.assertNotNull;
 
 public class GraphQLScalarType
@@ -10,7 +9,6 @@ public class GraphQLScalarType
   private final String name;
   private final String description;
   private final Coercing coercing;
-
 
   public GraphQLScalarType(String name, String description, Coercing coercing) {
     assertNotNull(name, "name can't be null");
@@ -24,11 +22,9 @@ public class GraphQLScalarType
     return name;
   }
 
-
   public String getDescription() {
     return description;
   }
-
 
   public Coercing getCoercing() {
     return coercing;

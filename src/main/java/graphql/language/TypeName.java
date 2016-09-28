@@ -1,12 +1,10 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class TypeName extends AbstractNode implements Type {
-
-  private String name;
+  private final String name;
 
   public TypeName(String name) {
     this.name = name;
@@ -14,10 +12,6 @@ public class TypeName extends AbstractNode implements Type {
 
   public String getName() {
     return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   @Override
@@ -36,7 +30,6 @@ public class TypeName extends AbstractNode implements Type {
 
     return true;
   }
-
 
   @Override
   public String toString() {

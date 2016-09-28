@@ -1,6 +1,5 @@
 package graphql.validation;
 
-
 import graphql.ErrorType;
 import graphql.GraphQLError;
 import graphql.language.SourceLocation;
@@ -9,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ValidationError implements GraphQLError {
-
-
   private final ValidationErrorType validationErrorType;
   private final List<SourceLocation> sourceLocations = new ArrayList<>();
   private final String description;

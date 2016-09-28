@@ -1,6 +1,5 @@
 package graphql.schema;
 
-
 import static graphql.Assert.assertNotNull;
 
 public class GraphQLInputObjectField {

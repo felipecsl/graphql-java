@@ -1,19 +1,16 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class VariableDefinition extends AbstractNode {
-
-  private String name;
+  private final String name;
   private Type type;
   private Value defaultValue;
 
-  public VariableDefinition() {
-
+  public VariableDefinition(String name) {
+    this(name, null);
   }
-
 
   public VariableDefinition(String name, Type type) {
     this.name = name;
@@ -36,10 +33,6 @@ public class VariableDefinition extends AbstractNode {
 
   public String getName() {
     return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public Type getType() {
@@ -68,7 +61,6 @@ public class VariableDefinition extends AbstractNode {
     return !(name != null ? !name.equals(that.name) : that.name != null);
 
   }
-
 
   @Override
   public String toString() {

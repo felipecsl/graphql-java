@@ -1,16 +1,11 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Directive extends AbstractNode {
-  private String name;
+  private final String name;
   private final List<Argument> arguments = new ArrayList<>();
-
-  public Directive() {
-
-  }
 
   public Directive(String name) {
     this.name = name;
@@ -28,11 +23,6 @@ public class Directive extends AbstractNode {
   public String getName() {
     return name;
   }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
 
   @Override
   public List<Node> getChildren() {

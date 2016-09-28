@@ -1,15 +1,13 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Document extends AbstractNode {
-
-  private List<Definition> definitions = new ArrayList<>();
+  private final List<Definition> definitions;
 
   public Document() {
-
+    this(new ArrayList<Definition>());
   }
 
   public Document(List<Definition> definitions) {
@@ -20,16 +18,10 @@ public class Document extends AbstractNode {
     return definitions;
   }
 
-  public void setDefinitions(List<Definition> definitions) {
-    this.definitions = definitions;
-  }
-
-
   @Override
   public List<Node> getChildren() {
     return new ArrayList<Node>(definitions);
   }
-
 
   @Override
   public boolean isEqualTo(Node o) {
@@ -38,9 +30,7 @@ public class Document extends AbstractNode {
 
 
     return true;
-
   }
-
 
   @Override
   public String toString() {

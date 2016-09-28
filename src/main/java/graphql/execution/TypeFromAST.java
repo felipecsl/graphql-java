@@ -1,6 +1,5 @@
 package graphql.execution;
 
-
 import graphql.language.ListType;
 import graphql.language.NonNullType;
 import graphql.language.Type;
@@ -11,8 +10,6 @@ import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 
 public class TypeFromAST {
-
-
   public static GraphQLType getTypeFromAST(GraphQLSchema schema, Type type) {
     if (type instanceof ListType) {
       return new GraphQLList(getTypeFromAST(schema, ((ListType) type).getType()));

@@ -5,13 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InlineFragment extends AbstractNode implements Selection {
-  private TypeName typeCondition;
+  private final TypeName typeCondition;
   private List<Directive> directives = new ArrayList<>();
   private SelectionSet selectionSet;
-
-  public InlineFragment() {
-
-  }
 
   public InlineFragment(TypeName typeCondition) {
     this.typeCondition = typeCondition;
@@ -29,21 +25,12 @@ public class InlineFragment extends AbstractNode implements Selection {
     this.selectionSet = selectionSet;
   }
 
-
   public TypeName getTypeCondition() {
     return typeCondition;
   }
 
-  public void setTypeCondition(TypeName typeCondition) {
-    this.typeCondition = typeCondition;
-  }
-
   public List<Directive> getDirectives() {
     return directives;
-  }
-
-  public void setDirectives(List<Directive> directives) {
-    this.directives = directives;
   }
 
   public SelectionSet getSelectionSet() {
@@ -71,7 +58,6 @@ public class InlineFragment extends AbstractNode implements Selection {
     return true;
 
   }
-
 
   @Override
   public String toString() {

@@ -1,16 +1,11 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentSpread extends AbstractNode implements Selection {
-
-  private String name;
-  private List<Directive> directives = new ArrayList<>();
-
-  public FragmentSpread() {
-  }
+  private final String name;
+  private final List<Directive> directives = new ArrayList<>();
 
   public FragmentSpread(String name) {
     this.name = name;
@@ -20,16 +15,8 @@ public class FragmentSpread extends AbstractNode implements Selection {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public List<Directive> getDirectives() {
     return directives;
-  }
-
-  public void setDirectives(List<Directive> directives) {
-    this.directives = directives;
   }
 
   @Override
@@ -42,7 +29,6 @@ public class FragmentSpread extends AbstractNode implements Selection {
     return !(name != null ? !name.equals(that.name) : that.name != null);
 
   }
-
 
   @Override
   public List<Node> getChildren() {

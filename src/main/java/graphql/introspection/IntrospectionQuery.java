@@ -1,7 +1,6 @@
 package graphql.introspection;
 
 public interface IntrospectionQuery {
-
   String INTROSPECTION_QUERY =
       "\n" + "  query IntrospectionQuery {\n" + "    __schema {\n" + "      queryType { name }\n" +
           "      mutationType { name }\n" + "      subscriptionType { name }\n" +

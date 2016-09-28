@@ -1,12 +1,10 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class VariableReference extends AbstractNode implements Value {
-
-  private String name;
+  private final String name;
 
   public VariableReference(String name) {
     this.name = name;
@@ -14,10 +12,6 @@ public class VariableReference extends AbstractNode implements Value {
 
   public String getName() {
     return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   @Override

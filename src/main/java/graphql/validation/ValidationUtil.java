@@ -1,6 +1,5 @@
 package graphql.validation;
 
-
 import graphql.ShouldNotHappenException;
 import graphql.language.*;
 import graphql.schema.*;
