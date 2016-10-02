@@ -1,11 +1,12 @@
 package graphql.language;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Field extends AbstractNode implements Selection {
   private final String name;
-  private String alias;
+  @Nullable private String alias;
   private List<Argument> arguments = new ArrayList<>();
   private List<Directive> directives = new ArrayList<>();
   private SelectionSet selectionSet;
@@ -54,7 +55,7 @@ public class Field extends AbstractNode implements Selection {
     return name;
   }
 
-  public String getAlias() {
+  @Nullable public String getAlias() {
     return alias;
   }
 

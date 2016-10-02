@@ -28,12 +28,11 @@ public abstract class ExecutionStrategy {
     GraphQLFieldDefinition fieldDef =
         getFieldDef(executionContext.getGraphQLSchema(), parentType, fields.get(0));
 
-    Map<String, Object> argumentValues = valuesResolver
-        .getArgumentValues(fieldDef.getArguments(), fields.get(0).getArguments(),
-            executionContext.getVariables());
-    DataFetchingEnvironment environment =
-        new DataFetchingEnvironment(source, argumentValues, executionContext.getRoot(), fields,
-            fieldDef.getType(), parentType, executionContext.getGraphQLSchema());
+    Map<String, Object> argumentValues = valuesResolver.getArgumentValues(
+        fieldDef.getArguments(), fields.get(0).getArguments(), executionContext.getVariables());
+    DataFetchingEnvironment environment = new DataFetchingEnvironment(source, argumentValues,
+        executionContext.getRoot(), fields, fieldDef.getType(), parentType,
+        executionContext.getGraphQLSchema());
 
     Object resolvedValue = null;
     try {
@@ -75,22 +74,21 @@ public abstract class ExecutionStrategy {
           visitedFragments, subFields);
     }
 
-    // Calling this from the executionContext so that you can shift from the simple execution strategy for mutations
-    // back to the desired strategy.
-
+    // Calling this from the executionContext so that you can shift from the simple execution
+    // strategy for mutations back to the desired strategy.
     return executionContext.getExecutionStrategy()
         .execute(executionContext, resolvedType, result, subFields);
   }
 
   private ExecutionResult completeValueForNonNull(ExecutionContext executionContext,
       GraphQLNonNull fieldType, List<Field> fields, @Nullable Object result) {
-    GraphQLNonNull graphQLNonNull = fieldType;
-    ExecutionResult completed = completeValue(executionContext, graphQLNonNull.getWrappedType(),
+    ExecutionResult completed = completeValue(executionContext, fieldType.getWrappedType(),
         fields, result);
     if (completed == null) {
       throw new GraphQLException("Cannot return null for non-nullable type: " + fields);
+    } else {
+      return completed;
     }
-    return completed;
   }
 
   private ExecutionResult completeValueForList(ExecutionContext executionContext,
@@ -98,7 +96,6 @@ public abstract class ExecutionStrategy {
     if (result.getClass().isArray()) {
       result = Arrays.asList((Object[]) result);
     }
-
     return completeValueForList(executionContext, fieldType, fields, (List<Object>) result);
   }
 

@@ -14,7 +14,6 @@ public class FieldCollector {
 
   public void collectFields(ExecutionContext executionContext, GraphQLObjectType type,
       SelectionSet selectionSet, List<String> visitedFragments, Map<String, List<Field>> fields) {
-
     for (Selection selection : selectionSet.getSelections()) {
       if (selection instanceof Field) {
         collectField(executionContext, fields, (Field) selection);
@@ -74,8 +73,7 @@ public class FieldCollector {
   }
 
   private String getFieldEntryKey(Field field) {
-    if (field.getAlias() != null) return field.getAlias();
-    else return field.getName();
+    return field.getAlias() != null ? field.getAlias() : field.getName();
   }
 
   private boolean doesFragmentConditionMatch(ExecutionContext executionContext,
