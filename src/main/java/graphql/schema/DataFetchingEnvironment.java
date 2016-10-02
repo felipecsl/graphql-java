@@ -2,11 +2,12 @@ package graphql.schema;
 
 import graphql.language.Field;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
 public class DataFetchingEnvironment {
-  private final Object source;
+  @Nullable private final Object source;
   private final Map<String, Object> arguments;
   private final Object context;
   private final List<Field> fields;
@@ -14,8 +15,8 @@ public class DataFetchingEnvironment {
   private final GraphQLType parentType;
   private final GraphQLSchema graphQLSchema;
 
-  public DataFetchingEnvironment(Object source, Map<String, Object> arguments, Object context,
-      List<Field> fields, GraphQLOutputType fieldType, GraphQLType parentType,
+  public DataFetchingEnvironment(@Nullable Object source, Map<String, Object> arguments,
+      Object context, List<Field> fields, GraphQLOutputType fieldType, GraphQLType parentType,
       GraphQLSchema graphQLSchema) {
     this.source = source;
     this.arguments = arguments;
@@ -26,7 +27,7 @@ public class DataFetchingEnvironment {
     this.graphQLSchema = graphQLSchema;
   }
 
-  public Object getSource() {
+  @Nullable public Object getSource() {
     return source;
   }
 

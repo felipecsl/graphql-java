@@ -56,11 +56,13 @@ public class PropertyDataFetcher implements DataFetcher {
   }
 
   private boolean isBooleanProperty(GraphQLOutputType outputType) {
-    if (outputType == GraphQLBoolean) return true;
-    if (outputType instanceof GraphQLNonNull) {
+    if (outputType == GraphQLBoolean) {
+      return true;
+    } else if (outputType instanceof GraphQLNonNull) {
       return ((GraphQLNonNull) outputType).getWrappedType() == GraphQLBoolean;
+    } else {
+      return false;
     }
-    return false;
   }
 
   private Object getPropertyViaFieldAccess(Object object) {

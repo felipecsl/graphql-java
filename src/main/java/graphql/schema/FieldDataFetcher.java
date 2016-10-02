@@ -1,45 +1,38 @@
 package graphql.schema;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-/**
- * Fetches data directly from a field.
- */
+/** Fetches data directly from a field. */
 public class FieldDataFetcher implements DataFetcher {
 
-  /**
-   * The name of the field.
-   */
+  /** The name of the field. */
   private final String fieldName;
 
-  /**
-   * Ctor.
-   *
-   * @param fieldName The name of the field.
-   */
+  /** @param fieldName The name of the field. */
   public FieldDataFetcher(String fieldName) {
     this.fieldName = fieldName;
   }
 
-  @Override
-  public Object get(DataFetchingEnvironment environment) {
+  @Nullable @Override public Object get(DataFetchingEnvironment environment) {
     Object source = environment.getSource();
-    if (source == null) return null;
-    if (source instanceof Map) {
+    if (source == null) {
+      return null;
+    } else if (source instanceof Map) {
       return ((Map<?, ?>) source).get(fieldName);
+    } else {
+      return getFieldValue(source);
     }
-    return getFieldValue(source, environment.getFieldType());
   }
 
   /**
    * Uses introspection to get the field value.
    *
    * @param object     The object being acted on.
-   * @param outputType The output type; ignored in this case.
    * @return An object, or null.
    */
-  private Object getFieldValue(Object object, GraphQLOutputType outputType) {
+  private Object getFieldValue(Object object) {
     try {
       Field field = object.getClass().getField(fieldName);
       return field.get(object);

@@ -21,13 +21,12 @@ public abstract class ExecutionStrategy {
   protected final FieldCollector fieldCollector = new FieldCollector();
 
   public abstract ExecutionResult execute(ExecutionContext executionContext,
-      GraphQLObjectType parentType, Object source, Map<String, List<Field>> fields);
+      GraphQLObjectType parentType, @Nullable Object source, Map<String, List<Field>> fields);
 
-  ExecutionResult resolveField(ExecutionContext executionContext,
-      GraphQLObjectType parentType, Object source, List<Field> fields) {
-    GraphQLFieldDefinition fieldDef =
-        getFieldDef(executionContext.getGraphQLSchema(), parentType, fields.get(0));
-
+  @Nullable ExecutionResult resolveField(ExecutionContext executionContext,
+      GraphQLObjectType parentType, @Nullable Object source, List<Field> fields) {
+    GraphQLFieldDefinition fieldDef = getFieldDef(executionContext.getGraphQLSchema(), parentType,
+        fields.get(0));
     Map<String, Object> argumentValues = valuesResolver.getArgumentValues(
         fieldDef.getArguments(), fields.get(0).getArguments(), executionContext.getVariables());
     DataFetchingEnvironment environment = new DataFetchingEnvironment(source, argumentValues,
