@@ -1,5 +1,7 @@
 package graphql.relay;
 
+import graphql.schema.GraphQLObjectType;
+
 import graphql.schema.*;
 
 import java.util.ArrayList;

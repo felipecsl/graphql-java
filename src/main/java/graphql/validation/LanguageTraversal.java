@@ -33,7 +33,6 @@ public class LanguageTraversal {
     }
     path.remove(path.size() - 1);
     queryLanguageVisitor.leave(root, path);
-
   }
 }
 
