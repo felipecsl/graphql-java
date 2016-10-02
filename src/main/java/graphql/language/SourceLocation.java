@@ -1,48 +1,34 @@
 package graphql.language;
 
-
 public class SourceLocation {
+  private final int line;
+  private final int column;
 
-    private final int line;
-    private final int column;
+  public SourceLocation(int line, int column) {
+    this.line = line;
+    this.column = column;
+  }
 
-    public SourceLocation(int line, int column) {
-        this.line = line;
-        this.column = column;
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    public int getLine() {
-        return line;
-    }
+    SourceLocation that = (SourceLocation) o;
 
-    public int getColumn() {
-        return column;
-    }
+    if (line != that.line) return false;
+    return column == that.column;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public int hashCode() {
+    int result = line;
+    result = 31 * result + column;
+    return result;
+  }
 
-        SourceLocation that = (SourceLocation) o;
-
-        if (line != that.line) return false;
-        return column == that.column;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = line;
-        result = 31 * result + column;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "SourceLocation{" +
-                "line=" + line +
-                ", column=" + column +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "SourceLocation{" + "line=" + line + ", column=" + column + '}';
+  }
 }

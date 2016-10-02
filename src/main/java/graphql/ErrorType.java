@@ -1,10 +1,5 @@
 package graphql;
 
-
 public enum ErrorType {
-
-    InvalidSyntax,
-    ValidationError,
-    DataFetchingException
-
+  InvalidSyntax, ValidationError, DataFetchingException
 }

@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit
 
 class ExecutorServiceExecutionStrategyTest extends Specification {
 
-    def 'Example usage of ExecutorServiceExecutionStrategy.'() {
-        given:
-        def query = """
+  def 'Example usage of ExecutorServiceExecutionStrategy.'() {
+    given:
+    def query = """
         query HeroNameAndFriendsQuery {
             hero {
                 id
@@ -23,49 +23,49 @@ class ExecutorServiceExecutionStrategyTest extends Specification {
             }
         }
         """
-        def expected = [
-                hero: [
-                        id     : '2001',
-                        friends: [
-                                [
-                                        name: 'Luke Skywalker',
-                                ],
-                                [
-                                        name: 'Han Solo',
-                                ],
-                                [
-                                        name: 'Leia Organa',
-                                ],
-                        ]
-                ]
+    def expected = [
+        hero: [
+            id     : '2001',
+            friends: [
+                [
+                    name: 'Luke Skywalker',
+                ],
+                [
+                    name: 'Han Solo',
+                ],
+                [
+                    name: 'Leia Organa',
+                ],
+            ]
         ]
+    ]
 
-        when:
-        BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>() {
-            @Override
-            public boolean offer(Runnable e) {
-                /* queue that always rejects tasks */
-                return false;
-            }
-        };
+    when:
+    BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>() {
+      @Override
+      public boolean offer(Runnable e) {
+        /* queue that always rejects tasks */
+        return false;
+      }
+    };
 
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
-                2, /* core pool size 2 thread */
-                2, /* max pool size 2 thread */
-                30, TimeUnit.SECONDS,
-                /*
-                 * Do not use the queue to prevent threads waiting on enqueued tasks.
-                 */
-                queue,
-                /*
-                 *  If all the threads are working, then the caller thread
-                 *  should execute the code in its own thread. (serially)
-                 */
-                new ThreadPoolExecutor.CallerRunsPolicy());
+    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+        2, /* core pool size 2 thread */
+        2, /* max pool size 2 thread */
+        30, TimeUnit.SECONDS,
+        /*
+         * Do not use the queue to prevent threads waiting on enqueued tasks.
+         */
+        queue,
+        /*
+         *  If all the threads are working, then the caller thread
+         *  should execute the code in its own thread. (serially)
+         */
+        new ThreadPoolExecutor.CallerRunsPolicy());
 
-        def result = new GraphQL(StarWarsSchema.starWarsSchema, new ExecutorServiceExecutionStrategy(threadPoolExecutor)).execute(query).data
+    def result = new GraphQL(StarWarsSchema.starWarsSchema, new ExecutorServiceExecutionStrategy(threadPoolExecutor)).execute(query).data
 
-        then:
-        result == expected
-    }
+    then:
+    result == expected
+  }
 }

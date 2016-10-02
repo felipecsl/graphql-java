@@ -1,110 +1,84 @@
 package graphql.validation;
 
-
 import graphql.language.*;
 
 import java.util.List;
 
 public class AbstractRule {
+  private final ValidationContext validationContext;
+  private final ValidationErrorCollector validationErrorCollector;
+  private boolean visitFragmentSpreads;
+  private final ValidationUtil validationUtil = new ValidationUtil();
 
-    private final ValidationContext validationContext;
-    private final ValidationErrorCollector validationErrorCollector;
+  public AbstractRule(ValidationContext validationContext,
+      ValidationErrorCollector validationErrorCollector) {
+    this.validationContext = validationContext;
+    this.validationErrorCollector = validationErrorCollector;
+  }
 
+  boolean isVisitFragmentSpreads() {
+    return visitFragmentSpreads;
+  }
 
-    private boolean visitFragmentSpreads;
+  protected void setVisitFragmentSpreads(boolean visitFragmentSpreads) {
+    this.visitFragmentSpreads = visitFragmentSpreads;
+  }
 
-    private ValidationUtil validationUtil = new ValidationUtil();
+  protected ValidationUtil getValidationUtil() {
+    return validationUtil;
+  }
 
-    public AbstractRule(ValidationContext validationContext, ValidationErrorCollector validationErrorCollector) {
-        this.validationContext = validationContext;
-        this.validationErrorCollector = validationErrorCollector;
-    }
+  public void addError(ValidationError error) {
+    validationErrorCollector.addError(error);
+  }
 
-    public boolean isVisitFragmentSpreads() {
-        return visitFragmentSpreads;
-    }
+  public List<ValidationError> getErrors() {
+    return validationErrorCollector.getErrors();
+  }
 
-    public void setVisitFragmentSpreads(boolean visitFragmentSpreads) {
-        this.visitFragmentSpreads = visitFragmentSpreads;
-    }
+  public ValidationContext getValidationContext() {
+    return validationContext;
+  }
 
+  public void checkArgument(Argument argument) {
+  }
 
-    public ValidationUtil getValidationUtil() {
-        return validationUtil;
-    }
+  public void checkTypeName(TypeName typeName) {
+  }
 
-    public void setValidationUtil(ValidationUtil validationUtil) {
-        this.validationUtil = validationUtil;
-    }
+  public void checkVariableDefinition(VariableDefinition variableDefinition) {
+  }
 
-    public void addError(ValidationError error) {
-        validationErrorCollector.addError(error);
-    }
+  public void checkField(Field field) {
+  }
 
-    public List<ValidationError> getErrors() {
-        return validationErrorCollector.getErrors();
-    }
+  public void checkInlineFragment(InlineFragment inlineFragment) {
+  }
 
+  public void checkDirective(Directive directive, List<Node> ancestors) {
+  }
 
-    public ValidationContext getValidationContext() {
-        return validationContext;
-    }
+  public void checkFragmentSpread(FragmentSpread fragmentSpread) {
+  }
 
-    public void checkArgument(Argument argument) {
+  public void checkFragmentDefinition(FragmentDefinition fragmentDefinition) {
+  }
 
-    }
+  public void checkOperationDefinition(OperationDefinition operationDefinition) {
+  }
 
-    public void checkTypeName(TypeName typeName) {
+  public void leaveOperationDefinition(OperationDefinition operationDefinition) {
+  }
 
-    }
+  void checkSelectionSet(SelectionSet selectionSet) {
+  }
 
-    public void checkVariableDefinition(VariableDefinition variableDefinition) {
+  public void leaveSelectionSet(SelectionSet selectionSet) {
+  }
 
-    }
+  public void checkVariable(VariableReference variableReference) {
+  }
 
-    public void checkField(Field field) {
-
-    }
-
-    public void checkInlineFragment(InlineFragment inlineFragment) {
-
-    }
-
-    public void checkDirective(Directive directive, List<Node> ancestors) {
-
-    }
-
-    public void checkFragmentSpread(FragmentSpread fragmentSpread) {
-
-    }
-
-    public void checkFragmentDefinition(FragmentDefinition fragmentDefinition) {
-
-    }
-
-    public void checkOperationDefinition(OperationDefinition operationDefinition) {
-
-    }
-
-    public void leaveOperationDefinition(OperationDefinition operationDefinition) {
-
-    }
-
-    public void checkSelectionSet(SelectionSet selectionSet) {
-
-    }
-
-    public void leaveSelectionSet(SelectionSet selectionSet) {
-
-    }
-
-    public void checkVariable(VariableReference variableReference) {
-
-    }
-
-    public void documentFinished(Document document) {
-
-    }
-
-
+  public void documentFinished(Document document) {
+  }
 }

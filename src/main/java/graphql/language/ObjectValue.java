@@ -1,47 +1,34 @@
 package graphql.language;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectValue extends AbstractNode implements Value {
+  private final List<ObjectField> objectFields = new ArrayList<>();
 
-    private List<ObjectField> objectFields = new ArrayList<ObjectField>();
+  public List<ObjectField> getObjectFields() {
+    return objectFields;
+  }
 
-    public ObjectValue() {
-    }
+  @Override
+  public List<Node> getChildren() {
+    List<Node> result = new ArrayList<>();
+    result.addAll(objectFields);
+    return result;
+  }
 
-    public ObjectValue(List<ObjectField> objectFields) {
-        this.objectFields.addAll(objectFields);
-    }
+  @Override
+  public boolean isEqualTo(Node o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    public List<ObjectField> getObjectFields() {
-        return objectFields;
-    }
+    ObjectValue that = (ObjectValue) o;
 
-    @Override
-    public List<Node> getChildren() {
-        List<Node> result = new ArrayList<Node>();
-        result.addAll(objectFields);
-        return result;
-    }
+    return true;
+  }
 
-    @Override
-    public boolean isEqualTo(Node o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ObjectValue that = (ObjectValue) o;
-
-        return true;
-
-    }
-
-
-    @Override
-    public String toString() {
-        return "ObjectValue{" +
-                "objectFields=" + objectFields +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "ObjectValue{" + "objectFields=" + objectFields + '}';
+  }
 }

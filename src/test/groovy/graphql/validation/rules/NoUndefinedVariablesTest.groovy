@@ -9,54 +9,54 @@ import spock.lang.Specification
 class NoUndefinedVariablesTest extends Specification {
 
 
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
 
 
-    def traverse(String query){
-        Document document = new Parser().parseDocument(query)
-        ValidationContext validationContext = new ValidationContext(TestUtil.dummySchema,document)
-        NoUndefinedVariables noUndefinedVariables = new NoUndefinedVariables(validationContext, errorCollector)
-        LanguageTraversal languageTraversal = new LanguageTraversal();
+  def traverse(String query) {
+    Document document = new Parser().parseDocument(query)
+    ValidationContext validationContext = new ValidationContext(TestUtil.dummySchema, document)
+    NoUndefinedVariables noUndefinedVariables = new NoUndefinedVariables(validationContext, errorCollector)
+    LanguageTraversal languageTraversal = new LanguageTraversal();
 
-        languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUndefinedVariables]));
-    }
+    languageTraversal.traverse(document, new RulesVisitor(validationContext, [noUndefinedVariables]));
+  }
 
 
-    def "undefined variable"() {
-        given:
-        def query = """
+  def "undefined variable"() {
+    given:
+    def query = """
             query Foo(\$a: String, \$b: String, \$c: String) {
                 field(a: \$a, b: \$b, c: \$c, d: \$d)
             }
         """
 
-        when:
-        traverse(query)
+    when:
+    traverse(query)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.UndefinedVariable)
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.UndefinedVariable)
 
-    }
+  }
 
-    def "all variables definied"() {
-        given:
-        def query = """
+  def "all variables definied"() {
+    given:
+    def query = """
             query Foo(\$a: String, \$b: String, \$c: String) {
                 field(a: \$a, b: \$b, c: \$c)
             }
         """
 
-        when:
-        traverse(query)
+    when:
+    traverse(query)
 
-        then:
-        errorCollector.errors.isEmpty()
+    then:
+    errorCollector.errors.isEmpty()
 
-    }
+  }
 
-    def "all variables in fragments deeply defined"() {
-        given:
-        def query = """
+  def "all variables in fragments deeply defined"() {
+    given:
+    def query = """
             fragment FragA on Type {
                 field(a: \$a) {
                     ...FragB
@@ -75,16 +75,16 @@ class NoUndefinedVariablesTest extends Specification {
             }
         """
 
-        when:
-        traverse(query)
+    when:
+    traverse(query)
 
-        then:
-        errorCollector.errors.isEmpty()
-    }
+    then:
+    errorCollector.errors.isEmpty()
+  }
 
-    def 'variable in fragment not defined by operation'() {
-        given:
-        def query = """
+  def 'variable in fragment not defined by operation'() {
+    given:
+    def query = """
         query Foo(\$a: String, \$b: String) {
             ...FragA
         }
@@ -102,11 +102,11 @@ class NoUndefinedVariablesTest extends Specification {
             field(c: \$c)
         }
         """
-        when:
-        traverse(query)
+    when:
+    traverse(query)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.UndefinedVariable)
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.UndefinedVariable)
 
-    }
+  }
 }

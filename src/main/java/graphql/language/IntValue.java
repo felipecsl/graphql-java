@@ -1,47 +1,38 @@
 package graphql.language;
 
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IntValue extends AbstractNode implements Value {
+  private final BigInteger value;
 
-    private BigInteger value;
+  public IntValue(BigInteger value) {
+    this.value = value;
+  }
 
-    public IntValue(BigInteger value) {
-        this.value = value;
-    }
+  public BigInteger getValue() {
+    return value;
+  }
 
-    public BigInteger getValue() {
-        return value;
-    }
+  @Override
+  public List<Node> getChildren() {
+    return new ArrayList<>();
+  }
 
-    public void setValue(BigInteger value) {
-        this.value = value;
-    }
+  @Override
+  public boolean isEqualTo(Node o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public List<Node> getChildren() {
-        return new ArrayList<Node>();
-    }
+    IntValue that = (IntValue) o;
 
-    @Override
-    public boolean isEqualTo(Node o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    return !(value != null ? !value.equals(that.value) : that.value != null);
 
-        IntValue that = (IntValue) o;
+  }
 
-        return !(value != null ? !value.equals(that.value) : that.value != null);
-
-    }
-
-
-    @Override
-    public String toString() {
-        return "IntValue{" +
-                "value=" + value +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "IntValue{" + "value=" + value + '}';
+  }
 }

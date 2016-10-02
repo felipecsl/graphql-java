@@ -6,15 +6,13 @@ import graphql.validation.Validator
 import spock.lang.Specification
 
 class StarWarsValidationTest extends Specification {
+  List<ValidationError> validate(String query) {
+    def document = new Parser().parseDocument(query)
+    return new Validator(StarWarsSchema.starWarsSchema).validate(document)
+  }
 
-
-    List<ValidationError> validate(String query) {
-        def document = new Parser().parseDocument(query)
-        return new Validator().validateDocument(StarWarsSchema.starWarsSchema, document)
-    }
-
-    def 'Validates a complex but valid query'() {
-        def query = """
+  def 'Validates a complex but valid query'() {
+    def query = """
         query NestedQueryWithFragment {
             hero {
                 ...NameAndAppearances
@@ -32,43 +30,43 @@ class StarWarsValidationTest extends Specification {
             appearsIn
         }
         """
-        when:
-        def validationErrors = validate(query)
+    when:
+    def validationErrors = validate(query)
 
-        then:
-        validationErrors.isEmpty()
-    }
+    then:
+    validationErrors.isEmpty()
+  }
 
-    def 'Notes that non-existent fields are invalid'() {
-        def query = """
+  def 'Notes that non-existent fields are invalid'() {
+    def query = """
         query HeroSpaceshipQuery {
             hero {
                 favoriteSpaceship
             }
         }
         """
-        when:
-        def validationErrors = validate(query)
+    when:
+    def validationErrors = validate(query)
 
-        then:
-        validationErrors.size() > 0
-    }
+    then:
+    validationErrors.size() > 0
+  }
 
-    def 'Requires fields on objects'() {
-        def query = """
+  def 'Requires fields on objects'() {
+    def query = """
         query HeroNoFieldsQuery {
             hero
         }
         """
-        when:
-        def validationErrors = validate(query)
+    when:
+    def validationErrors = validate(query)
 
-        then:
-        validationErrors.size() > 0
-    }
+    then:
+    validationErrors.size() > 0
+  }
 
-    def 'Disallows fields on scalars'() {
-        def query = """
+  def 'Disallows fields on scalars'() {
+    def query = """
         query HeroFieldsOnScalarQuery {
             hero {
                 name {
@@ -77,15 +75,15 @@ class StarWarsValidationTest extends Specification {
             }
         }
         """
-        when:
-        def validationErrors = validate(query)
+    when:
+    def validationErrors = validate(query)
 
-        then:
-        validationErrors.size() > 0
-    }
+    then:
+    validationErrors.size() > 0
+  }
 
-    def 'Disallows object fields on interfaces'() {
-        def query = """
+  def 'Disallows object fields on interfaces'() {
+    def query = """
         query DroidFieldOnCharacter {
             hero {
                 name
@@ -93,15 +91,15 @@ class StarWarsValidationTest extends Specification {
             }
         }
         """
-        when:
-        def validationErrors = validate(query)
+    when:
+    def validationErrors = validate(query)
 
-        then:
-        validationErrors.size() > 0
-    }
+    then:
+    validationErrors.size() > 0
+  }
 
-    def 'Allows object fields in fragments'() {
-        def query = """
+  def 'Allows object fields in fragments'() {
+    def query = """
         query DroidFieldInFragment {
             hero {
                 name
@@ -113,15 +111,15 @@ class StarWarsValidationTest extends Specification {
             primaryFunction
         }
         """
-        when:
-        def validationErrors = validate(query)
+    when:
+    def validationErrors = validate(query)
 
-        then:
-        validationErrors.isEmpty()
-    }
+    then:
+    validationErrors.isEmpty()
+  }
 
-    def 'Allows object fields in inline fragments'() {
-        def query = """
+  def 'Allows object fields in inline fragments'() {
+    def query = """
         query DroidFieldInFragment {
             hero {
                 name
@@ -131,11 +129,10 @@ class StarWarsValidationTest extends Specification {
             }
         }
         """
-        when:
-        def validationErrors = validate(query)
+    when:
+    def validationErrors = validate(query)
 
-        then:
-        validationErrors.isEmpty()
-    }
-
+    then:
+    validationErrors.isEmpty()
+  }
 }

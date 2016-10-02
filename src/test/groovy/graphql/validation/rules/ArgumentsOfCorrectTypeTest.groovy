@@ -12,33 +12,33 @@ import static graphql.Scalars.GraphQLBoolean
 
 class ArgumentsOfCorrectTypeTest extends Specification {
 
-    ArgumentsOfCorrectType argumentsOfCorrectType
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  ArgumentsOfCorrectType argumentsOfCorrectType
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
 
-    def setup() {
-        argumentsOfCorrectType = new ArgumentsOfCorrectType(validationContext, errorCollector)
-    }
+  def setup() {
+    argumentsOfCorrectType = new ArgumentsOfCorrectType(validationContext, errorCollector)
+  }
 
-    def "invalid type results in error"() {
-        given:
-        def stringValue = new StringValue("string")
-        def argumentLiteral = new Argument("arg", stringValue)
-        def graphQLArgument = new GraphQLArgument("arg", GraphQLBoolean)
-        argumentsOfCorrectType.validationContext.getArgument() >> graphQLArgument
-        when:
-        argumentsOfCorrectType.checkArgument(argumentLiteral)
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.WrongType)
-    }
+  def "invalid type results in error"() {
+    given:
+    def stringValue = new StringValue("string")
+    def argumentLiteral = new Argument("arg", stringValue)
+    def graphQLArgument = new GraphQLArgument("arg", GraphQLBoolean)
+    argumentsOfCorrectType.validationContext.getArgument() >> graphQLArgument
+    when:
+    argumentsOfCorrectType.checkArgument(argumentLiteral)
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.WrongType)
+  }
 
-    def "current null argument from context is no error"(){
-        given:
-        def stringValue = new StringValue("string")
-        def argumentLiteral = new Argument("arg", stringValue)
-        when:
-        argumentsOfCorrectType.checkArgument(argumentLiteral)
-        then:
-        argumentsOfCorrectType.getErrors().isEmpty()
-    }
+  def "current null argument from context is no error"() {
+    given:
+    def stringValue = new StringValue("string")
+    def argumentLiteral = new Argument("arg", stringValue)
+    when:
+    argumentsOfCorrectType.checkArgument(argumentLiteral)
+    then:
+    argumentsOfCorrectType.getErrors().isEmpty()
+  }
 }

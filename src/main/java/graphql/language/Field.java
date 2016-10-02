@@ -1,121 +1,103 @@
 package graphql.language;
 
-
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Field extends AbstractNode implements Selection {
+  private final String name;
+  @Nullable private String alias;
+  private List<Argument> arguments = new ArrayList<>();
+  private List<Directive> directives = new ArrayList<>();
+  private SelectionSet selectionSet;
 
-    private String name;
-    private String alias;
+  public Field() {
+    this(null);
+  }
 
-    private List<Argument> arguments = new ArrayList<Argument>();
-    private List<Directive> directives = new ArrayList<Directive>();
-    private SelectionSet selectionSet;
+  public Field(String name) {
+    this.name = name;
+  }
 
-    public Field() {
-
-    }
-
-    public Field(String name) {
-        this.name = name;
-    }
-
-    public Field(String name, SelectionSet selectionSet) {
-        this.name = name;
-        this.selectionSet = selectionSet;
-    }
+  public Field(String name, SelectionSet selectionSet) {
+    this.name = name;
+    this.selectionSet = selectionSet;
+  }
 
 
-    public Field(String name, List<Argument> arguments) {
-        this.name = name;
-        this.arguments = arguments;
-    }
+  public Field(String name, List<Argument> arguments) {
+    this.name = name;
+    this.arguments = arguments;
+  }
 
-    public Field(String name, List<Argument> arguments, List<Directive> directives) {
-        this.name = name;
-        this.arguments = arguments;
-        this.directives = directives;
-    }
+  public Field(String name, List<Argument> arguments, List<Directive> directives) {
+    this.name = name;
+    this.arguments = arguments;
+    this.directives = directives;
+  }
 
-    public Field(String name, List<Argument> arguments, SelectionSet selectionSet) {
-        this.name = name;
-        this.arguments = arguments;
-        this.selectionSet = selectionSet;
-    }
+  public Field(String name, List<Argument> arguments, SelectionSet selectionSet) {
+    this.name = name;
+    this.arguments = arguments;
+    this.selectionSet = selectionSet;
+  }
 
+  @Override
+  public List<Node> getChildren() {
+    List<Node> result = new ArrayList<>();
+    result.addAll(arguments);
+    result.addAll(directives);
+    if (selectionSet != null) result.add(selectionSet);
+    return result;
+  }
 
-    @Override
-    public List<Node> getChildren() {
-        List<Node> result = new ArrayList<Node>();
-        result.addAll(arguments);
-        result.addAll(directives);
-        if (selectionSet != null) result.add(selectionSet);
-        return result;
-    }
+  public String getName() {
+    return name;
+  }
 
+  @Nullable public String getAlias() {
+    return alias;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setAlias(String alias) {
+    this.alias = alias;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public List<Argument> getArguments() {
+    return arguments;
+  }
 
-    public String getAlias() {
-        return alias;
-    }
+  public void setArguments(List<Argument> arguments) {
+    this.arguments = arguments;
+  }
 
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
+  public List<Directive> getDirectives() {
+    return directives;
+  }
 
-    public List<Argument> getArguments() {
-        return arguments;
-    }
+  public SelectionSet getSelectionSet() {
+    return selectionSet;
+  }
 
-    public void setArguments(List<Argument> arguments) {
-        this.arguments = arguments;
-    }
+  public void setSelectionSet(SelectionSet selectionSet) {
+    this.selectionSet = selectionSet;
+  }
 
-    public List<Directive> getDirectives() {
-        return directives;
-    }
+  @Override
+  public boolean isEqualTo(Node o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    public void setDirectives(List<Directive> directives) {
-        this.directives = directives;
-    }
+    Field field = (Field) o;
 
-    public SelectionSet getSelectionSet() {
-        return selectionSet;
-    }
+    if (name != null ? !name.equals(field.name) : field.name != null) return false;
+    return !(alias != null ? !alias.equals(field.alias) : field.alias != null);
 
-    public void setSelectionSet(SelectionSet selectionSet) {
-        this.selectionSet = selectionSet;
-    }
+  }
 
-    @Override
-    public boolean isEqualTo(Node o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Field field = (Field) o;
-
-        if (name != null ? !name.equals(field.name) : field.name != null) return false;
-        return !(alias != null ? !alias.equals(field.alias) : field.alias != null);
-
-    }
-
-
-    @Override
-    public String toString() {
-        return "Field{" +
-                "name='" + name + '\'' +
-                ", alias='" + alias + '\'' +
-                ", arguments=" + arguments +
-                ", directives=" + directives +
-                ", selectionSet=" + selectionSet +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Field{" + "name='" + name + '\'' + ", alias='" + alias + '\'' + ", arguments=" +
+        arguments + ", directives=" + directives + ", selectionSet=" + selectionSet + '}';
+  }
 }

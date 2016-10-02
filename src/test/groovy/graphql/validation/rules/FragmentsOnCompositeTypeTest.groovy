@@ -11,33 +11,33 @@ import spock.lang.Specification
 
 class FragmentsOnCompositeTypeTest extends Specification {
 
-    ValidationContext validationContext = Mock(ValidationContext)
-    ValidationErrorCollector errorCollector = new ValidationErrorCollector()
-    FragmentsOnCompositeType fragmentsOnCompositeType = new FragmentsOnCompositeType(validationContext, errorCollector)
+  ValidationContext validationContext = Mock(ValidationContext)
+  ValidationErrorCollector errorCollector = new ValidationErrorCollector()
+  FragmentsOnCompositeType fragmentsOnCompositeType = new FragmentsOnCompositeType(validationContext, errorCollector)
 
-    def "inline fragment type condition must refer to a composite type"() {
-        given:
-        InlineFragment inlineFragment = new InlineFragment(new TypeName("String"))
-        validationContext.getSchema() >> StarWarsSchema.starWarsSchema
+  def "inline fragment type condition must refer to a composite type"() {
+    given:
+    InlineFragment inlineFragment = new InlineFragment(new TypeName("String"))
+    validationContext.getSchema() >> StarWarsSchema.starWarsSchema
 
-        when:
-        fragmentsOnCompositeType.checkInlineFragment(inlineFragment)
+    when:
+    fragmentsOnCompositeType.checkInlineFragment(inlineFragment)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid)
-    }
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid)
+  }
 
-    def "fragment type condition must refer to a composite type"() {
-        given:
-        FragmentDefinition fragmentDefinition = new FragmentDefinition("fragment",new TypeName("String"))
-        validationContext.getSchema() >> StarWarsSchema.starWarsSchema
+  def "fragment type condition must refer to a composite type"() {
+    given:
+    FragmentDefinition fragmentDefinition = new FragmentDefinition("fragment", new TypeName("String"))
+    validationContext.getSchema() >> StarWarsSchema.starWarsSchema
 
-        when:
-        fragmentsOnCompositeType.checkFragmentDefinition(fragmentDefinition)
+    when:
+    fragmentsOnCompositeType.checkFragmentDefinition(fragmentDefinition)
 
-        then:
-        errorCollector.containsValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid)
-    }
+    then:
+    errorCollector.containsValidationError(ValidationErrorType.InlineFragmentTypeConditionInvalid)
+  }
 
 
 }

@@ -6,42 +6,40 @@ import java.util.List;
 
 public class SelectionSet extends AbstractNode {
 
-    private final List<Selection> selections = new ArrayList<Selection>();
+  private final List<Selection> selections = new ArrayList<>();
 
-    public List<Selection> getSelections() {
-        return selections;
-    }
+  public List<Selection> getSelections() {
+    return selections;
+  }
 
-    public SelectionSet() {
-    }
+  public SelectionSet() {
+  }
 
-    public SelectionSet(List<Selection> selections) {
-        this.selections.addAll(selections);
-    }
+  public SelectionSet(List<Selection> selections) {
+    this.selections.addAll(selections);
+  }
 
-    @Override
-    public List<Node> getChildren() {
-        List<Node> result = new ArrayList<Node>();
-        result.addAll(selections);
-        return result;
-    }
+  @Override
+  public List<Node> getChildren() {
+    List<Node> result = new ArrayList<>();
+    result.addAll(selections);
+    return result;
+  }
 
-    @Override
-    public boolean isEqualTo(Node o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public boolean isEqualTo(Node o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        SelectionSet that = (SelectionSet) o;
+    SelectionSet that = (SelectionSet) o;
 
-        return true;
+    return true;
 
-    }
+  }
 
 
-    @Override
-    public String toString() {
-        return "SelectionSet{" +
-                "selections=" + selections +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "SelectionSet{" + "selections=" + selections + '}';
+  }
 }

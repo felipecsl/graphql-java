@@ -12,20 +12,20 @@ import static graphql.Scalars.GraphQLString
 
 class VariablesTypesMatcherTest extends Specification {
 
-    VariablesTypesMatcher typesMatcher = new VariablesTypesMatcher()
+  VariablesTypesMatcher typesMatcher = new VariablesTypesMatcher()
 
 
-    @Unroll
-    def "#variableType with default value #defaultValue and expected #expectedType should result: #result "() {
+  @Unroll
+  def "#variableType with default value #defaultValue and expected #expectedType should result: #result "() {
 
-        expect:
-        typesMatcher.doesVariableTypesMatch(variableType, defaultValue, expectedType) == result
+    expect:
+    typesMatcher.doesVariableTypesMatch(variableType, defaultValue, expectedType) == result
 
-        where:
-        variableType                       | defaultValue           | expectedType                   || result
-        GraphQLString                      | null                   | GraphQLString                  || true
-        new GraphQLList(GraphQLString)     | null                   | new GraphQLList(GraphQLString) || true
-        new GraphQLNonNull(GraphQLBoolean) | new BooleanValue(true) | GraphQLBoolean                 || true
-        new GraphQLNonNull(GraphQLString)  | null                   | new GraphQLList(GraphQLString) || false
-    }
+    where:
+    variableType                       | defaultValue           | expectedType                   || result
+    GraphQLString                      | null                   | GraphQLString                  || true
+    new GraphQLList(GraphQLString)     | null                   | new GraphQLList(GraphQLString) || true
+    new GraphQLNonNull(GraphQLBoolean) | new BooleanValue(true) | GraphQLBoolean                 || true
+    new GraphQLNonNull(GraphQLString)  | null                   | new GraphQLList(GraphQLString) || false
+  }
 }

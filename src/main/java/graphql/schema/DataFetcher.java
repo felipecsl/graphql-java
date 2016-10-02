@@ -1,7 +1,7 @@
 package graphql.schema;
 
+import javax.annotation.Nullable;
 
 public interface DataFetcher {
-
-    Object get(DataFetchingEnvironment environment);
+  @Nullable Object get(DataFetchingEnvironment environment);
 }
