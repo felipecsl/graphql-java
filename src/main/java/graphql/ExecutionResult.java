@@ -1,6 +1,5 @@
 package graphql;
 
-
 import java.util.List;
 
 public interface ExecutionResult {

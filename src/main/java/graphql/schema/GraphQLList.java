@@ -4,9 +4,8 @@ import java.util.Map;
 
 import static graphql.Assert.assertNotNull;
 
-public class GraphQLList
-    implements GraphQLType, GraphQLInputType, GraphQLOutputType, GraphQLModifiedType,
-    GraphQLNullableType {
+public class GraphQLList implements GraphQLType, GraphQLInputType, GraphQLOutputType,
+    GraphQLModifiedType, GraphQLNullableType {
 
   private GraphQLType wrappedType;
 

@@ -8,6 +8,7 @@ import graphql.language.StringValue;
 import graphql.schema.Coercing;
 import graphql.schema.GraphQLScalarType;
 
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -24,8 +25,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLInt =
       new GraphQLScalarType("Int", "Built-in Int", new Coercing() {
-        @Override
-        public Object serialize(Object input) {
+        @Nullable @Override public Object serialize(Object input) {
           if (input instanceof String) {
             return Integer.parseInt((String) input);
           } else if (input instanceof Integer) {
@@ -35,13 +35,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public Object parseValue(Object input) {
+        @Nullable @Override public Object parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Object parseLiteral(Object input) {
+        @Nullable @Override public Object parseLiteral(Object input) {
           if (!(input instanceof IntValue)) return null;
           BigInteger value = ((IntValue) input).getValue();
           if (value.compareTo(INT_MIN) == -1 || value.compareTo(INT_MAX) == 1) {
@@ -54,8 +52,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLLong =
       new GraphQLScalarType("Long", "Long type", new Coercing() {
-        @Override
-        public Object serialize(Object input) {
+        @Nullable @Override public Object serialize(Object input) {
           if (input instanceof String) {
             return Long.parseLong((String) input);
           } else if (input instanceof Long) {
@@ -67,13 +64,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public Object parseValue(Object input) {
+        @Nullable @Override public Object parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Object parseLiteral(Object input) {
+        @Nullable @Override public Object parseLiteral(Object input) {
           if (input instanceof StringValue) {
             return Long.parseLong(((StringValue) input).getValue());
           } else if (input instanceof IntValue) {
@@ -91,8 +86,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLFloat =
       new GraphQLScalarType("Float", "Built-in Float", new Coercing() {
-        @Override
-        public Double serialize(Object input) {
+        @Nullable @Override public Double serialize(Object input) {
           if (input instanceof String) {
             return Double.parseDouble((String) input);
           } else if (input instanceof Double) {
@@ -106,13 +100,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public Object parseValue(Object input) {
+        @Nullable @Override public Object parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Object parseLiteral(Object input) {
+        @Nullable @Override public Object parseLiteral(Object input) {
           if (input instanceof IntValue) {
             return ((IntValue) input).getValue().doubleValue();
           } else if (input instanceof FloatValue) {
@@ -125,18 +117,15 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLString =
       new GraphQLScalarType("String", "Built-in String", new Coercing() {
-        @Override
-        public Object serialize(Object input) {
+        @Override @Nullable public Object serialize(@Nullable Object input) {
           return input == null ? null : input.toString();
         }
 
-        @Override
-        public Object parseValue(Object input) {
+        @Override public Object parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Object parseLiteral(Object input) {
+        @Nullable @Override public Object parseLiteral(Object input) {
           if (!(input instanceof StringValue)) return null;
           return ((StringValue) input).getValue();
         }
@@ -145,8 +134,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLBoolean =
       new GraphQLScalarType("Boolean", "Built-in Boolean", new Coercing() {
-        @Override
-        public Object serialize(Object input) {
+        @Nullable @Override public Object serialize(Object input) {
           if (input instanceof Boolean) {
             return input;
           } else if (input instanceof Integer) {
@@ -158,23 +146,19 @@ public class Scalars {
           }
         }
 
-        @Override
-        public Object parseValue(Object input) {
+        @Nullable @Override public Object parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Object parseLiteral(Object input) {
+        @Nullable @Override public Object parseLiteral(Object input) {
           if (!(input instanceof BooleanValue)) return null;
           return ((BooleanValue) input).isValue();
         }
       });
 
-
   public static GraphQLScalarType GraphQLID =
       new GraphQLScalarType("ID", "Built-in ID", new Coercing() {
-        @Override
-        public Object serialize(Object input) {
+        @Nullable @Override public Object serialize(Object input) {
           if (input instanceof String) {
             return input;
           }
@@ -182,13 +166,11 @@ public class Scalars {
           return null;
         }
 
-        @Override
-        public Object parseValue(Object input) {
+        @Nullable @Override public Object parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Object parseLiteral(Object input) {
+        @Nullable @Override public Object parseLiteral(Object input) {
           if (!(input instanceof StringValue)) return null;
           return ((StringValue) input).getValue();
         }
@@ -196,8 +178,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLBigInteger =
       new GraphQLScalarType("BigInteger", "Built-in java.math.BigInteger", new Coercing() {
-        @Override
-        public BigInteger serialize(Object input) {
+        @Nullable @Override public BigInteger serialize(Object input) {
           if (input instanceof BigInteger) {
             return (BigInteger) input;
           } else if (input instanceof String) {
@@ -211,13 +192,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public BigInteger parseValue(Object input) {
+        @Nullable @Override public BigInteger parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public BigInteger parseLiteral(Object input) {
+        @Nullable @Override public BigInteger parseLiteral(Object input) {
           if (input instanceof StringValue) {
             return new BigInteger(((StringValue) input).getValue());
           } else if (input instanceof IntValue) {
@@ -229,8 +208,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLBigDecimal =
       new GraphQLScalarType("BigDecimal", "Built-in java.math.BigDecimal", new Coercing() {
-        @Override
-        public BigDecimal serialize(Object input) {
+        @Nullable @Override public BigDecimal serialize(Object input) {
           if (input instanceof BigDecimal) {
             return (BigDecimal) input;
           } else if (input instanceof String) {
@@ -248,13 +226,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public BigDecimal parseValue(Object input) {
+        @Nullable @Override public BigDecimal parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public BigDecimal parseLiteral(Object input) {
+        @Nullable @Override public BigDecimal parseLiteral(Object input) {
           if (input instanceof StringValue) {
             return new BigDecimal(((StringValue) input).getValue());
           } else if (input instanceof IntValue) {
@@ -268,8 +244,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLByte =
       new GraphQLScalarType("Byte", "Built-in Byte as Int", new Coercing() {
-        @Override
-        public Byte serialize(Object input) {
+        @Nullable @Override public Byte serialize(Object input) {
           if (input instanceof String) {
             return Byte.parseByte((String) input);
           } else if (input instanceof Byte) {
@@ -279,13 +254,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public Byte parseValue(Object input) {
+        @Nullable @Override public Byte parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Byte parseLiteral(Object input) {
+        @Nullable @Override public Byte parseLiteral(Object input) {
           if (!(input instanceof IntValue)) return null;
           BigInteger value = ((IntValue) input).getValue();
           if (value.compareTo(BYTE_MIN) < 0 || value.compareTo(BYTE_MAX) > 0) {
@@ -298,8 +271,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLShort =
       new GraphQLScalarType("Short", "Built-in Short as Int", new Coercing() {
-        @Override
-        public Short serialize(Object input) {
+        @Nullable @Override public Short serialize(Object input) {
           if (input instanceof String) {
             return Short.parseShort((String) input);
           } else if (input instanceof Short) {
@@ -309,13 +281,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public Short parseValue(Object input) {
+        @Nullable @Override public Short parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Short parseLiteral(Object input) {
+        @Nullable @Override public Short parseLiteral(Object input) {
           if (!(input instanceof IntValue)) return null;
           BigInteger value = ((IntValue) input).getValue();
           if (value.compareTo(SHORT_MIN) < 0 || value.compareTo(SHORT_MAX) > 0) {
@@ -328,8 +298,7 @@ public class Scalars {
 
   public static GraphQLScalarType GraphQLChar =
       new GraphQLScalarType("Char", "Built-in Char as Character", new Coercing() {
-        @Override
-        public Character serialize(Object input) {
+        @Nullable @Override public Character serialize(Object input) {
           if (input instanceof String) {
             return ((String) input).length() != 1 ? null : ((String) input).charAt(0);
           } else if (input instanceof Character) {
@@ -339,13 +308,11 @@ public class Scalars {
           }
         }
 
-        @Override
-        public Character parseValue(Object input) {
+        @Nullable @Override public Character parseValue(Object input) {
           return serialize(input);
         }
 
-        @Override
-        public Character parseLiteral(Object input) {
+        @Nullable @Override public Character parseLiteral(Object input) {
           if (!(input instanceof StringValue)) return null;
           String value = ((StringValue) input).getValue();
           if (value == null || value.length() != 1) return null;

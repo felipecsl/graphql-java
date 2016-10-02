@@ -23,7 +23,8 @@ import static graphql.Assert.assertNotNull;
 public class GraphQL {
   private static final Logger log = LoggerFactory.getLogger(GraphQL.class);
   private final GraphQLSchema graphQLSchema;
-  @Nullable private final ExecutionStrategy executionStrategy;
+  @Nullable
+  private final ExecutionStrategy executionStrategy;
 
   public GraphQL(GraphQLSchema graphQLSchema) {
     this(graphQLSchema, null);
@@ -38,21 +39,22 @@ public class GraphQL {
     return execute(requestString, null);
   }
 
-  public ExecutionResult execute(String requestString, Object context) {
+  public ExecutionResult execute(String requestString, @Nullable Object context) {
     return execute(requestString, context, Collections.<String, Object>emptyMap());
   }
 
-  public ExecutionResult execute(String requestString, String operationName, Object context) {
+  public ExecutionResult execute(String requestString, @Nullable String operationName,
+      @Nullable Object context) {
     return execute(requestString, operationName, context, Collections.<String, Object>emptyMap());
   }
 
-  public ExecutionResult execute(String requestString, Object context,
+  public ExecutionResult execute(String requestString, @Nullable Object context,
       Map<String, Object> arguments) {
     return execute(requestString, null, context, arguments);
   }
 
-  public ExecutionResult execute(String requestString, String operationName, Object context,
-      Map<String, Object> arguments) {
+  public ExecutionResult execute(String requestString, @Nullable String operationName,
+      @Nullable Object context, Map<String, Object> arguments) {
     assertNotNull(arguments, "arguments can't be null");
     log.info("Executing request. operation name: {}. Request: {} ", operationName, requestString);
     Parser parser = new Parser();
@@ -70,10 +72,11 @@ public class GraphQL {
 
     Validator validator = new Validator(graphQLSchema);
     List<ValidationError> validationErrors = validator.validate(document);
-    if (validationErrors.size() > 0) {
+    if (!validationErrors.isEmpty()) {
       return new ExecutionResultImpl(validationErrors);
+    } else {
+      Execution execution = new Execution(executionStrategy);
+      return execution.execute(graphQLSchema, context, document, operationName, arguments);
     }
-    Execution execution = new Execution(executionStrategy);
-    return execution.execute(graphQLSchema, context, document, operationName, arguments);
   }
 }

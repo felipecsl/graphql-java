@@ -30,8 +30,7 @@ public class GraphQLScalarType
     return coercing;
   }
 
-  @Override
-  public String toString() {
+  @Override public String toString() {
     return "GraphQLScalarType{" + "name='" + name + '\'' + ", description='" + description + '\'' +
         ", coercing=" + coercing + '}';
   }

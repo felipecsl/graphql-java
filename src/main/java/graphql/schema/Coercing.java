@@ -1,6 +1,8 @@
 package graphql.schema;
 
 
+import javax.annotation.Nullable;
+
 public interface Coercing {
 
 
@@ -10,7 +12,7 @@ public interface Coercing {
    * @param input is never null
    * @return null if not possible/invalid
    */
-  Object serialize(Object input);
+  @Nullable Object serialize(Object input);
 
   /**
    * Called to resolve a input from a variable.
@@ -19,7 +21,7 @@ public interface Coercing {
    * @param input is never null
    * @return null if not possible/invalid
    */
-  Object parseValue(Object input);
+  @Nullable Object parseValue(Object input);
 
   /**
    * Called to convert a AST node
@@ -27,5 +29,5 @@ public interface Coercing {
    * @param input is never null
    * @return null if not possible/invalid
    */
-  Object parseLiteral(Object input);
+  @Nullable Object parseLiteral(Object input);
 }

@@ -9,6 +9,7 @@ import graphql.schema.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static graphql.introspection.Introspection.*;
@@ -45,17 +46,11 @@ public abstract class ExecutionStrategy {
     return completeValue(executionContext, fieldDef.getType(), fields, resolvedValue);
   }
 
-  protected ExecutionResult completeValue(ExecutionContext executionContext, GraphQLType fieldType,
-      List<Field> fields, Object result) {
+  @Nullable protected ExecutionResult completeValue(ExecutionContext executionContext, GraphQLType
+      fieldType, List<Field> fields, @Nullable Object result) {
+    GraphQLObjectType resolvedType;
     if (fieldType instanceof GraphQLNonNull) {
-      GraphQLNonNull graphQLNonNull = (GraphQLNonNull) fieldType;
-      ExecutionResult completed =
-          completeValue(executionContext, graphQLNonNull.getWrappedType(), fields, result);
-      if (completed == null) {
-        throw new GraphQLException("Cannot return null for non-nullable type: " + fields);
-      }
-      return completed;
-
+      return completeValueForNonNull(executionContext, (GraphQLNonNull) fieldType, fields, result);
     } else if (result == null) {
       return null;
     } else if (fieldType instanceof GraphQLList) {
@@ -64,10 +59,7 @@ public abstract class ExecutionStrategy {
       return completeValueForScalar((GraphQLScalarType) fieldType, result);
     } else if (fieldType instanceof GraphQLEnumType) {
       return completeValueForEnum((GraphQLEnumType) fieldType, result);
-    }
-
-    GraphQLObjectType resolvedType;
-    if (fieldType instanceof GraphQLInterfaceType) {
+    } else if (fieldType instanceof GraphQLInterfaceType) {
       resolvedType = resolveType((GraphQLInterfaceType) fieldType, result);
     } else if (fieldType instanceof GraphQLUnionType) {
       resolvedType = resolveType((GraphQLUnionType) fieldType, result);
@@ -79,9 +71,8 @@ public abstract class ExecutionStrategy {
     List<String> visitedFragments = new ArrayList<>();
     for (Field field : fields) {
       if (field.getSelectionSet() == null) continue;
-      fieldCollector
-          .collectFields(executionContext, resolvedType, field.getSelectionSet(), visitedFragments,
-              subFields);
+      fieldCollector.collectFields(executionContext, resolvedType, field.getSelectionSet(),
+          visitedFragments, subFields);
     }
 
     // Calling this from the executionContext so that you can shift from the simple execution strategy for mutations
@@ -89,6 +80,17 @@ public abstract class ExecutionStrategy {
 
     return executionContext.getExecutionStrategy()
         .execute(executionContext, resolvedType, result, subFields);
+  }
+
+  private ExecutionResult completeValueForNonNull(ExecutionContext executionContext,
+      GraphQLNonNull fieldType, List<Field> fields, @Nullable Object result) {
+    GraphQLNonNull graphQLNonNull = fieldType;
+    ExecutionResult completed = completeValue(executionContext, graphQLNonNull.getWrappedType(),
+        fields, result);
+    if (completed == null) {
+      throw new GraphQLException("Cannot return null for non-nullable type: " + fields);
+    }
+    return completed;
   }
 
   private ExecutionResult completeValueForList(ExecutionContext executionContext,
@@ -131,10 +133,10 @@ public abstract class ExecutionStrategy {
 
   private ExecutionResult completeValueForList(ExecutionContext executionContext,
       GraphQLList fieldType, List<Field> fields, List<Object> result) {
-    List<Object> completedResults = new ArrayList<>();
+    List<Object> completedResults = new ArrayList<>(result.size());
     for (Object item : result) {
-      ExecutionResult completedValue =
-          completeValue(executionContext, fieldType.getWrappedType(), fields, item);
+      ExecutionResult completedValue = completeValue(executionContext, fieldType.getWrappedType(),
+          fields, item);
       completedResults.add(completedValue != null ? completedValue.getData() : null);
     }
     return new ExecutionResultImpl(completedResults, null);

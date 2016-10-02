@@ -22,10 +22,10 @@ public class Execution {
     this.strategy = strategy != null ? strategy : new SimpleExecutionStrategy();
   }
 
-  public ExecutionResult execute(GraphQLSchema graphQLSchema, Object root, Document document,
-      String operationName, Map<String, Object> args) {
-    ExecutionContext executionContext = new ExecutionContextBuilder(new ValuesResolver())
-        .build(graphQLSchema, strategy, root, document, operationName, args);
+  public ExecutionResult execute(GraphQLSchema graphQLSchema, @Nullable Object root,
+      Document document, @Nullable String operationName, Map<String, Object> args) {
+    ExecutionContext executionContext = new ExecutionContextBuilder(new ValuesResolver(),
+        graphQLSchema).build(strategy, root, document, operationName, args);
     return executeOperation(executionContext, root, executionContext.getOperationDefinition());
   }
 
@@ -33,16 +33,14 @@ public class Execution {
       OperationDefinition operationDefinition) {
     if (operationDefinition.getOperation() == OperationDefinition.Operation.MUTATION) {
       return graphQLSchema.getMutationType();
-
     } else if (operationDefinition.getOperation() == OperationDefinition.Operation.QUERY) {
       return graphQLSchema.getQueryType();
-
     } else {
       throw new GraphQLException();
     }
   }
 
-  private ExecutionResult executeOperation(ExecutionContext executionContext, Object root,
+  private ExecutionResult executeOperation(ExecutionContext executionContext, @Nullable Object root,
       OperationDefinition operationDefinition) {
     GraphQLObjectType operationRootType =
         getOperationRootType(executionContext.getGraphQLSchema(), operationDefinition);

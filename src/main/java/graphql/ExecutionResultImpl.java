@@ -7,7 +7,7 @@ public class ExecutionResultImpl implements ExecutionResult {
   private final List<GraphQLError> errors = new ArrayList<>();
   private final Object data;
 
-  public ExecutionResultImpl(List<? extends GraphQLError> errors) {
+  ExecutionResultImpl(List<? extends GraphQLError> errors) {
     this.errors.addAll(errors);
     this.data = null;
   }
@@ -18,10 +18,6 @@ public class ExecutionResultImpl implements ExecutionResult {
     if (errors != null) {
       this.errors.addAll(errors);
     }
-  }
-
-  public void addErrors(List<? extends GraphQLError> errors) {
-    this.errors.addAll(errors);
   }
 
   @Override
