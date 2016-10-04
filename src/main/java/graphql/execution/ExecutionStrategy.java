@@ -16,7 +16,6 @@ import static graphql.introspection.Introspection.*;
 
 public abstract class ExecutionStrategy {
   private static final Logger log = LoggerFactory.getLogger(ExecutionStrategy.class);
-
   protected final ValuesResolver valuesResolver = new ValuesResolver();
   protected final FieldCollector fieldCollector = new FieldCollector();
 
@@ -25,23 +24,27 @@ public abstract class ExecutionStrategy {
 
   @Nullable ExecutionResult resolveField(ExecutionContext executionContext,
       GraphQLObjectType parentType, @Nullable Object source, List<Field> fields) {
+    Field field = fields.get(0);
     GraphQLFieldDefinition fieldDef = getFieldDef(executionContext.getGraphQLSchema(), parentType,
-        fields.get(0));
+        field);
     Map<String, Object> argumentValues = valuesResolver.getArgumentValues(
-        fieldDef.getArguments(), fields.get(0).getArguments(), executionContext.getVariables());
+        fieldDef.getArguments(), field.getArguments(), executionContext.getVariables());
     DataFetchingEnvironment environment = new DataFetchingEnvironment(source, argumentValues,
         executionContext.getRoot(), fields, fieldDef.getType(), parentType,
         executionContext.getGraphQLSchema());
+    Object resolvedValue = resolveValue(executionContext, fieldDef, environment);
+    return completeValue(executionContext, fieldDef.getType(), fields, resolvedValue);
+  }
 
-    Object resolvedValue = null;
+  protected Object resolveValue(ExecutionContext executionContext, GraphQLFieldDefinition fieldDef,
+      DataFetchingEnvironment environment) {
     try {
-      resolvedValue = fieldDef.getDataFetcher().get(environment);
+      return fieldDef.getDataFetcher().get(environment);
     } catch (Exception e) {
       log.info("Exception while fetching data", e);
       executionContext.addError(new ExceptionWhileDataFetching(e));
+      return null;
     }
-
-    return completeValue(executionContext, fieldDef.getType(), fields, resolvedValue);
   }
 
   @Nullable protected ExecutionResult completeValue(ExecutionContext executionContext, GraphQLType
@@ -68,7 +71,9 @@ public abstract class ExecutionStrategy {
     Map<String, List<Field>> subFields = new LinkedHashMap<>();
     List<String> visitedFragments = new ArrayList<>();
     for (Field field : fields) {
-      if (field.getSelectionSet() == null) continue;
+      if (field.getSelectionSet() == null) {
+        continue;
+      }
       fieldCollector.collectFields(executionContext, resolvedType, field.getSelectionSet(),
           visitedFragments, subFields);
     }
@@ -143,15 +148,13 @@ public abstract class ExecutionStrategy {
     if (schema.getQueryType() == parentType) {
       if (field.getName().equals(SchemaMetaFieldDef.getName())) {
         return SchemaMetaFieldDef;
-      }
-      if (field.getName().equals(TypeMetaFieldDef.getName())) {
+      } else if (field.getName().equals(TypeMetaFieldDef.getName())) {
         return TypeMetaFieldDef;
       }
     }
     if (field.getName().equals(TypeNameMetaFieldDef.getName())) {
       return TypeNameMetaFieldDef;
     }
-
     GraphQLFieldDefinition fieldDefinition = parentType.getFieldDefinition(field.getName());
     if (fieldDefinition == null) {
       throw new GraphQLException("unknown field " + field.getName());

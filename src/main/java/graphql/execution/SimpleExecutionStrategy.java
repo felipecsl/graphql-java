@@ -14,11 +14,10 @@ public class SimpleExecutionStrategy extends ExecutionStrategy {
   @Override public ExecutionResult execute(ExecutionContext executionContext,
       GraphQLObjectType parentType, @Nullable Object source, Map<String, List<Field>> fields) {
     Map<String, Object> results = new LinkedHashMap<>();
-    for (String fieldName : fields.keySet()) {
-      List<Field> fieldList = fields.get(fieldName);
+    for (Map.Entry<String, List<Field>> entry : fields.entrySet()) {
       ExecutionResult resolvedResult = resolveField(executionContext, parentType, source,
-          fieldList);
-      results.put(fieldName, resolvedResult != null ? resolvedResult.getData() : null);
+          entry.getValue());
+      results.put(entry.getKey(), resolvedResult != null ? resolvedResult.getData() : null);
     }
     return new ExecutionResultImpl(results, executionContext.getErrors());
   }

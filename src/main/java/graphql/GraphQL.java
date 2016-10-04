@@ -23,8 +23,7 @@ import static graphql.Assert.assertNotNull;
 public class GraphQL {
   private static final Logger log = LoggerFactory.getLogger(GraphQL.class);
   private final GraphQLSchema graphQLSchema;
-  @Nullable
-  private final ExecutionStrategy executionStrategy;
+  @Nullable private final ExecutionStrategy executionStrategy;
 
   public GraphQL(GraphQLSchema graphQLSchema) {
     this(graphQLSchema, null);
