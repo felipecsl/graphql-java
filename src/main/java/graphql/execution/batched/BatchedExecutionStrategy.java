@@ -16,32 +16,31 @@ import java.util.*;
 import static java.util.Collections.singletonList;
 
 /**
- * Execution Strategy that minimizes calls to the data fetcher when used in conjunction with {@link DataFetcher}s that have
- * {@link DataFetcher#get(DataFetchingEnvironment)} methods annotated with {@link Batched}. See the javadoc comment on
- * {@link Batched} for a more detailed description of batched data fetchers.
- * <p>
- * The strategy runs a BFS over terms of the query and passes a list of all the relevant sources to the batched data fetcher.
- * </p>
- * Normal DataFetchers can be used, however they will not see benefits of batching as they expect a single source object
- * at a time.
+ * Execution Strategy that minimizes calls to the data fetcher when used in conjunction with {@link
+ * DataFetcher}s that have {@link DataFetcher#get(DataFetchingEnvironment)} methods annotated with
+ * {@link Batched}. See the javadoc comment on {@link Batched} for a more detailed description of
+ * batched data fetchers. <p> The strategy runs a BFS over terms of the query and passes a list of
+ * all the relevant sources to the batched data fetcher. </p> Normal DataFetchers can be used,
+ * however they will not see benefits of batching as they expect a single source object at a time.
  */
 public class BatchedExecutionStrategy extends ExecutionStrategy {
-
   private static final Logger log = LoggerFactory.getLogger(BatchedExecutionStrategy.class);
-
   private final BatchedDataFetcherFactory batchingFactory = new BatchedDataFetcherFactory();
 
+  public BatchedExecutionStrategy(ExecutionContext executionContext) {
+    super(executionContext);
+  }
+
   @Override
-  public ExecutionResult execute(ExecutionContext executionContext, GraphQLObjectType parentType,
-      Object source, Map<String, List<Field>> fields) {
+  public ExecutionResult execute(GraphQLObjectType parentType, Object source,
+      Map<String, List<Field>> fields) {
     GraphQLExecutionNodeDatum data =
         new GraphQLExecutionNodeDatum(new LinkedHashMap<String, Object>(), source);
     GraphQLExecutionNode root = new GraphQLExecutionNode(parentType, fields, singletonList(data));
-    return execute(executionContext, root);
+    return execute(root);
   }
 
-  private ExecutionResult execute(ExecutionContext executionContext, GraphQLExecutionNode root) {
-
+  private ExecutionResult execute(GraphQLExecutionNode root) {
     Queue<GraphQLExecutionNode> nodes = new ArrayDeque<>();
     nodes.add(root);
 
@@ -52,14 +51,13 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
       for (String fieldName : node.getFields().keySet()) {
         List<Field> fieldList = node.getFields().get(fieldName);
         List<GraphQLExecutionNode> childNodes =
-            resolveField(executionContext, node.getParentType(), node.getData(), fieldName,
+            resolveField(node.getParentType(), node.getData(), fieldName,
                 fieldList);
         nodes.addAll(childNodes);
       }
     }
     return new ExecutionResultImpl(getOnlyElement(root.getData()).getParentResult(),
         executionContext.getErrors());
-
   }
 
   private GraphQLExecutionNodeDatum getOnlyElement(List<GraphQLExecutionNodeDatum> list) {
@@ -70,8 +68,8 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
   // Use the data.parentResult objects to put values into.  These are either primitives or empty maps
   // If they were empty maps, we need that list of nodes to process
 
-  private List<GraphQLExecutionNode> resolveField(ExecutionContext executionContext,
-      GraphQLObjectType parentType, List<GraphQLExecutionNodeDatum> nodeData, String fieldName,
+  private List<GraphQLExecutionNode> resolveField(GraphQLObjectType parentType,
+      List<GraphQLExecutionNodeDatum> nodeData, String fieldName,
       List<Field> fields) {
 
     GraphQLFieldDefinition fieldDef =

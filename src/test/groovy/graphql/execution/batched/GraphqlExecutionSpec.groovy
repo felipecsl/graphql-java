@@ -6,22 +6,19 @@ package graphql.execution.batched
 
 import graphql.ExecutionResult
 import graphql.GraphQL
-import graphql.execution.SimpleExecutionStrategy
+import graphql.execution.ExecutionStrategy
 import graphql.schema.GraphQLSchema
 import spock.lang.Specification
 
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * Created by dcohen on 1/4/16.
- */
 class GraphqlExecutionSpec extends Specification {
 
   private GraphQLSchema schema = new FunWithStringsSchemaFactory().createSchema();
-  private GraphQL graphQLSimple = new GraphQL(this.schema, new SimpleExecutionStrategy());
-  private GraphQL graphQLBatchedButUnbatched = new GraphQL(this.schema, new BatchedExecutionStrategy());
+  private GraphQL graphQLSimple = new GraphQL(this.schema);
+  private GraphQL graphQLBatchedButUnbatched = new GraphQL(this.schema, ExecutionStrategy.Type.Batched);
   private Map<FunWithStringsSchemaFactory.CallType, AtomicInteger> countMap = new HashMap<>();
-  private GraphQL graphQLBatchedValue = new GraphQL(FunWithStringsSchemaFactory.createBatched(countMap).createSchema(), new BatchedExecutionStrategy());
+  private GraphQL graphQLBatchedValue = new GraphQL(FunWithStringsSchemaFactory.createBatched(countMap).createSchema(), ExecutionStrategy.Type.Batched);
 
   private Map<String, Object> nullValueMap = new HashMap<>();
 

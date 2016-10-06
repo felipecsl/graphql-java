@@ -11,9 +11,9 @@ class ExecutionStrategySpec extends Specification {
   ExecutionStrategy executionStrategy
 
   def setup() {
-    executionStrategy = new ExecutionStrategy() {
+    executionStrategy = new ExecutionStrategy(null) {
       @Override
-      ExecutionResult execute(ExecutionContext executionContext, GraphQLObjectType parentType,
+      ExecutionResult execute(GraphQLObjectType parentType,
                               Object source, Map<String, List<Field>> fields) {
         return null
       }
@@ -22,12 +22,11 @@ class ExecutionStrategySpec extends Specification {
 
   def "completes value for a java.util.List"() {
     given:
-    ExecutionContext executionContext = new ExecutionContext(null, null, null, null, null, null);
     Field field = new Field()
     def fieldType = new GraphQLList(Scalars.GraphQLString)
     def result = Arrays.asList("test")
     when:
-    def executionResult = executionStrategy.completeValue(executionContext, fieldType, [field], result)
+    def executionResult = executionStrategy.completeValue(fieldType, [field], result)
 
     then:
     executionResult.data == ["test"]
@@ -35,12 +34,11 @@ class ExecutionStrategySpec extends Specification {
 
   def "completes value for an array"() {
     given:
-    ExecutionContext executionContext = new ExecutionContext(null, null, null, null, null, null);
     Field field = new Field()
     def fieldType = new GraphQLList(Scalars.GraphQLString)
     String[] result = ["test"]
     when:
-    def executionResult = executionStrategy.completeValue(executionContext, fieldType, [field], result)
+    def executionResult = executionStrategy.completeValue(fieldType, [field], result)
 
     then:
     executionResult.data == ["test"]

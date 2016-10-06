@@ -9,38 +9,36 @@ import graphql.schema.GraphQLObjectType;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
- * <p>ExecutorServiceExecutionStrategy uses an {@link ExecutorService} to parallelize the resolve.</p>
- * <p>
- * Due to the nature of {@link #execute(ExecutionContext, GraphQLObjectType, Object, Map)} implementation, {@link ExecutorService}
- * MUST have the following 2 characteristics:
- * <ul>
- * <li>1. The underlying {@link java.util.concurrent.ThreadPoolExecutor} MUST have a reasonable {@code maximumPoolSize}
- * <li>2. The underlying {@link java.util.concurrent.ThreadPoolExecutor} SHALL NOT use its task queue.
- * </ul>
- * <p>
- * <p>Failure to follow 1. and 2. can result in a very large number of threads created or hanging. (deadlock)</p>
+ * <p>ExecutorServiceExecutionStrategy uses an {@link ExecutorService} to parallelize the
+ * resolve.</p> <p> Due to the nature of {@link #execute(GraphQLObjectType, Object, Map)}
+ * implementation, {@link ExecutorService} MUST have the following 2 characteristics: <ul> <li>1.
+ * The underlying {@link java.util.concurrent.ThreadPoolExecutor} MUST have a reasonable {@code
+ * maximumPoolSize} <li>2. The underlying {@link java.util.concurrent.ThreadPoolExecutor} SHALL NOT
+ * use its task queue. </ul> <p> <p>Failure to follow 1. and 2. can result in a very large number of
+ * threads created or hanging. (deadlock)</p>
  * <p>
  * See {@code graphql.execution.ExecutorServiceExecutionStrategyTest} for example usage.
  */
 public class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
   private final ExecutorService executorService;
 
-  public ExecutorServiceExecutionStrategy(ExecutorService executorService) {
+  public ExecutorServiceExecutionStrategy(ExecutorService executorService,
+      ExecutionContext executionContext) {
+    super(executionContext);
     this.executorService = executorService;
   }
 
-  @Override
-  public ExecutionResult execute(final ExecutionContext executionContext,
-      final GraphQLObjectType parentType, final Object source,
+  public ExecutorServiceExecutionStrategy(ExecutionContext executionContext) {
+    this(Executors.newCachedThreadPool(), executionContext);
+  }
+
+  @Override public ExecutionResult execute(final GraphQLObjectType parentType, final Object source,
       final Map<String, List<Field>> fields) {
     if (executorService == null)
-      return new SimpleExecutionStrategy().execute(executionContext, parentType, source, fields);
+      return new SimpleExecutionStrategy(executionContext).execute(parentType, source, fields);
 
     Map<String, Future<ExecutionResult>> futures =
         new LinkedHashMap<>();
@@ -49,8 +47,7 @@ public class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
       Callable<ExecutionResult> resolveField = new Callable<ExecutionResult>() {
         @Override
         public ExecutionResult call() throws Exception {
-          return resolveField(executionContext, parentType, source, fieldList);
-
+          return resolveField(parentType, source, fieldList);
         }
       };
       futures.put(fieldName, executorService.submit(resolveField));
@@ -59,7 +56,6 @@ public class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
       Map<String, Object> results = new LinkedHashMap<>();
       for (String fieldName : futures.keySet()) {
         ExecutionResult executionResult = futures.get(fieldName).get();
-
         results.put(fieldName, executionResult != null ? executionResult.getData() : null);
       }
       return new ExecutionResultImpl(results, executionContext.getErrors());

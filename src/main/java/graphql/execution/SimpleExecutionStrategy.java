@@ -11,11 +11,19 @@ import java.util.List;
 import java.util.Map;
 
 public class SimpleExecutionStrategy extends ExecutionStrategy {
-  @Override public ExecutionResult execute(ExecutionContext executionContext,
-      GraphQLObjectType parentType, @Nullable Object source, Map<String, List<Field>> fields) {
+  public SimpleExecutionStrategy(ExecutionContext executionContext) {
+    super(executionContext);
+  }
+
+  SimpleExecutionStrategy(ExecutionContext executionContext, ExecutionStrategy strategy) {
+    super(executionContext, strategy);
+  }
+
+  @Override public ExecutionResult execute(GraphQLObjectType parentType, @Nullable Object source,
+      Map<String, List<Field>> fields) {
     Map<String, Object> results = new LinkedHashMap<>();
     for (Map.Entry<String, List<Field>> entry : fields.entrySet()) {
-      ExecutionResult resolvedResult = resolveField(executionContext, parentType, source,
+      ExecutionResult resolvedResult = resolveField(parentType, source,
           entry.getValue());
       results.put(entry.getKey(), resolvedResult != null ? resolvedResult.getData() : null);
     }

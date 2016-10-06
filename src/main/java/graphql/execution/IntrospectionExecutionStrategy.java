@@ -14,14 +14,17 @@ import java.util.List;
 import java.util.Map;
 
 public class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
+  public IntrospectionExecutionStrategy(ExecutionContext executionContext) {
+    super(executionContext);
+  }
+
   @Override
-  public ExecutionResult execute(ExecutionContext executionContext, GraphQLObjectType parentType,
-      @Nullable Object source, Map<String, List<Field>> fields) {
+  public ExecutionResult execute(GraphQLObjectType parentType, @Nullable Object source,
+      Map<String, List<Field>> fields) {
     Map<String, Object> results = new LinkedHashMap<>(1);
     List<Object> fieldResults = new ArrayList<>(fields.keySet().size());
     for (Map.Entry<String, List<Field>> entry : fields.entrySet()) {
-      ExecutionResult resolvedResult = resolveField(executionContext, parentType, source,
-          entry.getValue());
+      ExecutionResult resolvedResult = resolveField(parentType, source, entry.getValue());
       if (resolvedResult != null) {
         fieldResults.add(resolvedResult.getData());
       }
@@ -32,8 +35,8 @@ public class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
     return new ExecutionResultImpl(results, executionContext.getErrors());
   }
 
-  @Override protected Object resolveValue(ExecutionContext executionContext,
-      GraphQLFieldDefinition fieldDef, DataFetchingEnvironment environment) {
+  @Override protected Object resolveValue(GraphQLFieldDefinition fieldDef,
+      DataFetchingEnvironment environment) {
     Map<String, String> map = new LinkedHashMap<>();
     map.put("name", fieldDef.getName());
     map.put("type", fieldDef.getType().getName());

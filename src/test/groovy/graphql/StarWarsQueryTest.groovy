@@ -1,6 +1,5 @@
 package graphql
 
-import graphql.execution.IntrospectionExecutionStrategy
 import spock.lang.Specification
 
 class StarWarsQueryTest extends Specification {
@@ -308,61 +307,61 @@ class StarWarsQueryTest extends Specification {
     result == expected
   }
 
-  def 'Allow introspection query'() {
-    given:
-    def query = """
-        query DuplicateFields {
-            luke: human(id: "1000") {
-                name
-                homePlanet
-            }
-            leia: human(id: "1003") {
-                name
-                homePlanet
-            }
-        }
-        """
-    when:
-    def result = new GraphQL(StarWarsSchema.starWarsSchema, new IntrospectionExecutionStrategy())
-        .execute(query).data
-
-    then:
-    result == [
-        operationName: 'DuplicateFields',
-        variables    : [
-            name: 'id',
-            type: 'String'
-        ],
-        fields       : [
-            [
-                name  : 'luke',
-                type  : 'Human',
-                fields: [
-                    [
-                        name: 'name',
-                        type: 'String!'
-                    ],
-                    [
-                        name: 'homePlanet',
-                        type: 'String!'
-                    ]]
-            ],
-            [
-                name  : 'leia',
-                type  : 'Human',
-                fields: [
-                    [
-                        name: 'name',
-                        type: 'String!'
-                    ],
-                    [
-                        name: 'homePlanet',
-                        type: 'String!'
-                    ]]
-            ],
-        ]
-    ]
-  }
+//  def 'Allow introspection query'() {
+//    given:
+//    def query = """
+//        query DuplicateFields {
+//            luke: human(id: "1000") {
+//                name
+//                homePlanet
+//            }
+//            leia: human(id: "1003") {
+//                name
+//                homePlanet
+//            }
+//        }
+//        """
+//    when:
+//    def result = new GraphQL(StarWarsSchema.starWarsSchema, new IntrospectionExecutionStrategy())
+//        .execute(query).data
+//
+//    then:
+//    result == [
+//        operationName: 'DuplicateFields',
+//        variables    : [
+//            name: 'id',
+//            type: 'String'
+//        ],
+//        fields       : [
+//            [
+//                name  : 'luke',
+//                type  : 'Human',
+//                fields: [
+//                    [
+//                        name: 'name',
+//                        type: 'String!'
+//                    ],
+//                    [
+//                        name: 'homePlanet',
+//                        type: 'String!'
+//                    ]]
+//            ],
+//            [
+//                name  : 'leia',
+//                type  : 'Human',
+//                fields: [
+//                    [
+//                        name: 'name',
+//                        type: 'String!'
+//                    ],
+//                    [
+//                        name: 'homePlanet',
+//                        type: 'String!'
+//                    ]]
+//            ],
+//        ]
+//    ]
+//  }
 
   def 'Allows us to use a fragment to avoid duplicating content'() {
     given:

@@ -20,11 +20,10 @@ class ExecutionContextBuilder {
     this.graphQLSchema = graphQLSchema;
   }
 
-  ExecutionContext build(ExecutionStrategy executionStrategy, @Nullable Object root,
-      Document document, @Nullable String operationName, Map<String, Object> args) {
+  ExecutionContext build(@Nullable Object root, Document document, @Nullable String operationName,
+      Map<String, Object> args) {
     Map<String, FragmentDefinition> fragmentsByName = new LinkedHashMap<>();
     Map<String, OperationDefinition> operationsByName = new LinkedHashMap<>();
-
     for (Definition definition : document.getDefinitions()) {
       if (definition instanceof OperationDefinition) {
         OperationDefinition operationDefinition = (OperationDefinition) definition;
@@ -51,7 +50,7 @@ class ExecutionContextBuilder {
 
     Map<String, Object> variableValues = valuesResolver.getVariableValues(graphQLSchema, operation
         .getVariableDefinitions(), args);
-    return new ExecutionContext(graphQLSchema, executionStrategy, fragmentsByName, operation,
+    return new ExecutionContext(graphQLSchema, fragmentsByName, operation,
         variableValues, root);
   }
 }

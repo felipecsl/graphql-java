@@ -5,27 +5,28 @@ import graphql.language.FragmentDefinition;
 import graphql.language.OperationDefinition;
 import graphql.schema.GraphQLSchema;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static graphql.Assert.assertNotNull;
+
 public class ExecutionContext {
   private final GraphQLSchema graphQLSchema;
-  private final ExecutionStrategy executionStrategy;
   private final Map<String, FragmentDefinition> fragmentsByName;
   private final OperationDefinition operationDefinition;
   private final Map<String, Object> variables;
   private final List<GraphQLError> errors = new ArrayList<>();
-  private final Object root;
+  @Nullable private final Object root;
 
-  public ExecutionContext(GraphQLSchema graphQLSchema, ExecutionStrategy executionStrategy,
+  public ExecutionContext(GraphQLSchema graphQLSchema,
       Map<String, FragmentDefinition> fragmentsByName, OperationDefinition operationDefinition,
-      Map<String, Object> variables, Object root) {
-    this.graphQLSchema = graphQLSchema;
-    this.executionStrategy = executionStrategy;
-    this.fragmentsByName = fragmentsByName;
-    this.operationDefinition = operationDefinition;
-    this.variables = variables;
+      Map<String, Object> variables, @Nullable Object root) {
+    this.graphQLSchema = assertNotNull(graphQLSchema, "graphQLSchema == null");
+    this.fragmentsByName = assertNotNull(fragmentsByName, "fragmentsByName == null");
+    this.operationDefinition = assertNotNull(operationDefinition, "operationDefinition == null");
+    this.variables = assertNotNull(variables, "variable == null");
     this.root = root;
   }
 
@@ -41,7 +42,7 @@ public class ExecutionContext {
     return variables;
   }
 
-  public Object getRoot() {
+  @Nullable public Object getRoot() {
     return root;
   }
 
@@ -55,9 +56,5 @@ public class ExecutionContext {
 
   public List<GraphQLError> getErrors() {
     return errors;
-  }
-
-  ExecutionStrategy getExecutionStrategy() {
-    return executionStrategy;
   }
 }

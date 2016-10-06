@@ -23,15 +23,15 @@ import static graphql.Assert.assertNotNull;
 public class GraphQL {
   private static final Logger log = LoggerFactory.getLogger(GraphQL.class);
   private final GraphQLSchema graphQLSchema;
-  @Nullable private final ExecutionStrategy executionStrategy;
+  private final ExecutionStrategy.Type executionStrategyType;
 
   public GraphQL(GraphQLSchema graphQLSchema) {
-    this(graphQLSchema, null);
+    this(graphQLSchema, ExecutionStrategy.Type.Simple);
   }
 
-  public GraphQL(GraphQLSchema graphQLSchema, @Nullable ExecutionStrategy executionStrategy) {
+  public GraphQL(GraphQLSchema graphQLSchema, ExecutionStrategy.Type executionStrategyType) {
     this.graphQLSchema = graphQLSchema;
-    this.executionStrategy = executionStrategy;
+    this.executionStrategyType = executionStrategyType;
   }
 
   public ExecutionResult execute(String requestString) {
@@ -74,7 +74,7 @@ public class GraphQL {
     if (!validationErrors.isEmpty()) {
       return new ExecutionResultImpl(validationErrors);
     } else {
-      Execution execution = new Execution(executionStrategy);
+      Execution execution = new Execution(executionStrategyType);
       return execution.execute(graphQLSchema, context, document, operationName, arguments);
     }
   }

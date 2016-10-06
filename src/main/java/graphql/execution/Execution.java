@@ -2,6 +2,7 @@ package graphql.execution;
 
 import graphql.ExecutionResult;
 import graphql.GraphQLException;
+import graphql.execution.batched.BatchedExecutionStrategy;
 import graphql.language.Document;
 import graphql.language.Field;
 import graphql.language.OperationDefinition;
@@ -16,16 +17,16 @@ import java.util.Map;
 
 public class Execution {
   private final FieldCollector fieldCollector = new FieldCollector();
-  private final ExecutionStrategy strategy;
+  private final ExecutionStrategy.Type strategyType;
 
-  public Execution(@Nullable ExecutionStrategy strategy) {
-    this.strategy = strategy != null ? strategy : new SimpleExecutionStrategy();
+  public Execution(ExecutionStrategy.Type strategyType) {
+    this.strategyType = strategyType;
   }
 
   public ExecutionResult execute(GraphQLSchema graphQLSchema, @Nullable Object root,
       Document document, @Nullable String operationName, Map<String, Object> args) {
     ExecutionContext executionContext = new ExecutionContextBuilder(new ValuesResolver(),
-        graphQLSchema).build(strategy, root, document, operationName, args);
+        graphQLSchema).build(root, document, operationName, args);
     return executeOperation(executionContext, root, executionContext.getOperationDefinition());
   }
 
@@ -48,11 +49,28 @@ public class Execution {
     fieldCollector.collectFields(executionContext, operationRootType,
         operationDefinition.getSelectionSet(), new ArrayList<String>(), fields);
 
+    ExecutionStrategy strategy;
+    switch (strategyType) {
+      case Simple:
+        strategy = new SimpleExecutionStrategy(executionContext);
+        break;
+      case Batched:
+        strategy = new BatchedExecutionStrategy(executionContext);
+        break;
+      case ExecutorService:
+        strategy = new ExecutorServiceExecutionStrategy(executionContext);
+        break;
+      default:
+          throw new IllegalArgumentException("strategyType");
+    }
+
     if (operationDefinition.getOperation() == OperationDefinition.Operation.MUTATION) {
-      return new SimpleExecutionStrategy()
-          .execute(executionContext, operationRootType, root, fields);
+      SimpleExecutionStrategy mutationStrategy =
+          new SimpleExecutionStrategy(executionContext, strategy);
+      return mutationStrategy.execute(operationRootType, root,
+          fields);
     } else {
-      return strategy.execute(executionContext, operationRootType, root, fields);
+      return strategy.execute(operationRootType, root, fields);
     }
   }
 }

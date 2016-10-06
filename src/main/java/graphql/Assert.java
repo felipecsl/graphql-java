@@ -3,8 +3,8 @@ package graphql;
 import java.util.Collection;
 
 public class Assert {
-  public static void assertNotNull(Object object, String errorMessage) {
-    if (object != null) return;
+  public static <T> T assertNotNull(T object, String errorMessage) {
+    if (object != null) return object;
     throw new AssertException(errorMessage);
   }
 
