@@ -19,10 +19,10 @@ public abstract class ExecutionStrategy {
   protected final ValuesResolver valuesResolver = new ValuesResolver();
   protected final FieldCollector fieldCollector = new FieldCollector();
   protected final ExecutionContext executionContext;
-  private final ExecutionStrategy originalStrategy;
+  protected final ExecutionStrategy originalStrategy;
 
   public enum Type {
-    Simple, Batched, ExecutorService
+    Simple, Batched, ExecutorService, Introspection
   }
 
   protected ExecutionStrategy(ExecutionContext executionContext) {
@@ -36,21 +36,21 @@ public abstract class ExecutionStrategy {
     this.originalStrategy = originalStrategy;
   }
 
-  public abstract ExecutionResult execute(GraphQLObjectType parentType, @Nullable Object source,
-      Map<String, List<Field>> fields);
+  public abstract ExecutionResult execute(GraphQLObjectType parentType, @Nullable Field parentField,
+      @Nullable Object source, Map<String, List<Field>> fields);
 
   @Nullable ExecutionResult resolveField(GraphQLObjectType parentType, @Nullable Object source,
       List<Field> fields) {
     Field field = fields.get(0);
-    GraphQLFieldDefinition fieldDef = getFieldDef(executionContext.getGraphQLSchema(), parentType,
-        field);
+    GraphQLFieldDefinition fieldDefinition =
+        getFieldDefinition(executionContext.getGraphQLSchema(), parentType, field);
     Map<String, Object> argumentValues = valuesResolver.getArgumentValues(
-        fieldDef.getArguments(), field.getArguments(), executionContext.getVariables());
+        fieldDefinition.getArguments(), field.getArguments(), executionContext.getVariables());
     DataFetchingEnvironment environment = new DataFetchingEnvironment(source, argumentValues,
-        executionContext.getRoot(), fields, fieldDef.getType(), parentType,
+        executionContext.getRoot(), fields, fieldDefinition.getType(), parentType,
         executionContext.getGraphQLSchema());
-    Object resolvedValue = resolveValue(fieldDef, environment);
-    return completeValue(fieldDef.getType(), fields, resolvedValue);
+    Object resolvedValue = resolveValue(fieldDefinition, environment);
+    return completeValue(fieldDefinition.getType(), fields, resolvedValue);
   }
 
   protected Object resolveValue(GraphQLFieldDefinition fieldDef,
@@ -66,7 +66,6 @@ public abstract class ExecutionStrategy {
 
   @Nullable protected ExecutionResult completeValue(GraphQLType fieldType, List<Field> fields,
       @Nullable Object result) {
-    GraphQLObjectType resolvedType;
     if (fieldType instanceof GraphQLNonNull) {
       return completeValueForNonNull((GraphQLNonNull) fieldType, fields, result);
     } else if (result == null) {
@@ -77,27 +76,40 @@ public abstract class ExecutionStrategy {
       return completeValueForScalar((GraphQLScalarType) fieldType, result);
     } else if (fieldType instanceof GraphQLEnumType) {
       return completeValueForEnum((GraphQLEnumType) fieldType, result);
-    } else if (fieldType instanceof GraphQLInterfaceType) {
-      resolvedType = resolveType((GraphQLInterfaceType) fieldType, result);
-    } else if (fieldType instanceof GraphQLUnionType) {
-      resolvedType = resolveType((GraphQLUnionType) fieldType, result);
     } else {
-      resolvedType = (GraphQLObjectType) fieldType;
+      return completeValueForObject(fieldType, fields, result);
     }
+  }
 
+  protected ExecutionResult completeValueForObject(GraphQLType fieldType, List<Field> fields,
+      @Nullable Object result) {
+    GraphQLObjectType resolvedType = resolveType(fieldType, result);
+    Map<String, List<Field>> subFields = collectSubFields(fields, resolvedType);
+    // Calling this from the executionContext so that you can shift from the simple execution
+    // strategy for mutations back to the desired strategy.
+    return originalStrategy.execute(resolvedType, fields.get(0), result, subFields);
+  }
+
+  Map<String, List<Field>> collectSubFields(List<Field> fields, GraphQLObjectType resolvedType) {
     Map<String, List<Field>> subFields = new LinkedHashMap<>();
     List<String> visitedFragments = new ArrayList<>();
     for (Field field : fields) {
-      if (field.getSelectionSet() == null) {
-        continue;
+      if (field.getSelectionSet() != null) {
+        fieldCollector.collectFields(executionContext, resolvedType, field.getSelectionSet(),
+            visitedFragments, subFields);
       }
-      fieldCollector.collectFields(executionContext, resolvedType, field.getSelectionSet(),
-          visitedFragments, subFields);
     }
+    return subFields;
+  }
 
-    // Calling this from the executionContext so that you can shift from the simple execution
-    // strategy for mutations back to the desired strategy.
-    return originalStrategy.execute(resolvedType, result, subFields);
+  GraphQLObjectType resolveType(GraphQLType fieldType, @Nullable Object result) {
+    if (fieldType instanceof GraphQLInterfaceType) {
+      return resolveType((GraphQLInterfaceType) fieldType, result);
+    } else if (fieldType instanceof GraphQLUnionType) {
+      return resolveType((GraphQLUnionType) fieldType, result);
+    } else {
+      return (GraphQLObjectType) fieldType;
+    }
   }
 
   private ExecutionResult completeValueForNonNull(GraphQLNonNull fieldType, List<Field> fields,
@@ -138,7 +150,7 @@ public abstract class ExecutionStrategy {
     return new ExecutionResultImpl(enumType.getCoercing().serialize(result), null);
   }
 
-  private ExecutionResult completeValueForScalar(GraphQLScalarType scalarType, Object result) {
+  ExecutionResult completeValueForScalar(GraphQLScalarType scalarType, Object result) {
     Object serialized = scalarType.getCoercing().serialize(result);
     //6.6.1 http://facebook.github.io/graphql/#sec-Field-entries
     if (serialized instanceof Double && ((Double) serialized).isNaN()) {
@@ -151,15 +163,14 @@ public abstract class ExecutionStrategy {
       GraphQLList fieldType, List<Field> fields, Iterable<Object> result) {
     List<Object> completedResults = new ArrayList<>();
     for (Object item : result) {
-      ExecutionResult completedValue = completeValue(fieldType.getWrappedType(),
-          fields, item);
+      ExecutionResult completedValue = completeValue(fieldType.getWrappedType(), fields, item);
       completedResults.add(completedValue != null ? completedValue.getData() : null);
     }
     return new ExecutionResultImpl(completedResults, null);
   }
 
-  protected GraphQLFieldDefinition getFieldDef(GraphQLSchema schema, GraphQLObjectType parentType,
-      Field field) {
+  protected static GraphQLFieldDefinition getFieldDefinition(GraphQLSchema schema, GraphQLObjectType
+      parentType, Field field) {
     if (schema.getQueryType() == parentType) {
       if (field.getName().equals(SchemaMetaFieldDef.getName())) {
         return SchemaMetaFieldDef;

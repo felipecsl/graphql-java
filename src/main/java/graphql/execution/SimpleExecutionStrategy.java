@@ -10,8 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SimpleExecutionStrategy extends ExecutionStrategy {
-  public SimpleExecutionStrategy(ExecutionContext executionContext) {
+class SimpleExecutionStrategy extends ExecutionStrategy {
+  SimpleExecutionStrategy(ExecutionContext executionContext) {
     super(executionContext);
   }
 
@@ -19,12 +19,11 @@ public class SimpleExecutionStrategy extends ExecutionStrategy {
     super(executionContext, strategy);
   }
 
-  @Override public ExecutionResult execute(GraphQLObjectType parentType, @Nullable Object source,
-      Map<String, List<Field>> fields) {
+  @Override public ExecutionResult execute(GraphQLObjectType parentType, @Nullable Field parentField,
+      @Nullable Object source, Map<String, List<Field>> fields) {
     Map<String, Object> results = new LinkedHashMap<>();
     for (Map.Entry<String, List<Field>> entry : fields.entrySet()) {
-      ExecutionResult resolvedResult = resolveField(parentType, source,
-          entry.getValue());
+      ExecutionResult resolvedResult = resolveField(parentType, source, entry.getValue());
       results.put(entry.getKey(), resolvedResult != null ? resolvedResult.getData() : null);
     }
     return new ExecutionResultImpl(results, executionContext.getErrors());

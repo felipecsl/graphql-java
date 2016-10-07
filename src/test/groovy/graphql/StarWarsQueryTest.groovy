@@ -1,5 +1,6 @@
 package graphql
 
+import graphql.execution.ExecutionStrategy
 import spock.lang.Specification
 
 class StarWarsQueryTest extends Specification {
@@ -307,61 +308,108 @@ class StarWarsQueryTest extends Specification {
     result == expected
   }
 
-//  def 'Allow introspection query'() {
-//    given:
-//    def query = """
-//        query DuplicateFields {
-//            luke: human(id: "1000") {
-//                name
-//                homePlanet
-//            }
-//            leia: human(id: "1003") {
-//                name
-//                homePlanet
-//            }
-//        }
-//        """
-//    when:
-//    def result = new GraphQL(StarWarsSchema.starWarsSchema, new IntrospectionExecutionStrategy())
-//        .execute(query).data
-//
-//    then:
-//    result == [
-//        operationName: 'DuplicateFields',
-//        variables    : [
-//            name: 'id',
-//            type: 'String'
-//        ],
-//        fields       : [
-//            [
-//                name  : 'luke',
-//                type  : 'Human',
-//                fields: [
-//                    [
-//                        name: 'name',
-//                        type: 'String!'
-//                    ],
-//                    [
-//                        name: 'homePlanet',
-//                        type: 'String!'
-//                    ]]
-//            ],
-//            [
-//                name  : 'leia',
-//                type  : 'Human',
-//                fields: [
-//                    [
-//                        name: 'name',
-//                        type: 'String!'
-//                    ],
-//                    [
-//                        name: 'homePlanet',
-//                        type: 'String!'
-//                    ]]
-//            ],
-//        ]
-//    ]
-//  }
+  def 'Introspection query should resolve aliases'() {
+    given:
+    def query = """
+        query DuplicateFields {
+            luke: human(id: "1000") {
+                name
+                homePlanet
+            }
+            leia: human(id: "1003") {
+                name
+                homePlanet
+            }
+        }
+        """
+    when:
+    def result = new GraphQL(StarWarsSchema.starWarsSchema, ExecutionStrategy.Type.Introspection)
+        .execute(query).data
+
+    then:
+    result == [
+        operationName: 'DuplicateFields',
+        variables    : [
+            name: 'id',
+            type: 'String'
+        ],
+        fields       : [
+            [
+                name  : 'luke',
+                type  : 'Human',
+                fields: [
+                    [
+                        name: 'name',
+                        type: 'String!'
+                    ],
+                    [
+                        name: 'homePlanet',
+                        type: 'String!'
+                    ]]
+            ],
+            [
+                name  : 'leia',
+                type  : 'Human',
+                fields: [
+                    [
+                        name: 'name',
+                        type: 'String!'
+                    ],
+                    [
+                        name: 'homePlanet',
+                        type: 'String!'
+                    ]]
+            ],
+        ]
+    ]
+  }
+
+  def 'Introspection query should flatten inline fragments with the same parent type'() {
+    given:
+    def query = """
+        query Hero {
+          hero {
+            id
+            ... on Character {
+              name
+              ... on Character {
+                id
+                appearsIn
+              }
+              id
+            }
+          }
+        }
+        """
+    when:
+    def result = new GraphQL(StarWarsSchema.starWarsSchema, ExecutionStrategy.Type.Introspection)
+        .execute(query).data
+
+    then:
+    result == [
+        operationName: 'Hero',
+        variables    : [],
+        fields       : [
+            [
+                name  : 'hero',
+                type  : 'Character',
+                fields: [
+                    [
+                        name: 'id',
+                        type: 'ID!'
+                    ],
+                    [
+                        name: 'name',
+                        type: 'String!'
+                    ],
+                    [
+                        name: 'appearsIn',
+                        type: '[Episode]!'
+                    ]]
+            ],
+        ]
+    ]
+  }
 
   def 'Allows us to use a fragment to avoid duplicating content'() {
     given:

@@ -6,6 +6,7 @@ import graphql.GraphQLException;
 import graphql.language.Field;
 import graphql.schema.GraphQLObjectType;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,26 +23,27 @@ import java.util.concurrent.*;
  * <p>
  * See {@code graphql.execution.ExecutorServiceExecutionStrategyTest} for example usage.
  */
-public class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
+class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
   private final ExecutorService executorService;
 
-  public ExecutorServiceExecutionStrategy(ExecutorService executorService,
+  private ExecutorServiceExecutionStrategy(ExecutorService executorService,
       ExecutionContext executionContext) {
     super(executionContext);
     this.executorService = executorService;
   }
 
-  public ExecutorServiceExecutionStrategy(ExecutionContext executionContext) {
+  ExecutorServiceExecutionStrategy(ExecutionContext executionContext) {
     this(Executors.newCachedThreadPool(), executionContext);
   }
 
-  @Override public ExecutionResult execute(final GraphQLObjectType parentType, final Object source,
-      final Map<String, List<Field>> fields) {
-    if (executorService == null)
-      return new SimpleExecutionStrategy(executionContext).execute(parentType, source, fields);
+  @Override public ExecutionResult execute(final GraphQLObjectType parentType, @Nullable Field
+      parentField, @Nullable final Object source, final Map<String, List<Field>> fields) {
+    if (executorService == null) {
+      return new SimpleExecutionStrategy(executionContext).execute(parentType, parentField,
+          source, fields);
+    }
 
-    Map<String, Future<ExecutionResult>> futures =
-        new LinkedHashMap<>();
+    Map<String, Future<ExecutionResult>> futures = new LinkedHashMap<>();
     for (String fieldName : fields.keySet()) {
       final List<Field> fieldList = fields.get(fieldName);
       Callable<ExecutionResult> resolveField = new Callable<ExecutionResult>() {

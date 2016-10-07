@@ -27,7 +27,7 @@ public class Execution {
       Document document, @Nullable String operationName, Map<String, Object> args) {
     ExecutionContext executionContext = new ExecutionContextBuilder(new ValuesResolver(),
         graphQLSchema).build(root, document, operationName, args);
-    return executeOperation(executionContext, root, executionContext.getOperationDefinition());
+    return executeOperation(executionContext, root);
   }
 
   private GraphQLObjectType getOperationRootType(GraphQLSchema graphQLSchema,
@@ -41,36 +41,35 @@ public class Execution {
     }
   }
 
-  private ExecutionResult executeOperation(ExecutionContext executionContext, @Nullable Object root,
-      OperationDefinition operationDefinition) {
+  private ExecutionResult executeOperation(ExecutionContext executionContext,
+      @Nullable Object root) {
+    OperationDefinition operationDefinition = executionContext.getOperationDefinition();
     GraphQLObjectType operationRootType = getOperationRootType(executionContext.getGraphQLSchema(),
         operationDefinition);
     Map<String, List<Field>> fields = new LinkedHashMap<>();
     fieldCollector.collectFields(executionContext, operationRootType,
         operationDefinition.getSelectionSet(), new ArrayList<String>(), fields);
+    ExecutionStrategy strategy = strategyForType(executionContext);
+    if (operationDefinition.getOperation() == OperationDefinition.Operation.MUTATION) {
+      return new SimpleExecutionStrategy(executionContext, strategy)
+          .execute(operationRootType, null, root, fields);
+    } else {
+      return strategy.execute(operationRootType, null, root, fields);
+    }
+  }
 
-    ExecutionStrategy strategy;
+  private ExecutionStrategy strategyForType(ExecutionContext executionContext) {
     switch (strategyType) {
       case Simple:
-        strategy = new SimpleExecutionStrategy(executionContext);
-        break;
+        return new SimpleExecutionStrategy(executionContext);
       case Batched:
-        strategy = new BatchedExecutionStrategy(executionContext);
-        break;
+        return new BatchedExecutionStrategy(executionContext);
       case ExecutorService:
-        strategy = new ExecutorServiceExecutionStrategy(executionContext);
-        break;
+        return new ExecutorServiceExecutionStrategy(executionContext);
+      case Introspection:
+        return new IntrospectionExecutionStrategy(executionContext);
       default:
-          throw new IllegalArgumentException("strategyType");
-    }
-
-    if (operationDefinition.getOperation() == OperationDefinition.Operation.MUTATION) {
-      SimpleExecutionStrategy mutationStrategy =
-          new SimpleExecutionStrategy(executionContext, strategy);
-      return mutationStrategy.execute(operationRootType, root,
-          fields);
-    } else {
-      return strategy.execute(operationRootType, root, fields);
+        throw new IllegalArgumentException("strategyType");
     }
   }
 }

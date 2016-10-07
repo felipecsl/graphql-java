@@ -62,14 +62,13 @@ public class FieldCollector {
 
   private void collectField(ExecutionContext executionContext, Map<String, List<Field>> fields,
       Field field) {
-    if (!conditionalNodes.shouldInclude(executionContext, field.getDirectives())) {
-      return;
+    if (conditionalNodes.shouldInclude(executionContext, field.getDirectives())) {
+      String name = getFieldEntryKey(field);
+      if (!fields.containsKey(name)) {
+        fields.put(name, new ArrayList<Field>());
+      }
+      fields.get(name).add(field);
     }
-    String name = getFieldEntryKey(field);
-    if (!fields.containsKey(name)) {
-      fields.put(name, new ArrayList<Field>());
-    }
-    fields.get(name).add(field);
   }
 
   private String getFieldEntryKey(Field field) {

@@ -13,7 +13,7 @@ class ExecutionStrategySpec extends Specification {
   def setup() {
     executionStrategy = new ExecutionStrategy(null) {
       @Override
-      ExecutionResult execute(GraphQLObjectType parentType,
+      ExecutionResult execute(GraphQLObjectType parentType, Field parentField,
                               Object source, Map<String, List<Field>> fields) {
         return null
       }

@@ -11,6 +11,7 @@ import graphql.schema.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 import static java.util.Collections.singletonList;
@@ -32,8 +33,8 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
   }
 
   @Override
-  public ExecutionResult execute(GraphQLObjectType parentType, Object source,
-      Map<String, List<Field>> fields) {
+  public ExecutionResult execute(GraphQLObjectType parentType, @Nullable Field parentField,
+      @Nullable Object source, Map<String, List<Field>> fields) {
     GraphQLExecutionNodeDatum data =
         new GraphQLExecutionNodeDatum(new LinkedHashMap<String, Object>(), source);
     GraphQLExecutionNode root = new GraphQLExecutionNode(parentType, fields, singletonList(data));
@@ -73,7 +74,7 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
       List<Field> fields) {
 
     GraphQLFieldDefinition fieldDef =
-        getFieldDef(executionContext.getGraphQLSchema(), parentType, fields.get(0));
+        getFieldDefinition(executionContext.getGraphQLSchema(), parentType, fields.get(0));
     if (fieldDef == null) {
       return Collections.emptyList();
     }
@@ -195,7 +196,6 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
 
   private Map<String, List<Field>> getChildFields(ExecutionContext executionContext,
       GraphQLObjectType resolvedType, List<Field> fields) {
-
     Map<String, List<Field>> subFields = new LinkedHashMap<>();
     List<String> visitedFragments = new ArrayList<>();
     for (Field field : fields) {
