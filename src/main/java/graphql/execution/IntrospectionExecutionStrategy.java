@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
+  // A list of name/type pairs of all variables used for this query
+  private final List<Map<String, String>> allVariables = new ArrayList<>();
+
   IntrospectionExecutionStrategy(ExecutionContext executionContext) {
     super(executionContext);
   }
@@ -21,7 +24,11 @@ class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
     Map<String, Object> results = new LinkedHashMap<>(1);
     List<Object> fieldResults = collectFields(parentType, source, fields);
     results.put(parentField != null ? "name" : "operationName", resolveName(parentField));
-    results.put("type", parentType.getName());
+    if (parentField != null) {
+      results.put("type", parentType.getName());
+    } else {
+      results.put("variables", allVariables);
+    }
     results.put("fields", fieldResults);
     return new ExecutionResultImpl(results, executionContext.getErrors());
   }
@@ -52,7 +59,36 @@ class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
     Map<String, Object> map = new LinkedHashMap<>(2);
     map.put("name", fieldDefinition.getName());
     map.put("type", fieldDefinition.getType().getName());
+    addFieldVariables(fieldDefinition);
     return map;
+  }
+
+  private void addFieldVariables(GraphQLFieldDefinition fieldDefinition) {
+    if (!fieldDefinition.getArguments().isEmpty()) {
+      List<Map<String, String>> variables = new ArrayList<>();
+      for (GraphQLArgument argument : fieldDefinition.getArguments()) {
+        String name = argument.getName();
+        String type = argument.getType().getName();
+        if (!hasVariable(name, type)) {
+          Map<String, String> variable = new LinkedHashMap<>(2);
+          variable.put("name", name);
+          variable.put("type", type);
+          variables.add(variable);
+        }
+      }
+      if (!variables.isEmpty()) {
+        allVariables.addAll(variables);
+      }
+    }
+  }
+
+  private boolean hasVariable(String name, String type) {
+    for (Map<String, String> variable : allVariables) {
+      if (variable.get("name").equals(name) && variable.get("type").equals(type)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override ExecutionResult completeValueForScalar(GraphQLScalarType scalarType,

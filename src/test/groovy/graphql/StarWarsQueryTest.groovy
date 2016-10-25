@@ -326,10 +326,10 @@ class StarWarsQueryTest extends Specification {
     then:
     result == [
         operationName: 'DuplicateFields',
-        variables    : [
+        variables    : [[
             name: 'id',
-            type: 'String'
-        ],
+            type: 'String!'
+        ]],
         fields       : [
             [
                 name  : 'luke',
