@@ -32,9 +32,9 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
     super(executionContext);
   }
 
-  @Override
-  public ExecutionResult execute(GraphQLObjectType parentType, @Nullable Field parentField,
-      @Nullable Object source, Map<String, List<Field>> fields) {
+  @Override public ExecutionResult execute(GraphQLObjectType parentType,
+      @Nullable Field parentField, @Nullable Object source,
+      Map<String, List<Field>> fields) {
     GraphQLExecutionNodeDatum data =
         new GraphQLExecutionNodeDatum(new LinkedHashMap<String, Object>(), source);
     GraphQLExecutionNode root = new GraphQLExecutionNode(parentType, fields, singletonList(data));
@@ -44,16 +44,12 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
   private ExecutionResult execute(GraphQLExecutionNode root) {
     Queue<GraphQLExecutionNode> nodes = new ArrayDeque<>();
     nodes.add(root);
-
     while (!nodes.isEmpty()) {
-
       GraphQLExecutionNode node = nodes.poll();
-
       for (String fieldName : node.getFields().keySet()) {
         List<Field> fieldList = node.getFields().get(fieldName);
         List<GraphQLExecutionNode> childNodes =
-            resolveField(node.getParentType(), node.getData(), fieldName,
-                fieldList);
+            resolveField(node.getParentType(), node.getData(), fieldName, fieldList);
         nodes.addAll(childNodes);
       }
     }
@@ -207,7 +203,8 @@ public class BatchedExecutionStrategy extends ExecutionStrategy {
     return subFields;
   }
 
-  private GraphQLObjectType getGraphQLObjectType(GraphQLType fieldType, Object value) {
+  private GraphQLObjectType getGraphQLObjectType(GraphQLType fieldType,
+      Object value) {
     GraphQLObjectType resolvedType = null;
     if (fieldType instanceof GraphQLInterfaceType) {
       resolvedType = resolveType((GraphQLInterfaceType) fieldType, value);

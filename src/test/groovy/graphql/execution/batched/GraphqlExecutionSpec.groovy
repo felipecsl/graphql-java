@@ -148,9 +148,7 @@ class GraphqlExecutionSpec extends Specification {
 
     expect:
     runTest(query, expected);
-
   }
-
 
   def "Legal null entries in lists"() {
     given:
@@ -207,9 +205,7 @@ class GraphqlExecutionSpec extends Specification {
 
     expect:
     runTest(query, expected);
-
   }
-
 
   def "Legal null values for primitives"() {
 
@@ -231,7 +227,6 @@ class GraphqlExecutionSpec extends Specification {
 
     expect:
     runTest(query, expected);
-
   }
 
   def "Legal null value for enum"() {

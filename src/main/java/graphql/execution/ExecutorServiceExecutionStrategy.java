@@ -18,7 +18,7 @@ import java.util.concurrent.*;
  * implementation, {@link ExecutorService} MUST have the following 2 characteristics: <ul> <li>1.
  * The underlying {@link java.util.concurrent.ThreadPoolExecutor} MUST have a reasonable {@code
  * maximumPoolSize} <li>2. The underlying {@link java.util.concurrent.ThreadPoolExecutor} SHALL NOT
- * use its task queue. </ul> <p> <p>Failure to follow 1. and 2. can result in a very large number of
+ * use its task queue. </ul> <p> <p>Failure to follow 1. and 2. can data in a very large number of
  * threads created or hanging. (deadlock)</p>
  * <p>
  * See {@code graphql.execution.ExecutorServiceExecutionStrategyTest} for example usage.
@@ -37,7 +37,8 @@ class ExecutorServiceExecutionStrategy extends ExecutionStrategy {
   }
 
   @Override public ExecutionResult execute(final GraphQLObjectType parentType, @Nullable Field
-      parentField, @Nullable final Object source, final Map<String, List<Field>> fields) {
+      parentField, @Nullable final Object source,
+      final Map<String, List<Field>> fields) {
     if (executorService == null) {
       return new SimpleExecutionStrategy(executionContext).execute(parentType, parentField,
           source, fields);

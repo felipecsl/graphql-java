@@ -20,8 +20,9 @@ public class PropertyDataFetcher implements DataFetcher {
     if (source == null) return null;
     if (source instanceof Map) {
       return ((Map<?, ?>) source).get(propertyName);
+    } else {
+      return getPropertyViaGetter(source, environment.getFieldType());
     }
-    return getPropertyViaGetter(source, environment.getFieldType());
   }
 
   private Object getPropertyViaGetter(Object object, GraphQLOutputType outputType) {
@@ -47,7 +48,6 @@ public class PropertyDataFetcher implements DataFetcher {
     try {
       Method method = object.getClass().getMethod(getterName);
       return method.invoke(object);
-
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     } catch (InvocationTargetException e) {

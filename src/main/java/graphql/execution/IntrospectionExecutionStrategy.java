@@ -3,7 +3,10 @@ package graphql.execution;
 import graphql.ExecutionResult;
 import graphql.ExecutionResultImpl;
 import graphql.language.Field;
-import graphql.schema.*;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLFieldDefinition;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLScalarType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -43,13 +46,14 @@ class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
 
   @Override protected Object resolveValue(GraphQLFieldDefinition fieldDefinition,
       DataFetchingEnvironment environment) {
-    Map<String, String> map = new LinkedHashMap<>(2);
+    Map<String, Object> map = new LinkedHashMap<>(2);
     map.put("name", fieldDefinition.getName());
     map.put("type", fieldDefinition.getType().getName());
     return map;
   }
 
-  @Override ExecutionResult completeValueForScalar(GraphQLScalarType scalarType, Object value) {
+  @Override ExecutionResult completeValueForScalar(GraphQLScalarType scalarType,
+      Object value) {
     // Prevent us from calling toString() on a Map because the actual field is of Scalar type
     return new ExecutionResultImpl(value, null);
   }

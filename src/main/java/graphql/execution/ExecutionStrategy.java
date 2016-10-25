@@ -53,8 +53,8 @@ public abstract class ExecutionStrategy {
     return completeValue(fieldDefinition.getType(), fields, resolvedValue);
   }
 
-  protected Object resolveValue(GraphQLFieldDefinition fieldDef,
-      DataFetchingEnvironment environment) {
+  Object resolveValue(GraphQLFieldDefinition fieldDef, DataFetchingEnvironment
+      environment) {
     try {
       return fieldDef.getDataFetcher().get(environment);
     } catch (Exception e) {
@@ -124,33 +124,42 @@ public abstract class ExecutionStrategy {
 
   private ExecutionResult completeValueForList(GraphQLList fieldType, List<Field> fields,
       Object result) {
+    List<Object> newResult = new ArrayList<>();
     if (result.getClass().isArray()) {
-      result = Arrays.asList((Object[]) result);
+      Collections.addAll(newResult, (Object[]) result);
+    } else {
+      newResult = Collections.singletonList(result);
     }
     return completeValueForList(executionContext, fieldType, fields, (Iterable<Object>) result);
   }
 
-  protected GraphQLObjectType resolveType(GraphQLInterfaceType graphQLInterfaceType, Object value) {
+  protected GraphQLObjectType resolveType(GraphQLInterfaceType graphQLInterfaceType,
+      Object value) {
     GraphQLObjectType result = graphQLInterfaceType.getTypeResolver().getType(value);
-    if (result == null) {
+    if (result != null) {
+      return result;
+    } else {
       throw new GraphQLException("could not determine type");
     }
-    return result;
   }
 
-  protected GraphQLObjectType resolveType(GraphQLUnionType graphQLUnionType, Object value) {
+  protected GraphQLObjectType resolveType(GraphQLUnionType graphQLUnionType,
+      Object value) {
     GraphQLObjectType result = graphQLUnionType.getTypeResolver().getType(value);
-    if (result == null) {
+    if (result != null) {
+      return result;
+    } else {
       throw new GraphQLException("could not determine type");
     }
-    return result;
   }
 
-  private ExecutionResult completeValueForEnum(GraphQLEnumType enumType, Object result) {
+  private ExecutionResult completeValueForEnum(GraphQLEnumType enumType,
+      Object result) {
     return new ExecutionResultImpl(enumType.getCoercing().serialize(result), null);
   }
 
-  ExecutionResult completeValueForScalar(GraphQLScalarType scalarType, Object result) {
+  ExecutionResult completeValueForScalar(GraphQLScalarType scalarType,
+      Object result) {
     Object serialized = scalarType.getCoercing().serialize(result);
     //6.6.1 http://facebook.github.io/graphql/#sec-Field-entries
     if (serialized instanceof Double && ((Double) serialized).isNaN()) {

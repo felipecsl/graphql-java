@@ -108,8 +108,8 @@ class ScalarsQueryTest extends Specification {
     then:
     //FIXME do not propagate exception, but instead raise an error.
     thrown(NumberFormatException)
-    //TODO result.errors.empty == false
-    //TODO result.errors == xyz
+    //TODO data.errors.empty == false
+    //TODO data.errors == xyz
 
     where:
     number       | _

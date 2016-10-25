@@ -43,7 +43,6 @@ public class GraphQLSchema {
     return queryType;
   }
 
-
   public GraphQLObjectType getMutationType() {
     return mutationType;
   }

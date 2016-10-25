@@ -27,7 +27,6 @@ class StarWarsQueryTest extends Specification {
     result == expected
   }
 
-
   def 'Allows us to query for the ID and friends of R2-D2'() {
     given:
     def query = """
@@ -147,8 +146,6 @@ class StarWarsQueryTest extends Specification {
 
     then:
     result == expected
-
-
   }
 
   def 'Allows us to query for Luke Skywalker directly, using his ID'() {
