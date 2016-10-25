@@ -9,14 +9,11 @@ import java.util.Map;
 
 import static graphql.Assert.assertNotNull;
 
-public class GraphQLInterfaceType
-    implements GraphQLType, GraphQLOutputType, GraphQLFieldsContainer, GraphQLCompositeType,
-    GraphQLUnmodifiedType, GraphQLNullableType {
-
+public class GraphQLInterfaceType implements GraphQLType, GraphQLOutputType, GraphQLFieldsContainer,
+    GraphQLCompositeType, GraphQLUnmodifiedType, GraphQLNullableType {
   private final String name;
   private final String description;
-  private final Map<String, GraphQLFieldDefinition> fieldDefinitionsByName =
-      new LinkedHashMap<>();
+  private final Map<String, GraphQLFieldDefinition> fieldDefinitionsByName = new LinkedHashMap<>();
   private final TypeResolver typeResolver;
 
   public GraphQLInterfaceType(String name, String description,
@@ -42,7 +39,6 @@ public class GraphQLInterfaceType
   public GraphQLFieldDefinition getFieldDefinition(String name) {
     return fieldDefinitionsByName.get(name);
   }
-
 
   public List<GraphQLFieldDefinition> getFieldDefinitions() {
     return new ArrayList<>(fieldDefinitionsByName.values());
@@ -139,9 +135,5 @@ public class GraphQLInterfaceType
     public GraphQLInterfaceType build() {
       return new GraphQLInterfaceType(name, description, fields, typeResolver);
     }
-
-
   }
-
-
 }

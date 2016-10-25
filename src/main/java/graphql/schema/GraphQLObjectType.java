@@ -9,14 +9,11 @@ import java.util.Map;
 
 import static graphql.Assert.assertNotNull;
 
-public class GraphQLObjectType
-    implements GraphQLType, GraphQLOutputType, GraphQLFieldsContainer, GraphQLCompositeType,
-    GraphQLUnmodifiedType, GraphQLNullableType {
-
+public class GraphQLObjectType implements GraphQLType, GraphQLOutputType, GraphQLFieldsContainer,
+    GraphQLCompositeType, GraphQLUnmodifiedType, GraphQLNullableType {
   private final String name;
   private final String description;
-  private final Map<String, GraphQLFieldDefinition> fieldDefinitionsByName =
-      new LinkedHashMap<>();
+  private final Map<String, GraphQLFieldDefinition> fieldDefinitionsByName = new LinkedHashMap<>();
   private final List<GraphQLInterfaceType> interfaces = new ArrayList<>();
 
   public GraphQLObjectType(String name, String description,

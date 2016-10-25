@@ -4,8 +4,8 @@ import java.util.Map;
 
 import static graphql.Assert.assertNotNull;
 
-public class GraphQLNonNull
-    implements GraphQLType, GraphQLInputType, GraphQLOutputType, GraphQLModifiedType {
+public class GraphQLNonNull implements GraphQLType, GraphQLInputType, GraphQLOutputType,
+    GraphQLModifiedType {
   private GraphQLType wrappedType;
 
   public GraphQLNonNull(GraphQLType wrappedType) {
@@ -45,6 +45,6 @@ public class GraphQLNonNull
 
   @Override
   public String getName() {
-    return null;
+    return wrappedType.getName() + "!";
   }
 }

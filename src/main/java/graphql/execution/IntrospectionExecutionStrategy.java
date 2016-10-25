@@ -3,10 +3,7 @@ package graphql.execution;
 import graphql.ExecutionResult;
 import graphql.ExecutionResultImpl;
 import graphql.language.Field;
-import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLFieldDefinition;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLScalarType;
+import graphql.schema.*;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -23,13 +20,19 @@ class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
       parentField, @Nullable Object source, Map<String, List<Field>> fields) {
     Map<String, Object> results = new LinkedHashMap<>(1);
     List<Object> fieldResults = collectFields(parentType, source, fields);
-    String nameKey = parentField != null ? "name" : "operationName";
-    Object nameValue = parentField != null
-        ? parentField.getAlias() : executionContext.getOperationDefinition().getName();
-    results.put(nameKey, nameValue);
+    results.put(parentField != null ? "name" : "operationName", resolveName(parentField));
     results.put("type", parentType.getName());
     results.put("fields", fieldResults);
     return new ExecutionResultImpl(results, executionContext.getErrors());
+  }
+
+  private String resolveName(@Nullable Field parentField) {
+    if (parentField != null) {
+      return parentField.getAlias() != null ? parentField.getAlias() : parentField.getName();
+    } else {
+      // We're in the root of the query, so just use the operation name, if any
+      return executionContext.getOperationDefinition().getName();
+    }
   }
 
   private List<Object> collectFields(GraphQLObjectType parentType, @Nullable Object source,
@@ -56,5 +59,10 @@ class IntrospectionExecutionStrategy extends SimpleExecutionStrategy {
       Object value) {
     // Prevent us from calling toString() on a Map because the actual field is of Scalar type
     return new ExecutionResultImpl(value, null);
+  }
+
+  @Override protected ExecutionResult completeValueForList(GraphQLList fieldType,
+      List<Field> fields, Object result) {
+    return new ExecutionResultImpl(result, null);
   }
 }

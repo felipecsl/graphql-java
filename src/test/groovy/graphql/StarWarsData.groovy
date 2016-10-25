@@ -102,11 +102,21 @@ class StarWarsData {
     @Override
     GraphQLObjectType getType(Object object) {
       def id = object.id
-      if (humanData[id] != null)
-        return StarWarsSchema.humanType
-      if (droidData[id] != null)
-        return StarWarsSchema.droidType
-      return null;
+      if (id != null) {
+        if (humanData[id] != null)
+          return StarWarsSchema.humanType
+        if (droidData[id] != null)
+          return StarWarsSchema.droidType
+        return null;
+      } else {
+        def type = object['type']
+        if (type == "Character") {
+          // TODO: For introspection, what should we return here?
+          return StarWarsSchema.humanType
+        } else {
+          return null
+        }
+      }
     }
   }
 

@@ -102,16 +102,6 @@ public abstract class ExecutionStrategy {
     return subFields;
   }
 
-  GraphQLObjectType resolveType(GraphQLType fieldType, @Nullable Object result) {
-    if (fieldType instanceof GraphQLInterfaceType) {
-      return resolveType((GraphQLInterfaceType) fieldType, result);
-    } else if (fieldType instanceof GraphQLUnionType) {
-      return resolveType((GraphQLUnionType) fieldType, result);
-    } else {
-      return (GraphQLObjectType) fieldType;
-    }
-  }
-
   private ExecutionResult completeValueForNonNull(GraphQLNonNull fieldType, List<Field> fields,
       @Nullable Object result) {
     ExecutionResult completed = completeValue(fieldType.getWrappedType(), fields, result);
@@ -122,7 +112,7 @@ public abstract class ExecutionStrategy {
     }
   }
 
-  private ExecutionResult completeValueForList(GraphQLList fieldType, List<Field> fields,
+  protected ExecutionResult completeValueForList(GraphQLList fieldType, List<Field> fields,
       Object result) {
     if (result.getClass().isArray()) {
       result = Arrays.asList((Object[]) result);
@@ -130,9 +120,19 @@ public abstract class ExecutionStrategy {
     return completeValueForList(executionContext, fieldType, fields, (Iterable<Object>) result);
   }
 
-  protected GraphQLObjectType resolveType(GraphQLInterfaceType graphQLInterfaceType,
-      Object value) {
-    GraphQLObjectType result = graphQLInterfaceType.getTypeResolver().getType(value);
+  GraphQLObjectType resolveType(GraphQLType fieldType, @Nullable Object result) {
+    if (fieldType instanceof GraphQLInterfaceType) {
+      return resolveType((GraphQLInterfaceType) fieldType, result);
+    } else if (fieldType instanceof GraphQLUnionType) {
+      return resolveType((GraphQLUnionType) fieldType, result);
+    } else {
+      return (GraphQLObjectType) fieldType;
+    }
+  }
+
+  protected GraphQLObjectType resolveType(GraphQLInterfaceType graphQLInterfaceType, Object value) {
+    TypeResolver typeResolver = graphQLInterfaceType.getTypeResolver();
+    GraphQLObjectType result = resolveType(value, typeResolver);
     if (result != null) {
       return result;
     } else {
@@ -140,14 +140,18 @@ public abstract class ExecutionStrategy {
     }
   }
 
-  protected GraphQLObjectType resolveType(GraphQLUnionType graphQLUnionType,
-      Object value) {
-    GraphQLObjectType result = graphQLUnionType.getTypeResolver().getType(value);
+  protected GraphQLObjectType resolveType(GraphQLUnionType graphQLUnionType, Object value) {
+    TypeResolver typeResolver = graphQLUnionType.getTypeResolver();
+    GraphQLObjectType result = resolveType(value, typeResolver);
     if (result != null) {
       return result;
     } else {
       throw new GraphQLException("could not determine type");
     }
+  }
+
+  GraphQLObjectType resolveType(Object value, TypeResolver typeResolver) {
+    return typeResolver.getType(value);
   }
 
   private ExecutionResult completeValueForEnum(GraphQLEnumType enumType,
@@ -158,7 +162,7 @@ public abstract class ExecutionStrategy {
   ExecutionResult completeValueForScalar(GraphQLScalarType scalarType,
       Object result) {
     Object serialized = scalarType.getCoercing().serialize(result);
-    //6.6.1 http://facebook.github.io/graphql/#sec-Field-entries
+    // 6.6.1 http://facebook.github.io/graphql/#sec-Field-entries
     if (serialized instanceof Double && ((Double) serialized).isNaN()) {
       serialized = null;
     }

@@ -1,5 +1,7 @@
 package graphql.schema;
 
+import javax.annotation.Nullable;
+
 public interface TypeResolver {
-  GraphQLObjectType getType(Object object);
+  @Nullable GraphQLObjectType getType(Object object);
 }
