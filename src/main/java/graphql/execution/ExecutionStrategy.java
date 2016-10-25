@@ -124,11 +124,8 @@ public abstract class ExecutionStrategy {
 
   private ExecutionResult completeValueForList(GraphQLList fieldType, List<Field> fields,
       Object result) {
-    List<Object> newResult = new ArrayList<>();
     if (result.getClass().isArray()) {
-      Collections.addAll(newResult, (Object[]) result);
-    } else {
-      newResult = Collections.singletonList(result);
+      result = Arrays.asList((Object[]) result);
     }
     return completeValueForList(executionContext, fieldType, fields, (Iterable<Object>) result);
   }
