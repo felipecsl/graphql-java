@@ -337,11 +337,11 @@ class StarWarsQueryTest extends Specification {
                 fields: [
                     [
                         name: 'name',
-                        type: 'String!'
+                        type: 'String'
                     ],
                     [
                         name: 'homePlanet',
-                        type: 'String!'
+                        type: 'String'
                     ]]
             ],
             [
@@ -350,11 +350,11 @@ class StarWarsQueryTest extends Specification {
                 fields: [
                     [
                         name: 'name',
-                        type: 'String!'
+                        type: 'String'
                     ],
                     [
                         name: 'homePlanet',
-                        type: 'String!'
+                        type: 'String'
                     ]]
             ],
         ]
@@ -397,7 +397,7 @@ class StarWarsQueryTest extends Specification {
                     ],
                     [
                         name: 'name',
-                        type: 'String!'
+                        type: 'String'
                     ],
                     [
                         name: 'appearsIn',

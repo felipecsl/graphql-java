@@ -6,7 +6,6 @@ import static graphql.Assert.assertNotNull;
 
 public class GraphQLList implements GraphQLType, GraphQLInputType, GraphQLOutputType,
     GraphQLModifiedType, GraphQLNullableType {
-
   private GraphQLType wrappedType;
 
   public GraphQLList(GraphQLType wrappedType) {
@@ -41,6 +40,6 @@ public class GraphQLList implements GraphQLType, GraphQLInputType, GraphQLOutput
 
   @Override
   public String getName() {
-    return null;
+    return "[" + wrappedType.getName() + "]";
   }
 }
