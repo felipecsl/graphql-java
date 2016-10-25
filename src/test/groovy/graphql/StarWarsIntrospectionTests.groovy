@@ -410,7 +410,7 @@ class StarWarsIntrospectionTests extends Specification {
 
   def "Allow querying the schema with pre-defined full introspection query"() {
     given:
-    def query = IntrospectionQuery.INTROSPECTION_QUERY
+    def query = IntrospectionQuery.QUERY
 
     when:
     def result = new GraphQL(StarWarsSchema.starWarsSchema).execute(query)
