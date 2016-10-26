@@ -162,7 +162,7 @@ class StarWarsIntrospectionTests extends Specification {
                 [
                     name: 'id',
                     type: [
-                        name: null,
+                        name: "String!",
                         kind: 'NON_NULL'
                     ]
                 ],
@@ -176,14 +176,14 @@ class StarWarsIntrospectionTests extends Specification {
                 [
                     name: 'friends',
                     type: [
-                        name: null,
+                        name: "[Character]",
                         kind: 'LIST'
                     ]
                 ],
                 [
                     name: 'appearsIn',
                     type: [
-                        name: null,
+                        name: "[Episode]",
                         kind: 'LIST'
                     ]
                 ],
@@ -231,7 +231,7 @@ class StarWarsIntrospectionTests extends Specification {
                 [
                     name: 'id',
                     type: [
-                        name  : null,
+                        name  : "String!",
                         kind  : 'NON_NULL',
                         ofType: [
                             name: 'String',
@@ -250,7 +250,7 @@ class StarWarsIntrospectionTests extends Specification {
                 [
                     name: 'friends',
                     type: [
-                        name  : null,
+                        name  : "[Character]",
                         kind  : 'LIST',
                         ofType: [
                             name: 'Character',
@@ -261,7 +261,7 @@ class StarWarsIntrospectionTests extends Specification {
                 [
                     name: 'appearsIn',
                     type: [
-                        name  : null,
+                        name  : "[Episode]",
                         kind  : 'LIST',
                         ofType: [
                             name: 'Episode',
@@ -344,7 +344,7 @@ class StarWarsIntrospectionTests extends Specification {
                                 description : 'id of the human',
                                 type        : [
                                     kind  : 'NON_NULL',
-                                    name  : null,
+                                    name  : 'String!',
                                     ofType: [
                                         kind: 'SCALAR',
                                         name: 'String'
@@ -362,7 +362,7 @@ class StarWarsIntrospectionTests extends Specification {
                                 description : 'id of the droid',
                                 type        : [
                                     kind  : 'NON_NULL',
-                                    name  : null,
+                                    name  : 'String!',
                                     ofType: [
                                         kind: 'SCALAR',
                                         name: 'String'
